@@ -17,3 +17,7 @@ Hooks.once('init', async function() {
 	}
 	});
 });
+
+Hooks.once('ready', async function() {
+	await game.user.unsetFlag("gambitsEmoteBar", "dialogOpen");
+});

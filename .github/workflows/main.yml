@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugs: Fix not checking if animated-spell-effects active for the slap emote" >> release_notes.txt
+          echo "- Bugs: Fix a flag potentially remaining set if a world is closed with the dialog window open" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
