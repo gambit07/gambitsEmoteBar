@@ -120,11 +120,11 @@ async function handleEmoteClick({emote, pickedTokens}) {
         let facing = 1;
         let mirrorFace = true;
 
-        if(token.document.getFlag("gambits-premades", "laughing")){
+        if(token.document.getFlag("gambitsEmoteBar", "laughing")){
             await Sequencer.EffectManager.endEffects({ name: "Laugh", object: token })
         } 
         else {
-            await token.document.setFlag("gambits-premades", "laughing", true)
+            await token.document.setFlag("gambitsEmoteBar", "laughing", true)
 
             new Sequence()
 
@@ -166,7 +166,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
             .waitUntilFinished(-200)
 
             .thenDo(function(){
-                token.document.unsetFlag("gambits-premades", "laughing")
+                token.document.unsetFlag("gambitsEmoteBar", "laughing")
                 Sequencer.EffectManager.endEffects({ name: "Laugh", object: token });
             })
 
@@ -178,11 +178,11 @@ async function handleEmoteClick({emote, pickedTokens}) {
         }
     }
     else if(emote === "angry") {
-        if(token.document.getFlag("gambits-premades", "angry")){
+        if(token.document.getFlag("gambitsEmoteBar", "angry")){
             await Sequencer.EffectManager.endEffects({ name: "Anger", object: token })
         }
         else {
-            await token.document.setFlag("gambits-premades", "angry", true)
+            await token.document.setFlag("gambitsEmoteBar", "angry", true)
             
             new Sequence()
             
@@ -213,7 +213,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
                 .waitUntilFinished()
             
             .thenDo(function(){
-                token.document.unsetFlag("gambits-premades", "angry")
+                token.document.unsetFlag("gambitsEmoteBar", "angry")
                 Sequencer.EffectManager.endEffects({ name: "Anger", object: token });
             })
             
@@ -223,11 +223,11 @@ async function handleEmoteClick({emote, pickedTokens}) {
     else if(emote === "surprised") {
         new Sequence()
 
-        if(token.document.getFlag("gambits-premades", "surprised")) {
+        if(token.document.getFlag("gambitsEmoteBar", "surprised")) {
             await Sequencer.EffectManager.endEffects({ name: "Surprise", object: token })
         }
         else {
-            await token.document.setFlag("gambits-premades", "surprised", true);
+            await token.document.setFlag("gambitsEmoteBar", "surprised", true);
 
             new Sequence()
 
@@ -258,7 +258,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
             .waitUntilFinished()
 
             .thenDo(function(){
-                token.document.unsetFlag("gambits-premades", "surprised")
+                token.document.unsetFlag("gambitsEmoteBar", "surprised")
                 Sequencer.EffectManager.endEffects({ name: "Surprise", object: token });
             })
 
@@ -269,11 +269,11 @@ async function handleEmoteClick({emote, pickedTokens}) {
         let facing = 1;
         let mirrorFace = false;
         
-        if(token.document.getFlag("gambits-premades", "shouting")) {
+        if(token.document.getFlag("gambitsEmoteBar", "shouting")) {
             await Sequencer.EffectManager.endEffects({ name: "Shout", object: token })
         }
         else {
-            await token.document.setFlag("gambits-premades", "shouting", true);
+            await token.document.setFlag("gambitsEmoteBar", "shouting", true);
 
             new Sequence()
 
@@ -325,7 +325,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
             .waitUntilFinished(-200)
 
             .thenDo(function(){
-                token.document.unsetFlag("gambits-premades", "shouting")
+                token.document.unsetFlag("gambitsEmoteBar", "shouting")
                 Sequencer.EffectManager.endEffects({ name: "Shout", object: token });
             })
 
@@ -333,7 +333,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
         }
     }
     else if(emote === "drunk") {
-      if(token.document.getFlag("gambits-premades", "drunken")) {
+      if(token.document.getFlag("gambitsEmoteBar", "drunken")) {
         await Sequencer.EffectManager.endEffects({ name: "Drunk", object: token })
       }
       else {
@@ -350,7 +350,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
         locationY = locationY.toFixed(2);
         //
         
-        token.document.setFlag("gambits-premades", "drunken", true)
+        token.document.setFlag("gambitsEmoteBar", "drunken", true)
         
         new Sequence()
         
@@ -451,7 +451,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
         .waitUntilFinished()
         
         .thenDo(function(){
-          token.document.unsetFlag("gambits-premades", "drunken")
+          token.document.unsetFlag("gambitsEmoteBar", "drunken")
           Sequencer.EffectManager.endEffects({ name: "Drunk", object: token });
         })
         
@@ -466,11 +466,11 @@ async function handleEmoteClick({emote, pickedTokens}) {
       let facing = 1;
       let mirrorFace = false; 
       
-      if(token.document.getFlag("gambits-premades", "soulSucked")){
+      if(token.document.getFlag("gambitsEmoteBar", "soulSucked")){
          await Sequencer.EffectManager.endEffects({ name: "Soul", object: token })
       }
       else {
-        token.document.setFlag("gambits-premades", "soulSucked", true)
+        token.document.setFlag("gambitsEmoteBar", "soulSucked", true)
         
         new Sequence()
         
@@ -489,7 +489,7 @@ async function handleEmoteClick({emote, pickedTokens}) {
           .waitUntilFinished()
         
         .thenDo(function(){
-          token.document.unsetFlag("gambits-premades", "soulSucked")
+          token.document.unsetFlag("gambitsEmoteBar", "soulSucked")
           Sequencer.EffectManager.endEffects({ name: "Soul", object: token });
         })
         
