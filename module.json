@@ -26,7 +26,11 @@
     "requires": [
       {
         "id": "sequencer",
-        "type": "module"
+        "type": "module",
+        "compatibility": {
+          "minimum": "3.4.8",
+          "verified": "3.4.9"
+        }
       }
     ]
   },

@@ -498,37 +498,40 @@ async function handleEmoteClick({emote, pickedTokens}) {
     }
     else if(emote === "slap") {
       let location = token.center;
-
-      new Sequence()
+      let seq = new Sequence();
       
-      .effect()
-      .atLocation(location,{offset:{x:0.1, y:-0.1},gridUnits:true})
-      .file("animated-spell-effects-cartoon.magic.impact.02")
-      .size(1.4, {gridUnits:true})
+      const hasAnimatedSpellEffects = game.modules.get("animated-spell-effects")?.active;
       
-      .effect()
-      .atLocation(location)
-      .file("modules/gambitsEmoteBar/assets/slap.webp")
-      .size(0.55, {gridUnits:true})
-      .rotate(-45)
-      .fadeOut(250)
-      .duration(1000)
-      .delay(50)
-      .zIndex(1)
+      if (hasAnimatedSpellEffects) {
+        seq.effect()
+          .atLocation(location, { offset: { x: 0.1, y: -0.1 }, gridUnits: true })
+          .file("animated-spell-effects-cartoon.magic.impact.02")
+          .size(1.4, { gridUnits: true });
+      }
       
-      .effect()
-      .atLocation(location)
-      .file("modules/gambitsEmoteBar/assets/slap.webp")
-      .size(0.55, {gridUnits:true})
-      .filter("ColorMatrix", { brightness: -1 })
-      .opacity(0.5)
-      .duration(6000)
-      .fadeOut(1000)
-      .rotate(-45)
-      .delay(50)
-      .zIndex(0)
+      seq.effect()
+        .atLocation(location)
+        .file("modules/gambitsEmoteBar/assets/slap.webp")
+        .size(0.55, { gridUnits: true })
+        .rotate(-45)
+        .fadeOut(250)
+        .duration(1000)
+        .delay(50)
+        .zIndex(1)
       
-      .play()
+        .effect()
+        .atLocation(location)
+        .file("modules/gambitsEmoteBar/assets/slap.webp")
+        .size(0.55, { gridUnits: true })
+        .filter("ColorMatrix", { brightness: -1 })
+        .opacity(0.5)
+        .duration(6000)
+        .fadeOut(1000)
+        .rotate(-45)
+        .delay(50)
+        .zIndex(0)
+      
+        .play();
     }
   }
 }
