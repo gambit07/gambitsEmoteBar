@@ -83,6 +83,7 @@ export async function generateEmotes() {
       }
 
       const buttons = dialog.querySelectorAll('.emote-btn');
+      
       buttons.forEach(button => {
         const clickHandler = async (e) => {
           const emote = button.dataset.emote;
