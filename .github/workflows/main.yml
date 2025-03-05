@@ -1,0 +1,71 @@
+name: Module Builder
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      release-notes: ${{ steps.set-release-notes.outputs.release-notes }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Release Notes for Github
+        id: set-release-notes-github
+        run: |
+          echo "- Initial Release" >> release_notes.txt
+          echo "release-notes-github<<EOF" >> $GITHUB_ENV
+          cat release_notes.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Get Version from Commit Message
+        id: get-version
+        run: |
+          version=$(git log -1 --pretty=%B | grep -o -E '[v]?[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^v//')
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Extracted version: $version"
+
+      - name: Update module.json with Version
+        run: node update-module.js ${{ steps.get-version.outputs.version }}
+
+      - name: Zip Files
+        working-directory: ./
+        run: zip -r ./module.zip ./*
+
+      - name: Create Release
+        id: create-release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          name: Release ${{ steps.get-version.outputs.version }}
+          draft: false
+          prerelease: false
+          body: ${{ env.release-notes-github }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: './module.zip, ./module.json'
+          tag: ${{ steps.get-version.outputs.version }}
+
+      - name: Release Foundry Package
+        run: |
+          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
+          -H "Content-Type: application/json" \
+          -H "Authorization: ${{ secrets.FOUNDRY_API_TOKEN }}" \
+          -d '{
+            "id": "'"gambitsEmoteBar"'",
+            "release": {
+              "version": "'"${{ steps.get-version.outputs.version }}"'",
+              "manifest": "'"https://github.com/gambit07/gambitsEmoteBar/releases/latest/download/module.json"'",
+              "download": "'"https://github.com/gambit07/gambitsEmoteBar/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
+              "notes": "'"https://github.com/gambit07/gambitsEmoteBar/releases/tag/${{ steps.get-version.outputs.version }}"'",
+              "compatibility": {
+                "minimum": "'"12.328"'",
+                "verified": "'"12"'",
+                "maximum": "'"12"'"
+              }
+            }
+          }'

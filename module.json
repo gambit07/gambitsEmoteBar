@@ -1,0 +1,35 @@
+{
+  "id": "gambitsEmoteBar",
+  "title": "Gambit's Emote Bar",
+  "description": "A tool to use emotes in Foundry VTT.",
+  "authors": [
+    {
+      "name": "Gambit"
+    },
+    {
+      "name": "Eskie",
+      "discord": "EskieMoh#2969"
+    }
+  ],
+  "version": "",
+  "compatibility": {
+    "minimum": 12.328,
+    "verified": 12,
+    "maximum": 12
+  },
+  "esmodules": [
+    "scripts/module.js",
+	  "scripts/emotePreview.js"
+  ],
+  "relationships": {
+    "requires": [
+      {
+        "id": "sequencer",
+        "type": "module"
+      }
+    ]
+  },
+  "url": "https://github.com/gambit07/gambitsEmoteBar",
+  "manifest": "",
+  "download": ""
+}
