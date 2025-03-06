@@ -6,8 +6,8 @@ Hooks.once('init', async function() {
 	  }
 
 	game.keybindings.register("gambitsEmoteBar", "toggleBar", {
-		name: "Toggle Emote Bar",
-		hint: "Press this key to open/close the emote bar",
+		name: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.name"),
+		hint: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.hint"),
 		editable: [{
 			key: "KeyE",
 			modifiers: ["Control"]
@@ -30,7 +30,7 @@ Hooks.once('init', async function() {
 	if (sidebarControls) {
 		sidebarControls.tools.push({
 		name: "emote-bar",
-		title: "Emote Bar",
+		title: game.i18n.format("gambitsEmoteBar.controls.emoteBar.title"),
 		icon: "fas fa-face-smile",
 		onClick: async () => {
 			await generateEmotes();

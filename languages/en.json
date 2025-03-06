@@ -1,0 +1,35 @@
+{
+  "I18N.LANGUAGE": "English",
+  "gambitsEmoteBar": {
+    "controls": {
+        "emoteBar": {
+            "title": "Emote Bar"
+        }
+    },
+    "keybinds": {
+        "toggleEmoteBar": {
+            "name": "Toggle Emote Bar",
+            "hint": "Press this key to open/close the emote bar"
+        }
+    },
+    "menu": {
+        "emote": {
+            "laugh": "Laugh",
+            "angry": "Angry",
+            "surprised": "Surprised",
+            "shout": "Shout",
+            "drunk": "Drunk",
+            "soul": "Soul",
+            "slap": "Slap"
+        }
+    },
+    "log": {
+        "warning": {
+            "noEffect": "No effect defined for emote:",
+            "pleaseSelectOneToken": "Please select at least one token.",
+            "noPermission": "You do not have permission to use the emote tool on the selected token(s).",
+            "selectMultiple": "Hold Shift to select multiple emotes IF YOU DARE."
+        }
+    }
+  }
+}
