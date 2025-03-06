@@ -19,8 +19,7 @@
     "maximum": 12
   },
   "esmodules": [
-    "scripts/module.js",
-	  "scripts/emoteHandler.js"
+    "scripts/module.js"
   ],
   "relationships": {
     "requires": [
