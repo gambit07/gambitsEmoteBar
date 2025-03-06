@@ -1,6 +1,6 @@
 function getPickedTokens(button) {
   if (!canvas.tokens.controlled || canvas.tokens.controlled.length === 0) {
-    ui.notifications.warn("Please select at least one token.");
+    ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.pleaseSelectOneToken"));
     toggleEmoteButton(button, false);
     return [];
   }
@@ -8,7 +8,7 @@ function getPickedTokens(button) {
     token.document.testUserPermission(game.user, "OWNER") || game.user.isGM
   );
   if (tokens.length === 0) {
-    ui.notifications.warn("You do not have permission to use the emote tool on the selected token(s).");
+    ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.noPermission"));
     toggleEmoteButton(button, false);
   }
   return tokens;
@@ -62,7 +62,7 @@ function setupEmoteButton(button, state) {
       await handleEmoteClick({ emote, pickedTokens: getPickedTokens(button) });
     } else {
       if (!e.shiftKey && state.active && state.active !== button) {
-        ui.notifications.warn("Hold Shift to select multiple emotes IF YOU DARE.");
+        ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.selectMultiple"));
         return;
       }
       toggleEmoteButton(button, true, state);
@@ -102,25 +102,25 @@ function getEmoteDialogHTML() {
             gap: 2px;
             width: fit-content;
             margin: auto;">
-          <button type="button" id="laugh" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Laugh" data-emote="laugh">
+          <button type="button" id="laugh" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.laugh")}" data-emote="laugh">
             <i class="fas fa-laugh-beam" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="angry" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Angry" data-emote="angry">
+          <button type="button" id="angry" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.angry")}" data-emote="angry">
             <i class="fas fa-angry" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="surprised" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Surprised" data-emote="surprised">
+          <button type="button" id="surprised" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.surprised")}" data-emote="surprised">
             <i class="fas fa-surprise" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="shout" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Shout" data-emote="shout">
+          <button type="button" id="shout" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.shout")}" data-emote="shout">
             <i class="fas fa-bullhorn" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="drunk" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Drunk" data-emote="drunk">
+          <button type="button" id="drunk" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.drunk")}" data-emote="drunk">
             <i class="fas fa-wine-glass" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="soul" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Soul" data-emote="soul">
+          <button type="button" id="soul" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.soul")}" data-emote="soul">
             <i class="fas fa-ghost" style="font-size: 2rem;"></i>
           </button>
-          <button type="button" id="slap" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="Slap" data-emote="slap">
+          <button type="button" id="slap" class="emote-btn" style="padding: 2px; width: 55px; height: 55px;" data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.slap")}" data-emote="slap">
             <i class="fas fa-hand-paper" style="font-size: 2rem;"></i>
           </button>
         </div>
@@ -197,7 +197,7 @@ async function handleEmoteClick({ emote, pickedTokens }) {
         await performSlap(token);
         break;
       default:
-        console.warn("No effect defined for emote:", emote);
+        console.warn(game.i18n.format("gambitsEmoteBar.log.warning.noEffect"), emote);
     }
   }
 }
