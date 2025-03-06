@@ -20,7 +20,7 @@
   },
   "esmodules": [
     "scripts/module.js",
-	  "scripts/emotePreview.js"
+	  "scripts/emoteHandler.js"
   ],
   "relationships": {
     "requires": [
