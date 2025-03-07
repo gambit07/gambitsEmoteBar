@@ -18,8 +18,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates: Added a keybind option to toggle the dialog open and closed, default is ctrl + e. Added data tooltip instead of title for better integration and visibility of button mouseover text. Added button highlighting to indicate when a button is in use. In addition, made the default selection only allow one emote at a time. A user can still hold the shift key and select additional emotes if desired. Added a title bar animation for a little spice" >> release_notes.txt
-          echo "- Bugfixes: Reworked a bunch of the dialog functionality to clean up the implementation. Still need to re-visit emote start stop events to make them more efficient when multiple tokens are selected" >> release_notes.txt
+          echo "TONS of updates not all listed here" >> release_notes.txt
+          echo "- Additions: A bunch of new emotes! Ill let everyone discover them for themselves, but huge shoutout to eskiemoh as always for the original animations. Make sure to visit their discord for tons of other animations!" >> release_notes.txt
+          echo "- Updates: Added in localization support (Thanks ChasarooniZ)." >> release_notes.txt
+          echo "- Bugfixes: Updated the Drunk, Laughing, and Slap emotes to respect token scale. Updated all animations to use attachTo in place of atLocation to properly interact with scaleToObject (Thanks eskie). Added small delay to emote button presses to prevent sequencers endEffect not having time to remove an effect if all of its effect have not been generated yet. Completely revamped ending effects, should be much more efficient with large groups of tokens. Bunch of other stuff" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
