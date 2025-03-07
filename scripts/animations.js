@@ -327,7 +327,7 @@ export async function performSlap(token) {
     .zIndex(1)
     .scaleToObject(token.document.width / 2, {considerTokenScale: true})
   
-  await seq.effect()
+  seq.effect()
     .attachTo(location)
     .file("modules/gambitsEmoteBar/assets/slap.webp")
     .size(0.55, { gridUnits: true })
@@ -339,7 +339,6 @@ export async function performSlap(token) {
     .delay(50)
     .zIndex(0)
     .scaleToObject(token.document.width / 2, {considerTokenScale: true})
-    .async()
   
   .play();
 }
