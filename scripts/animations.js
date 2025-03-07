@@ -5,7 +5,7 @@ export async function performLaugh(token) {
   new Sequence()
 
   .effect()
-    .name("emoteBarLaugh")
+    .name(`emoteBarLaugh_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/laugh_large.webp")
     .attachTo(token, {offset:{x:(-0.4*token.document.width*facing), y:-0.45*token.document.width}, gridUnits: true, local: true})
     .attachTo(token)
@@ -18,7 +18,7 @@ export async function performLaugh(token) {
     .persist()
 
   .effect()
-    .name("emoteBarLaugh")
+    .name(`emoteBarLaugh_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/laugh_small.webp")
     .attachTo(token, {offset:{x:(-0.55*token.document.width*facing), y:0*token.document.width}, gridUnits: true, local: true})
     .attachTo(token)
@@ -31,7 +31,7 @@ export async function performLaugh(token) {
     .persist()
 
   .effect()
-    .name("emoteBarLaugh")
+    .name(`emoteBarLaugh_${token.id}`)
     .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token)
@@ -55,7 +55,7 @@ export async function performAngry(token) {
   new Sequence()
 
   .effect()
-    .name("emoteBarAngry")
+    .name(`emoteBarAngry_${token.id}`)
     .file(`modules/gambitsEmoteBar/assets/angry_wide.webp`)
     .attachTo(token)
     .scaleIn(0, 1000, {ease: "easeOutElastic"})
@@ -68,7 +68,7 @@ export async function performAngry(token) {
     .private()
   
   .effect()
-    .name("emoteBarAngry")
+    .name(`emoteBarAngry_${token.id}`)
     .file(`modules/gambitsEmoteBar/assets/angry_narrow.webp`)
     .attachTo(token)
     .scaleIn(0, 1000, {ease: "easeOutElastic"})
@@ -86,7 +86,7 @@ export async function performSurprised(token) {
   new Sequence()
 
   .effect()
-    .name("emoteBarSurprised")
+    .name(`emoteBarSurprised_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/surprised_exclamation.webp")
     .attachTo(token)
     .anchor({x: 0.5, y: 1.55})
@@ -99,7 +99,7 @@ export async function performSurprised(token) {
     .private()
 
   .effect()
-    .name("emoteBarSurprised")
+    .name(`emoteBarSurprised_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/surprised.webp")
     .attachTo(token)
     .anchor({x: -0.3, y: 1.25})
@@ -121,7 +121,7 @@ export async function performShout(token) {
   new Sequence()
 
   .effect()
-    .name("emoteBarShout")
+    .name(`emoteBarShout_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/shout_small.webp")
     .attachTo(token, {offset:{x:(-0.45*token.document.width)*facing, y:(-0.4*token.document.width)}, gridUnits: true, local: true})
     .attachTo(token)
@@ -138,7 +138,7 @@ export async function performShout(token) {
     .persist()
 
   .effect()
-    .name("emoteBarShout")
+    .name(`emoteBarShout_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/shout_large.webp")
     .attachTo(token, {offset:{x:(-0.6*token.document.width)*facing, y:(-0.25*token.document.width)}, gridUnits: true, local: true})
     .attachTo(token)
@@ -154,7 +154,7 @@ export async function performShout(token) {
     .persist()
 
   .effect()
-    .name("emoteBarShout")
+    .name(`emoteBarShout_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/shout_small.webp")
     .attachTo(token, {offset:{x:(-0.6*token.document.width)*facing, y:(-0.05*token.document.width)}, gridUnits: true, local: true})
     .attachTo(token)
@@ -172,23 +172,14 @@ export async function performShout(token) {
 }
   
 export async function performDrunk(token) {
-  let centerX =  token.x+(canvas.grid.size*token.document.height)/2
-  let centerY =  token.y+(canvas.grid.size*token.document.height)/2
-  
-  let location = token.center;
-  let locationX = (location.x/canvas.grid.size)-(centerX/canvas.grid.size);
-  locationX = Math.round(locationX * 100) / 100;
-  locationX = locationX.toFixed(2);
-  
-  let locationY = (location.y/canvas.grid.size)-(centerY/canvas.grid.size);
-  locationY = Math.round(locationY * 100 ) / 100;
-  locationY = locationY.toFixed(2);
+  let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
+  let noseOffset = offsets?.noseOffset ?? { x: 0, y: 0 };
   
   new Sequence()
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_large.webp")
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .delay(0,500)
     .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.6*token.document.width}, gridUnits:true})
     .duration(7000)
@@ -205,7 +196,7 @@ export async function performDrunk(token) {
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_small.webp")
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .attachTo(token, {offset:{x:-0.35*token.document.width, y:-0.5*token.document.width}, gridUnits:true})
     .duration(7000)
     .delay(0, 600)
@@ -222,7 +213,7 @@ export async function performDrunk(token) {
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_medium.webp")
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.5*token.document.width}, gridUnits:true})
     .duration(7000)
     .delay(750, 1000)
@@ -239,7 +230,7 @@ export async function performDrunk(token) {
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_tiny.webp")
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .attachTo(token, {offset:{x:-0.1*token.document.width, y:-0.3*token.document.width}, gridUnits:true})
     .duration(7000)
     .delay(500,1200)
@@ -260,20 +251,20 @@ export async function performDrunk(token) {
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_blush.webp")
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .opacity(0.85)
-    .scaleToObject(0.4)
+    .scaleToObject(0.3, {considerTokenScale: true})
     .loopProperty("spriteContainer", "position.x", {  from:-20, to: 20, duration: 2500, pingPong: true, ease:"easeInOutSine" })
     .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .persist()
-    .attachTo(token, {offset: {x:Number(locationX), y:Number(locationY)}, gridUnits: true, bindAlpha: false})
+    .attachTo(token, {offset: {x:noseOffset.x-0.0, y:noseOffset.y+0.0}, gridUnits: true, bindAlpha: false})
     .zIndex(0)
     .private()
   
   .effect()
     .copySprite(token)
-    .name("emoteBarDrunk")
+    .name(`emoteBarDrunk_${token.id}`)
     .attachTo(token)
     .scaleToObject(1, {considerTokenScale: true})
     .loopProperty("spriteContainer", "position.x", {  from:-20, to: 20, duration: 2500, pingPong: true, ease:"easeInOutSine" })
@@ -297,7 +288,7 @@ export async function performSoul(token) {
   new Sequence()
   
   .effect()
-    .name("emoteBarSoul")
+    .name(`emoteBarSoul_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/soul.webp")
     .attachTo(token)
     .scaleIn(0, 1000, {ease: "easeOutElastic"})
@@ -363,7 +354,7 @@ export async function performCry(token) {
   new Sequence()
   
   .effect()
-    .name("emoteBarCry")
+    .name(`emoteBarCry_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/cry_lefteye.webp")
     .attachTo(token, {offset: {x:leftEyeOffset.x, y:leftEyeOffset.y+0.02}, gridUnits: true, bindAlpha: false})
     .fadeIn(500)
@@ -375,7 +366,7 @@ export async function performCry(token) {
     .private()
   
   .effect()
-    .name("emoteBarCry")
+    .name(`emoteBarCry_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/cry_righteye.webp")
     .attachTo(token, {offset: {x:rightEyeOffset.x, y:rightEyeOffset.y+0.02}, gridUnits: true, bindAlpha: false})
     .fadeIn(500)
@@ -393,7 +384,7 @@ export async function performDisgusted(token) {
   new Sequence()
   
   .effect()
-  .name("emoteBarDisgusted")
+  .name(`emoteBarDisgusted_${token.id}`)
   .file("modules/gambitsEmoteBar/assets/disgusted.webp")
   .attachTo(token)
   .scaleToObject(1, {considerTokenScale: true})
@@ -419,7 +410,7 @@ export async function performGiggle(token) {
   .opacity(0)
 
   .effect()
-    .name("emoteBarGiggle")
+    .name(`emoteBarGiggle_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/giggle_top.webp")
     .atLocation(token, {offset:{x:(-0.5*token.document.width)*facing, y:-0.25*token.document.width}, gridUnits: true, local: true})
     .attachTo(token, {bindAlpha: false})
@@ -429,9 +420,10 @@ export async function performGiggle(token) {
     .private()
     .mirrorX(mirrorFace)
     .persist()
+    .zIndex(2)
 
   .effect()
-    .name("emoteBarGiggle")
+    .name(`emoteBarGiggle_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/giggle_bottom.webp")
     .atLocation(token, {offset:{x:(-0.55*token.document.width)*facing, y:-0}, gridUnits: true, local: true})
     .attachTo(token, {bindAlpha: false})
@@ -441,9 +433,10 @@ export async function performGiggle(token) {
     .private()
     .mirrorX(mirrorFace)
     .persist()
+    .zIndex(2)
 
   .effect()
-    .name("emoteBarGiggle")
+    .name(`emoteBarGiggle_${token.id}`)
     .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .atLocation(token)
@@ -453,6 +446,7 @@ export async function performGiggle(token) {
     .loopProperty("sprite", "height", { from: 0, to: 0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad"  })
     .persist()
     .waitUntilFinished(-200)
+    .zIndex(1)
 
   .animation()
   .on(token)
@@ -462,18 +456,18 @@ export async function performGiggle(token) {
 }
 
 export async function performLove(token, state) {
-  state.loveActive = true;
+  game.gambitsEmoteBar.loveActive.set(token.id, true);
   
-  while (state.loveActive) {
+  while (game.gambitsEmoteBar.loveActive.get(token.id)) {
     await new Sequence()
       .effect()
-        .name("emoteBarLove")
+        .name(`emoteBarLove_${token.id}`)
         .file("modules/gambitsEmoteBar/assets/love.webp")
         .atLocation(token, { offset: { x: Math.random() * (0.4 - (-0.4)) + (-0.4) }, gridUnits: true })
         .spriteOffset({ y: -0.15 * token.document.width }, { gridUnits: true })
         .scaleIn(0, 1000, { ease: "easeOutElastic" })
         .fadeOut(400, { ease: "linear" })
-        .scaleToObject(0.25, {considerTokenScale: true})
+        .scaleToObject(0.25, { considerTokenScale: true })
         .duration(1000)
         .attachTo(token, { bindAlpha: false })
         .animateProperty("sprite", "position.y", { from: 0, to: -0.75, duration: 1000, gridUnits: true })
@@ -481,6 +475,8 @@ export async function performLove(token, state) {
         .wait(450)
       .play();
   }
+  
+  game.gambitsEmoteBar.loveActive.delete(token.id);
 }
 
 export async function performROFL(token) {
@@ -493,7 +489,7 @@ export async function performROFL(token) {
   .opacity(0)
 
   .effect()
-    .name("emoteBarRofl")
+    .name(`emoteBarRofl_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/rofl_top.webp")
     .atLocation(token, {offset:{x:-0.45*token.document.width, y:0.4*token.document.width}, gridUnits: true, local: true})
     .attachTo(token, {bindAlpha: false})
@@ -506,7 +502,7 @@ export async function performROFL(token) {
 
 
   .effect()
-    .name("emoteBarRofl")
+    .name(`emoteBarRofl_${token.id}`)
     .file("modules/gambitsEmoteBar/assets/rofl_bottom.webp")
     .atLocation(token, {offset:{x:-0.5*token.document.width, y:0.55*token.document.width}, gridUnits: true, local: true})
     .attachTo(token, {bindAlpha: false})
@@ -518,7 +514,7 @@ export async function performROFL(token) {
     .zIndex(2)
 
   .effect()
-    .name("emoteBarRofl")
+    .name(`emoteBarRofl_${token.id}`)
     .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token, {bindAlpha: false})
@@ -549,10 +545,10 @@ export async function performSmoking(token) {
   if (hasAnimatedSpellEffects) {
     seq.effect()
       .file("animated-spell-effects-cartoon.smoke.97")
-      .name("emoteBarSmoking")
+      .name(`emoteBarSmoking_${token.id}`)
       .attachTo(token, {offset: {x:mouthOffset.x-(0.18*facing), y:mouthOffset.y+0.0}, gridUnits: true, bindAlpha: false, local: true})
       .mirrorX(mirrorFace)
-      .scaleToObject(0.2, {considerTokenScale: true})
+      .scaleToObject(0.2)
       .filter("ColorMatrix", { brightness:0.75 })
       .persist()
       .zIndex(0.1)
@@ -563,10 +559,10 @@ export async function performSmoking(token) {
 
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/smoking.webp")
-    .name("emoteBarSmoking")
+    .name(`emoteBarSmoking_${token.id}`)
     .attachTo(token, {offset: {x:mouthOffset.x-(0.1*facing), y:mouthOffset.y+0.05}, gridUnits: true, bindAlpha: false, local: true})
     .mirrorX(mirrorFace)
-    .scaleToObject(0.2, {considerTokenScale: true})
+    .scaleToObject(0.2)
     .persist()
     .waitUntilFinished()
 
@@ -577,7 +573,7 @@ export async function performNervous(token) {
   new Sequence()
   
   .effect()
-  .name("emoteBarNervous")
+  .name(`emoteBarNervous_${token.id}`)
   .file("modules/gambitsEmoteBar/assets/nervous_left.webp")
   .scaleToObject(0.5, {considerTokenScale: true})
   .scaleIn(0, 1000, {ease: "easeOutElastic"})
@@ -590,7 +586,7 @@ export async function performNervous(token) {
   .zIndex(2)
   
   .effect()
-  .name("emoteBarNervous")
+  .name(`emoteBarNervous_${token.id}`)
   .file("modules/gambitsEmoteBar/assets/nervous_right.webp")
   .scaleToObject(0.5, {considerTokenScale: true})
   .scaleIn(0, 1000, {ease: "easeOutElastic"})

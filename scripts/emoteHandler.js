@@ -1,22 +1,6 @@
 import * as animations from './animations.js';
 import * as utils from './utils.js';
 
-function getPickedTokens(button) {
-  if (!canvas.tokens.controlled || canvas.tokens.controlled.length === 0) {
-    ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.pleaseSelectOneToken"));
-    toggleEmoteButton(button, false);
-    return [];
-  }
-  const tokens = canvas.tokens.controlled.filter(token =>
-    token.document.testUserPermission(game.user, "OWNER") || game.user.isGM
-  );
-  if (tokens.length === 0) {
-    ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.noPermission"));
-    toggleEmoteButton(button, false);
-  }
-  return tokens;
-}
-
 function setupTooltip(button) {
   button.addEventListener('mouseenter', () => {
     const tooltipText = button.getAttribute('data-tooltip');
@@ -25,40 +9,6 @@ function setupTooltip(button) {
   button.addEventListener('mouseleave', () => {
     game.tooltip.deactivate();
   });
-}
-
-function animateTitleBar(dialog) {
-  const titleBackground = dialog?.element?.querySelector('.window-header');
-  if (!titleBackground) return;
-  
-  const hasCarolingianUI = game.modules.get("crlngn-ui")?.active;
-  const duration = 5000;
-  let startTime = null;
-  
-  titleBackground.style.border = "2px solid";
-  titleBackground.style.borderImageSlice = 1;
-  
-  let baseColor = "rgba(255, 165, 0, 1)";
-  let highlightColor = "rgba(181, 99, 69, 1)";
-
-  if(hasCarolingianUI) {
-    baseColor = "rgba(93, 173, 226, 1)";
-    highlightColor = "rgba(26, 82, 118, 1)";
-  }
-  
-  function step(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
-    const progress = (elapsed % duration) / duration;
-    
-    const angle = 360 * progress;
-    
-    titleBackground.style.borderImage = `linear-gradient(${angle}deg, ${baseColor}, ${highlightColor}, ${baseColor}) 1`;
-    
-    requestAnimationFrame(step);
-  }
-  
-  requestAnimationFrame(step);
 }
 
 function setupEmoteButton(button, state) {
@@ -72,13 +22,13 @@ function setupEmoteButton(button, state) {
     }, 1000);
 
     const emote = button.dataset.emote;
-    const tokens = getPickedTokens(button);
+    const tokens = utils.getPickedTokens(button);
     if (!tokens.length) return;
     
-    if (areAllEffectsActive(emote, tokens)) {
-      endEmoteEffects(emote, tokens);
-      toggleEmoteButton(button, false, state);
-      if(state?.loveActive) state.loveActive = false;
+    if (utils.allEffectsActive(emote, tokens)) {
+      utils.endEmoteEffects(emote, tokens);
+      utils.toggleEmoteButton(button, false, state);
+      if(state?.loveActive) game.gambitsEmoteBar.loveActive = false;
     } else {
       if (!e.shiftKey && state.active && state.active !== button) {
         ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.selectMultiple"));
@@ -86,12 +36,12 @@ function setupEmoteButton(button, state) {
         return;
       }
       
-      toggleEmoteButton(button, true, state);
+      utils.toggleEmoteButton(button, true, state);
       if (!e.shiftKey) state.active = button;
-      await handleEmoteClick({ emote, pickedTokens: tokens, state });
+      await handleEmoteClick({ emote, pickedTokens: tokens });
 
       if (emote === "slap") {
-        toggleEmoteButton(button, false, state);
+        utils.toggleEmoteButton(button, false, state);
       }
     }
   });
@@ -101,49 +51,13 @@ function setupCrosshairButton(crosshairButton) {
   if (!crosshairButton) return;
 
   crosshairButton.addEventListener("click", async () => {
-      const tokens = getPickedTokens(crosshairButton);
+      const tokens = utils.getPickedTokens(crosshairButton);
       if (tokens.length !== 1) {
       ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.selectSingle"));
       return;
       }
       await utils.setOffsets(tokens[0]);
   });
-}
-
-function areAllEffectsActive(emote, tokens) {
-  const effectName = "emoteBar" + capitalize(emote);
-  return tokens.every(token => {
-    const effects = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
-    return effects.length > 0;
-  });
-}
-
-function endEmoteEffects(emote, tokens) {
-  tokens.forEach(token => {
-    Sequencer.EffectManager.endEffects({ name: "emoteBar" + capitalize(emote), object: token });
-  });
-}
-
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function toggleEmoteButton(button, active, state) {
-  if (active) {
-    button.dataset.active = "true";
-    const hasCarolingianUI = game.modules.get("crlngn-ui")?.active;
-    if(hasCarolingianUI) button.style.backgroundColor = "rgba(26, 82, 118, 1)";
-    else button.style.backgroundColor = "rgba(181, 99, 69, 0.80)";
-    if (state && !state.active) {
-      state.active = button;
-    }
-  } else {
-    button.dataset.active = "false";
-    button.style.backgroundColor = "";
-    if (state && state.active === button) {
-      state.active = null;
-    }
-  }
 }
 
 function getEmoteDialogHTML() {
@@ -259,7 +173,7 @@ export async function generateEmotes() {
     render: (event) => {
       let dialog = event.target;
       game.gambitsEmoteBar.dialogInstance = dialog;
-      animateTitleBar(dialog);
+      utils.animateTitleBar(dialog);
       let dialogElement = dialog?.element;
       let crosshairButton = dialogElement.querySelector('#setOffsets');
       setupCrosshairButton(crosshairButton);
@@ -287,7 +201,7 @@ export async function generateEmotes() {
   return emoteDialog;
 }
 
-async function handleEmoteClick({ emote, pickedTokens, state }) {
+async function handleEmoteClick({ emote, pickedTokens }) {
   for (let token of pickedTokens) {
     switch (emote) {
       case "laugh":
@@ -321,7 +235,7 @@ async function handleEmoteClick({ emote, pickedTokens, state }) {
         await animations.performGiggle(token);
         break;
       case "love":
-        await animations.performLove(token, state);
+        animations.performLove(token);
         break;
       case "rofl":
         await animations.performROFL(token);

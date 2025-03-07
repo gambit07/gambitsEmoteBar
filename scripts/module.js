@@ -2,7 +2,7 @@ import { generateEmotes } from './emoteHandler.js';
 
 Hooks.once('init', async function() {
 	if (!game.gambitsEmoteBar) {
-		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null };
+		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map() };
 	  }
 
 	game.keybindings.register("gambitsEmoteBar", "toggleBar", {
