@@ -354,14 +354,11 @@ export async function performSlap(token) {
 }
 
 export async function performCry(token) {
-  let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
-  let leftEyeOffset = {x: 0, y: 0};
-  let rightEyeOffset = {x: 0, y: 0};
-  let leftEyeScale = 0.25;
-  let rightEyeScale = 0.25;
-  if (offsets) {
-    ({ leftEyeOffset, rightEyeOffset, leftEyeScale, rightEyeScale } = offsets);
-  }
+  const offsets = token.document.getFlag("gambitsEmoteBar", "offsets") ?? {};
+  const leftEyeOffset = offsets.leftEyeOffset ?? { x: 0, y: 0 };
+  const rightEyeOffset = offsets.rightEyeOffset ?? { x: 0, y: 0 };
+  const leftEyeScale = offsets.leftEyeScale ?? 0.25;
+  const rightEyeScale = offsets.rightEyeScale ?? 0.25;
   
   new Sequence()
   
@@ -541,10 +538,7 @@ export async function performROFL(token) {
 
 export async function performSmoking(token) {
   let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
-  let mouthOffset = {x: 0, y: 0};
-  if (offsets) {
-    ({ mouthOffset } = offsets);
-  }
+  let mouthOffset = offsets?.mouthOffset ?? { x: 0, y: 0 };
 
   let facing = -1
   let mirrorFace = false;

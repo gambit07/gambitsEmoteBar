@@ -57,8 +57,8 @@ export async function setOffsets(token) {
     };
 
     let noseOffset = {
-        x:(noseOffset.x/canvas.grid.size) - (token.center.x/canvas.grid.size),
-        y:(noseOffset.y/canvas.grid.size) - (token.center.y/canvas.grid.size)
+        x:(noseCrosshair.x/canvas.grid.size) - (token.center.x/canvas.grid.size),
+        y:(noseCrosshair.y/canvas.grid.size) - (token.center.y/canvas.grid.size)
     };
 
     await token.document.setFlag("gambitsEmoteBar", "offsets", {

@@ -18,10 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "TONS of updates not all listed here" >> release_notes.txt
-          echo "- Additions: A bunch of new emotes! Ill let everyone discover them for themselves, but huge shoutout to eskiemoh as always for the original animations. Make sure to visit their discord for tons of other animations!" >> release_notes.txt
-          echo "- Updates: Added in localization support (Thanks ChasarooniZ)." >> release_notes.txt
-          echo "- Bugfixes: Updated the Drunk, Laughing, and Slap emotes to respect token scale. Updated all animations to use attachTo in place of atLocation to properly interact with scaleToObject (Thanks eskie). Added small delay to emote button presses to prevent sequencers endEffect not having time to remove an effect if all of its effect have not been generated yet. Completely revamped ending effects, should be much more efficient with large groups of tokens. Bunch of other stuff." >> release_notes.txt
+          echo "Couple small bugfixes for 1.0.7 BUT, one big note I forgot. This release contains a crosshair icon at the bottom of the emote list. This crosshair can be used to assign a location for a left eye, right eye, mouth, and nose which are used to specify locations for emotes that need them to give additional customization for placements" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
