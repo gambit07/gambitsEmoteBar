@@ -18,7 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Bugfixes: Fix cry, disgusted, and drunk emotes not rotating with token correctly. Fix nervous emote not working correctly with a mirrored token and changed the color to make it look less like tears. Fix smoking and cry emotes to correctly mirror when token is mirrored. Add support for dynamic token ring images." >> release_notes.txt
+          echo "Additions: Added a configurable sound selector tool per emote. There are two settings in the module now. One is to fully enable/disable sounds, default enabled. The second is to allow per user configuration of sounds, default disabled." >> release_notes.txt
+          echo "Bugfixes: Fixed a number of emotes not properly rotating the effect if the token started in a non-centered position. Fixed up the dialog icons for better centering of the FA icons and added the Sound Configuration button next to the existing Configure Offsets button." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

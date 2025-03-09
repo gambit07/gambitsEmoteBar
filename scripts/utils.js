@@ -171,3 +171,32 @@ export function getTokenImage(token) {
       ? token?.document?.ring?.subject?.texture ?? token?.document?.texture?.src
       : token.document?.texture?.src || "icons/svg/cowled.svg";
 }
+
+export function applyEmoteSound(sequence, emote) {
+  if (!game.settings.get("gambitsEmoteBar", "emoteSoundEnable")) {
+    return sequence;
+  }
+  
+  const moduleSoundPaths = game.settings.get("gambitsEmoteBar", "emoteSoundPaths") || {};
+  let soundPath = moduleSoundPaths[emote] || "";
+
+  if (!game.user.isGM && game.settings.get("gambitsEmoteBar", "emoteSoundEnablePerUser")) {
+    const userOverrides = game.user.getFlag("gambitsEmoteBar", "emoteSoundOverrides") || {};
+    soundPath = userOverrides[emote] || soundPath;
+  }
+
+  if (soundPath && soundPath.trim() !== "") {
+    sequence.sound()
+      .file(soundPath)
+      .fadeInAudio(500)
+      .fadeOutAudio(500);
+  }
+
+  return sequence;
+}
+
+export function getTokenRotation(token) {
+  let rotationEnabled = token.document.lockRotation;
+  rotationEnabled ? rotationEnabled = false : rotationEnabled = true;
+  return rotationEnabled;
+}

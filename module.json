@@ -21,6 +21,9 @@
   "esmodules": [
     "scripts/module.js"
   ],
+  "styles": [
+    "styles/styles.css"
+  ],
   "relationships": {
     "requires": [
       {

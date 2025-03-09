@@ -62,98 +62,91 @@ function setupCrosshairButton(crosshairButton) {
 
 function getEmoteDialogHTML() {
   return `
-  <style>
-    .emote-btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  </style>
     <form>
-      <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: auto;">
-        <!-- Grid with 2 columns and 8 rows: 14 emote cells plus 1 row for the crosshair -->
-        <div class="emote-buttons" style="
-            display: grid;
-            grid-template-columns: repeat(2, 55px);
-            grid-template-rows: repeat(8, 55px);
-            width: fit-content;
-            margin: auto;">
+      <div class="form-container">
+        <div class="emote-buttons">
           <button type="button" id="laugh" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.laugh")}" 
-                  data-emote="laugh" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-laugh-beam" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.laugh')}" 
+                  data-emote="laugh">
+            <i class="fas fa-laugh-beam"></i>
           </button>
           <button type="button" id="angry" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.angry")}" 
-                  data-emote="angry" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-angry" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.angry')}" 
+                  data-emote="angry">
+            <i class="fas fa-angry"></i>
           </button>
           <button type="button" id="surprised" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.surprised")}" 
-                  data-emote="surprised" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-surprise" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.surprised')}" 
+                  data-emote="surprised">
+            <i class="fas fa-surprise"></i>
           </button>
           <button type="button" id="shout" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.shout")}" 
-                  data-emote="shout" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-bullhorn" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.shout')}" 
+                  data-emote="shout">
+            <i class="fas fa-bullhorn"></i>
           </button>
           <button type="button" id="drunk" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.drunk")}" 
-                  data-emote="drunk" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-wine-glass" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.drunk')}" 
+                  data-emote="drunk">
+            <i class="fas fa-wine-glass"></i>
           </button>
           <button type="button" id="soul" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.soul")}" 
-                  data-emote="soul" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-ghost" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.soul')}" 
+                  data-emote="soul">
+            <i class="fas fa-ghost"></i>
           </button>
           <button type="button" id="slap" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.slap")}" 
-                  data-emote="slap" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-hand-paper" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.slap')}" 
+                  data-emote="slap">
+            <i class="fas fa-hand-paper"></i>
           </button>
           <button type="button" id="cry" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.cry")}" 
-                  data-emote="cry" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-sad-tear" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.cry')}" 
+                  data-emote="cry">
+            <i class="fas fa-sad-tear"></i>
           </button>
           <button type="button" id="disgusted" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.disgusted")}" 
-                  data-emote="disgusted" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-face-rolling-eyes" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.disgusted')}" 
+                  data-emote="disgusted">
+            <i class="fas fa-face-rolling-eyes"></i>
           </button>
           <button type="button" id="giggle" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.giggle")}" 
-                  data-emote="giggle" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-grin-beam" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.giggle')}" 
+                  data-emote="giggle">
+            <i class="fas fa-grin-beam"></i>
           </button>
           <button type="button" id="love" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.love")}" 
-                  data-emote="love" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-heart" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.love')}" 
+                  data-emote="love">
+            <i class="fas fa-heart"></i>
           </button>
           <button type="button" id="rofl" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.rofl")}" 
-                  data-emote="rofl" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-laugh-squint" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.rofl')}" 
+                  data-emote="rofl">
+            <i class="fas fa-laugh-squint"></i>
           </button>
           <button type="button" id="smoking" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.smoking")}" 
-                  data-emote="smoking" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-smoking" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.smoking')}" 
+                  data-emote="smoking">
+            <i class="fas fa-smoking"></i>
           </button>
           <button type="button" id="nervous" class="emote-btn" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.nervous")}" 
-                  data-emote="nervous" style="padding: 2px; width: 55px; height: 55px;">
-            <i class="fas fa-frown-open" style="font-size: 2rem;"></i>
+                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.nervous')}" 
+                  data-emote="nervous">
+            <i class="fas fa-frown-open"></i>
           </button>
 
-          <button type="button" id="setOffsets" class="setOffsets" 
-                  data-tooltip="${game.i18n.format("gambitsEmoteBar.menu.emote.offset")}" 
-                  style="grid-column: span 2; width: 100%;">
-            <i class="fas fa-bullseye" style="font-size: 1rem;"></i>
-          </button>
+          <!-- Action buttons row: setOffsets and file picker -->
+          <div class="action-container">
+            <button type="button" id="setOffsets" class="action-button" 
+                    data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
+              <i class="fas fa-bullseye"></i>
+            </button>
+            <button type="button" id="openFilePicker" class="action-button" 
+                    data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
+              <i class="fas fa-file-audio"></i>
+            </button>
+          </div>
         </div>
       </div>
     </form>
@@ -173,7 +166,7 @@ export async function generateEmotes() {
     content: htmlContent,
     buttons: [{
       action: "close",
-      label: `<i class='fas fa-times' style='margin-right: 5px;'></i>`,
+      label: `<i class='fas fa-times'></i>`,
       default: true
     }],
     render: (event) => {
@@ -183,6 +176,13 @@ export async function generateEmotes() {
       let dialogElement = dialog?.element;
       let crosshairButton = dialogElement.querySelector('#setOffsets');
       setupCrosshairButton(crosshairButton);
+      
+      const fileSelectButton = dialogElement.querySelector('#openFilePicker');
+      if (fileSelectButton) {
+        fileSelectButton.addEventListener("click", () => {
+          openSoundSelectionDialog();
+        });
+      }
 
       if (userFlags) {
         dialog.setPosition({ top: userFlags.top, left: userFlags.left });
@@ -205,6 +205,91 @@ export async function generateEmotes() {
   });
 
   return emoteDialog;
+}
+
+async function openSoundSelectionDialog() {
+  const emotes = [
+    "laugh", "angry", "surprised", "shout", "drunk",
+    "soul", "slap", "cry", "disgusted", "giggle",
+    "love", "rofl", "smoking", "nervous"
+  ];
+
+  const moduleDefaults = game.settings.get("gambitsEmoteBar", "emoteSoundPaths") || {};
+  const userOverrides = game.user.getFlag("gambitsEmoteBar", "emoteSoundOverrides") || {};
+
+  let content = `<form>`;
+  for (const emote of emotes) {
+    const initialValue = game.user.isGM
+      ? (moduleDefaults[emote] || "")
+      : (userOverrides[emote] || moduleDefaults[emote] || "");
+    content += `
+      <div style="display: flex; align-items: center; margin-bottom: 4px;">
+        <label for="soundPath_${emote}" style="width: 80px;">${emote}:</label>
+        <input type="text" name="soundPath_${emote}" id="soundPath_${emote}" value="${initialValue}" placeholder="Enter sound file path…" style="flex: 1; margin-right: 4px;" />
+        <button type="button" id="browseSound_${emote}" title="Browse sound files" style="width: 30px; height: 30px; padding: 2px; flex-shrink: 0;">
+          <i class="fas fa-folder-open" style="font-size: 0.8rem;"></i>
+        </button>
+      </div>
+    `;
+  }
+  content += `</form>`;
+
+  const result = await foundry.applications.api.DialogV2.wait({
+    window: { title: "Select Emote Sound Files" },
+    content: content,
+    buttons: [
+      {
+        action: "confirm",
+        label: `<i class='fas fa-check'></i> Confirm`,
+        callback: async (event, button, dialog) => {
+          const soundPaths = {};
+          const form = button.form;
+          for (const emote of emotes) {
+            soundPaths[emote] = form?.elements[`soundPath_${emote}`]?.value || "";
+          }
+          return soundPaths;
+        },
+        default: true
+      },
+      {
+        action: "cancel",
+        label: `<i class='fas fa-times'></i> Cancel`
+      }
+    ],
+    render: event => {
+      const element = event.target.element;
+      for (const emote of emotes) {
+        const browseButton = element.querySelector(`#browseSound_${emote}`);
+        if (browseButton) {
+          browseButton.addEventListener("click", () => {
+            const inputEl = element.querySelector(`#soundPath_${emote}`);
+            const startingPath = inputEl && inputEl.value ? inputEl.value : "/";
+            new FilePicker({
+              type: "audio",
+              current: startingPath,
+              callback: path => {
+                if (inputEl) inputEl.value = path;
+              }
+            }).render(true);
+          });
+        }
+      }
+    },
+    close: event => {
+      // Optional cleanup can be added here.
+    },
+    rejectClose: false
+  });
+
+  if (result) {
+    if (game.user.isGM) {
+      await game.settings.set("gambitsEmoteBar", "emoteSoundPaths", result);
+    } else {
+      await game.user.setFlag("gambitsEmoteBar", "emoteSoundOverrides", result);
+    }
+  }
+
+  return result;
 }
 
 async function handleEmoteClick({ emote, pickedTokens }) {
