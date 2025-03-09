@@ -61,6 +61,8 @@ function setupCrosshairButton(crosshairButton) {
 }
 
 function getEmoteDialogHTML() {
+  const showFilePicker = game.user.isGM || game.settings.get("gambitsEmoteBar", "emoteSoundEnablePerUser");
+  const actionContainerClass = showFilePicker ? "action-container with-filepicker" : "action-container no-filepicker";
   return `
     <form>
       <div class="form-container">
@@ -136,16 +138,15 @@ function getEmoteDialogHTML() {
             <i class="fas fa-frown-open"></i>
           </button>
 
-          <!-- Action buttons row: setOffsets and file picker -->
-          <div class="action-container">
-            <button type="button" id="setOffsets" class="action-button" 
-                    data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
+          <div class="${actionContainerClass}">
+            <button type="button" id="setOffsets" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
               <i class="fas fa-bullseye"></i>
             </button>
-            <button type="button" id="openFilePicker" class="action-button" 
-                    data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
+            ${ showFilePicker ? `
+            <button type="button" id="openFilePicker" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
               <i class="fas fa-file-audio"></i>
             </button>
+            ` : "" }
           </div>
         </div>
       </div>

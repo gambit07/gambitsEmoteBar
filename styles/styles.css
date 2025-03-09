@@ -1,60 +1,77 @@
-  /* Container for the entire form */
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: fit-content;
-    margin: auto;
-  }
+/* Container for the entire form */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  margin: auto;
+}
 
-  /* Grid container for the emote buttons */
-  .emote-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 55px);
-    grid-template-rows: repeat(8, 55px);
-    width: fit-content;
-    margin: auto;
-  }
+/* Grid container for the emote buttons */
+.emote-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 55px);
+  grid-template-rows: repeat(8, 55px);
+  width: fit-content;
+  margin: auto;
+}
 
-  /* Style for emote buttons */
-  button.emote-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px;
-    width: 55px;
-    height: 55px;
-  }
+/* Style for emote buttons */
+button.emote-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  width: 55px;
+  height: 55px;
+}
 
-  /* Center Font Awesome icons in emote buttons */
-  button.emote-btn i {
-    font-size: 2rem;
-    margin: 0;
-    transform: translateY(1px);
-  }
+/* Center Font Awesome icons in emote buttons */
+button.emote-btn i {
+  font-size: 2rem;
+  margin: 0;
+  transform: translateY(1px);
+}
 
-  /* Action button container*/
-  .action-container {
-    display: grid;
-    grid-template-columns: repeat(2, 55px);
-    gap: 0;
-    margin-top: 10px;
-    width: fit-content;
-  }
+/* Base Action button container */
+.action-container {
+  margin-top: 10px;
+  width: 110px; /* 2 x 55px */
+}
 
-  /* Style for action buttons */
-  button.action-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px;
-    width: 55px;
-    height: 28px;
-  }
+/* When file picker is displayed: use grid with 2 columns */
+.action-container.with-filepicker {
+  display: grid;
+  grid-template-columns: repeat(2, 55px);
+  gap: 0;
+}
 
-  /* Center Font Awesome icons in action buttons */
-  button.action-button i {
-    font-size: 1rem;
-    margin: 0;
-    transform: translateY(1px);
-  }
+/* When file picker is disabled, force the single button to span both columns */
+.action-container.no-filepicker {
+  display: grid;
+  grid-template-columns: repeat(2, 55px);
+  gap: 0;
+}
+
+/* Single button in a no-filepicker container - span both columns */
+.action-container.no-filepicker button.action-button {
+  grid-column: span 2;
+  width: 110px;
+}
+
+/* Style for action buttons */
+button.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  width: 55px;
+  height: 28px;
+}
+
+/* Center Font Awesome icons in action buttons */
+button.action-button i {
+  font-size: 1rem;
+  margin: 0;
+  transform: translateY(1px);
+}
