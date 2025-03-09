@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "And one more bugfix for slap" >> release_notes.txt
+          echo "Bugfixes: Fix cry, disgusted, and drunk emotes not rotating with token correctly. Fix nervous emote not working correctly with a mirrored token and changed the color to make it look less like tears. Fix smoking and cry emotes to correctly mirror when token is mirrored. Add support for dynamic token ring images." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

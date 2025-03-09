@@ -1,3 +1,5 @@
+import getTokenImage from './utils.js';
+
 export async function performLaugh(token) {
   let facing = 1;
   let mirrorFace = true;
@@ -32,7 +34,7 @@ export async function performLaugh(token) {
 
   .effect()
     .name(`emoteBarLaugh_${token.id}`)
-    .copySprite(token)
+    .file(getTokenImage(token))
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token)
     .attachTo(token)
@@ -181,7 +183,7 @@ export async function performDrunk(token) {
     .file("modules/gambitsEmoteBar/assets/drunk_large.webp")
     .name(`emoteBarDrunk_${token.id}`)
     .delay(0,500)
-    .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.6*token.document.width}, gridUnits:true})
+    .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.6*token.document.width}, gridUnits: true, bindAlpha: false, local: true})
     .duration(7000)
     .scaleToObject(0.05)
     .zeroSpriteRotation()
@@ -191,13 +193,14 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .persist()
-    .attachTo(token, {bindAlpha: false, bindRotation:false})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .private()
+    .belowTokens(false)
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_small.webp")
     .name(`emoteBarDrunk_${token.id}`)
-    .attachTo(token, {offset:{x:-0.35*token.document.width, y:-0.5*token.document.width}, gridUnits:true})
+    .attachTo(token, {offset:{x:-0.35*token.document.width, y:-0.5*token.document.width}, gridUnits: true, bindAlpha: false, local: true})
     .duration(7000)
     .delay(0, 600)
     .scaleToObject(0.05)
@@ -208,13 +211,14 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .persist()
-    .attachTo(token, {bindAlpha: false, bindRotation:false})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .private()
+    .belowTokens(false)
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_medium.webp")
     .name(`emoteBarDrunk_${token.id}`)
-    .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.5*token.document.width}, gridUnits:true})
+    .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.5*token.document.width}, gridUnits: true, bindAlpha: false, local: true})
     .duration(7000)
     .delay(750, 1000)
     .scaleToObject(0.05)
@@ -225,13 +229,14 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .persist()
-    .attachTo(token, {bindAlpha: false, bindRotation:false})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .private()
+    .belowTokens(false)
   
   .effect()
     .file("modules/gambitsEmoteBar/assets/drunk_tiny.webp")
     .name(`emoteBarDrunk_${token.id}`)
-    .attachTo(token, {offset:{x:-0.1*token.document.width, y:-0.3*token.document.width}, gridUnits:true})
+    .attachTo(token, {offset:{x:-0.1*token.document.width, y:-0.3*token.document.width}, gridUnits: true, bindAlpha: false, local: true})
     .duration(7000)
     .delay(500,1200)
     .scaleToObject(0.05)
@@ -242,8 +247,9 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .persist()
-    .attachTo(token, {bindAlpha: false, bindRotation:false})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .private()
+    .belowTokens(false)
   
   .animation()
   .on(token)
@@ -258,20 +264,20 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .persist()
-    .attachTo(token, {offset: {x:noseOffset.x-0.0, y:noseOffset.y+0.0}, gridUnits: true, bindAlpha: false})
+    .attachTo(token, {offset: {x:noseOffset.x-0.0, y:noseOffset.y+0.0}, gridUnits: true, bindAlpha: false, local: true})
     .zIndex(0)
     .private()
   
   .effect()
-    .copySprite(token)
+    .file(getTokenImage(token))
     .name(`emoteBarDrunk_${token.id}`)
-    .attachTo(token)
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .scaleToObject(1, {considerTokenScale: true})
     .loopProperty("spriteContainer", "position.x", {  from:-20, to: 20, duration: 2500, pingPong: true, ease:"easeInOutSine" })
     .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .persist()
-    .attachTo(token, {bindAlpha: false})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
     .waitUntilFinished()
   
   .animation()
@@ -344,39 +350,51 @@ export async function performSlap(token) {
 }
 
 export async function performCry(token) {
+  const isMirrored = token.document.texture.scaleX < 0;
   const offsets = token.document.getFlag("gambitsEmoteBar", "offsets") ?? {};
   const leftEyeOffset = offsets.leftEyeOffset ?? { x: 0, y: 0 };
   const rightEyeOffset = offsets.rightEyeOffset ?? { x: 0, y: 0 };
   const leftEyeScale = offsets.leftEyeScale ?? 0.25;
   const rightEyeScale = offsets.rightEyeScale ?? 0.25;
   
+  const adjustedLeftEyeOffset = {
+    x: isMirrored ? -leftEyeOffset.x : leftEyeOffset.x,
+    y: leftEyeOffset.y
+  };
+  const adjustedRightEyeOffset = {
+    x: isMirrored ? -rightEyeOffset.x : rightEyeOffset.x,
+    y: rightEyeOffset.y
+  };
+  
   new Sequence()
   
-  .effect()
-    .name(`emoteBarCry_${token.id}`)
-    .file("modules/gambitsEmoteBar/assets/cry_lefteye.webp")
-    .attachTo(token, {offset: {x:leftEyeOffset.x, y:leftEyeOffset.y+0.02}, gridUnits: true, bindAlpha: false})
-    .fadeIn(500)
-    .fadeOut(500)
-    .scaleToObject(leftEyeScale)
-    .mirrorX(true)
-    .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true})
-    .persist()
-    .private()
+    .effect()
+      .name(`emoteBarCry_${token.id}`)
+      .file("modules/gambitsEmoteBar/assets/cry_lefteye.webp")
+      .attachTo(token, { offset: { x: adjustedLeftEyeOffset.x, y: adjustedLeftEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: true })
+      .fadeIn(500)
+      .fadeOut(500)
+      .scaleToObject(leftEyeScale)
+      .mirrorX(!isMirrored)
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
+      .persist()
+      .private()
+      .belowTokens(false)
   
-  .effect()
-    .name(`emoteBarCry_${token.id}`)
-    .file("modules/gambitsEmoteBar/assets/cry_righteye.webp")
-    .attachTo(token, {offset: {x:rightEyeOffset.x, y:rightEyeOffset.y+0.02}, gridUnits: true, bindAlpha: false})
-    .fadeIn(500)
-    .fadeOut(500)
-    .scaleToObject(rightEyeScale)
-    .persist()
-    .mirrorX(false)
-    .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true})
-    .waitUntilFinished()
-
-  .play()
+    .effect()
+      .name(`emoteBarCry_${token.id}`)
+      .file("modules/gambitsEmoteBar/assets/cry_righteye.webp")
+      .attachTo(token, { offset: { x: adjustedRightEyeOffset.x, y: adjustedRightEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: true })
+      .fadeIn(500)
+      .fadeOut(500)
+      .scaleToObject(rightEyeScale)
+      .mirrorX(isMirrored)
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
+      .waitUntilFinished()
+      .belowTokens(false)
+      .persist()
+  
+    .play();
 }
 
 export async function performDisgusted(token) {
@@ -385,10 +403,10 @@ export async function performDisgusted(token) {
   .effect()
   .name(`emoteBarDisgusted_${token.id}`)
   .file("modules/gambitsEmoteBar/assets/disgusted.webp")
-  .attachTo(token)
+  .attachTo(token, {gridUnits: true, bindAlpha: false, local: true})
   .scaleToObject(1, {considerTokenScale: true})
   .persist()
-  .attachTo(token, {offset:{y:-1}, gridUnits: true, bindAlpha: false})
+  .attachTo(token, {offset:{y:-1}, gridUnits: true, bindAlpha: false, local: true})
   .animateProperty("sprite", "position.y", { from: 0, to: 1, duration: 500, gridUnits:true, fromEnd: false })
   .animateProperty("sprite", "position.y", { from: 0, to: -0.8, duration: 500, gridUnits:true, fromEnd: true })
   .mask()
@@ -436,7 +454,7 @@ export async function performGiggle(token) {
 
   .effect()
     .name(`emoteBarGiggle_${token.id}`)
-    .copySprite(token)
+    .file(getTokenImage(token))
     .scaleToObject(1, {considerTokenScale: true})
     .atLocation(token)
     .attachTo(token, {bindAlpha: false})
@@ -514,7 +532,7 @@ export async function performROFL(token) {
 
   .effect()
     .name(`emoteBarRofl_${token.id}`)
-    .copySprite(token)
+    .file(getTokenImage(token))
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token, {bindAlpha: false})
     .loopProperty("sprite", "position.y", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
@@ -534,69 +552,71 @@ export async function performROFL(token) {
 export async function performSmoking(token) {
   let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
   let mouthOffset = offsets?.mouthOffset ?? { x: 0, y: 0 };
-
-  let facing = -1
+  
+  let facing = -1;
   let mirrorFace = false;
   let seq = new Sequence();
   
   const hasAnimatedSpellEffects = game.modules.get("animated-spell-effects")?.active;
-
+  const isMirrored = token.document.texture.scaleX < 0;
+  const adjustedMouthOffset = { x: isMirrored ? -mouthOffset.x : mouthOffset.x, y: mouthOffset.y };
+  
   if (hasAnimatedSpellEffects) {
     seq.effect()
       .file("animated-spell-effects-cartoon.smoke.97")
       .name(`emoteBarSmoking_${token.id}`)
-      .attachTo(token, {offset: {x:mouthOffset.x-(0.18*facing), y:mouthOffset.y+0.0}, gridUnits: true, bindAlpha: false, local: true})
-      .mirrorX(mirrorFace)
-      .scaleToObject(0.2)
-      .filter("ColorMatrix", { brightness:0.75 })
+      .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.17 * facing), y: adjustedMouthOffset.y + 0.01 }, gridUnits: true, bindAlpha: false, local: true })
+      .mirrorX(!isMirrored && mirrorFace)
+      .scale(0.02)
+      .filter("ColorMatrix", { brightness: 0.75 })
       .persist()
-      .zIndex(0.1)
+      .zIndex(0.15);
   }
-  else {
-    ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.noAsecSmoking"))
-  }
-
+  
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/smoking.webp")
     .name(`emoteBarSmoking_${token.id}`)
-    .attachTo(token, {offset: {x:mouthOffset.x-(0.1*facing), y:mouthOffset.y+0.05}, gridUnits: true, bindAlpha: false, local: true})
-    .mirrorX(mirrorFace)
-    .scaleToObject(0.2)
+    .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.1 * facing), y: adjustedMouthOffset.y + 0.05 }, gridUnits: true, bindAlpha: false, local: true })
+    .mirrorX(!isMirrored && mirrorFace)
+    .scale(0.15)
     .persist()
     .waitUntilFinished()
-
-  .play()
+    .play();
 }
 
-export async function performNervous(token) {  
+export async function performNervous(token) {
+  const isMirrored = token.document.texture.scaleX < 0;
+
   new Sequence()
-  
-  .effect()
-  .name(`emoteBarNervous_${token.id}`)
-  .file("modules/gambitsEmoteBar/assets/nervous_left.webp")
-  .scaleToObject(0.5, {considerTokenScale: true})
-  .scaleIn(0, 1000, {ease: "easeOutElastic"})
-  .attachTo(token, { offset:{x:-0.25*token.document.width, y:((0.9-token.document.texture.scaleX)/2)-0.35}, gridUnits:true, align: "center", edge: "inner",local: true })
-  .loopProperty("sprite", "scale.x", { from: 0.5, to: 1, duration: 200, ease:"easeOutQuint"})
-  .loopProperty("sprite", "position.x", { from: 0, to: -0.1, gridUnits: true, duration: 200, ease:"easeOutCirc"})
-  .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease:"easeOutQuint"})
-  .loopProperty("sprite", "rotation", { from: 0, to: 15, duration: 1000})
-  .persist()
-  .zIndex(2)
-  
-  .effect()
-  .name(`emoteBarNervous_${token.id}`)
-  .file("modules/gambitsEmoteBar/assets/nervous_right.webp")
-  .scaleToObject(0.5, {considerTokenScale: true})
-  .scaleIn(0, 1000, {ease: "easeOutElastic"})
-  .attachTo(token, { offset:{x:0.2*token.document.width, y:((0.9-token.document.texture.scaleX)/2)-0.35}, gridUnits:true, align: "center", edge: "inner",local: true })
-  .loopProperty("sprite", "scale.x", { from: 0.5, to: 1, duration: 200, ease:"easeOutQuint"})
-  .loopProperty("sprite", "position.x", { from: 0, to: 0.1, gridUnits: true, duration: 200, ease:"easeOutCirc"})
-  .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease:"easeOutQuint"})
-  .loopProperty("sprite", "rotation", { from: 0, to: -15, duration: 1000})
-  .persist()
-  .mirrorX()
-  .zIndex(2)
-  
-  .play()
+    .effect()
+      .name(`emoteBarNervous_${token.id}`)
+      .file("modules/gambitsEmoteBar/assets/nervous_left.webp")
+      .scaleToObject(0.5, { considerTokenScale: true })
+      .mirrorX(isMirrored)
+      .scaleIn(0, 1000, { ease: "easeOutElastic" })
+      .attachTo(token, { offset: { x: -0.25 * token.document.width, y: ((0.9 - Math.abs(token.document.texture.scaleX)) / 2) - 0.35 }, gridUnits: true, align: "center", edge: "inner", local: true })
+      .loopProperty("sprite", "scale.x", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
+      .loopProperty("sprite", "position.x", { from: 0, to: -0.1, gridUnits: true, duration: 200, ease: "easeOutCirc" })
+      .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
+      .loopProperty("sprite", "rotation", { from: 0, to: 15, duration: 1000 })
+      .filter("ColorMatrix", { saturate: -1 })
+      .persist()
+      .belowTokens(false)
+    
+    .effect()
+      .name(`emoteBarNervous_${token.id}`)
+      .file("modules/gambitsEmoteBar/assets/nervous_right.webp")
+      .scaleToObject(0.5, { considerTokenScale: true })
+      .scaleIn(0, 1000, { ease: "easeOutElastic" })
+      .attachTo(token, { offset: { x: 0.2 * token.document.width, y: ((0.9 - Math.abs(token.document.texture.scaleX)) / 2) - 0.35 }, gridUnits: true, align: "center", edge: "inner", local: true })
+      .mirrorX(!isMirrored)
+      .loopProperty("sprite", "scale.x", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
+      .loopProperty("sprite", "position.x", { from: 0, to: 0.1, gridUnits: true, duration: 200, ease: "easeOutCirc" })
+      .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
+      .loopProperty("sprite", "rotation", { from: 0, to: -15, duration: 1000 })
+      .filter("ColorMatrix", { saturate: -1 })
+      .persist()
+      .belowTokens(false)
+    
+    .play();
 }

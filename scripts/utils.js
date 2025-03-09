@@ -165,3 +165,9 @@ export function allEffectsActive(emote, tokens) {
     return effects.length > 0;
   });
 }
+
+export function getTokenImage(token) {
+  return token?.document?.ring?.enabled
+      ? token?.document?.ring?.subject?.texture ?? token?.document?.texture?.src
+      : token.document?.texture?.src || "icons/svg/cowled.svg";
+}

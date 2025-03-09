@@ -26,16 +26,16 @@
             "angry": "Angry",
             "surprised": "Surprised",
             "shout": "Shout",
-            "drunk": "Drunk (Nose Offset)",
+            "drunk": "Drunk (Nose)",
             "soul": "Soul",
             "slap": "Slap",
-            "cry": "Cry (Eyes Offset)",
-            "offset": "Configure Offsets",
+            "cry": "Cry (Eyes)",
+            "offset": "Configure Offsets (Eyes, Mouth, Nose)",
             "disgusted": "Disgusted",
             "giggle": "Giggle",
             "love": "Love",
             "rofl": "ROFL",
-            "smoking": "Smoking (Mouth Offset)",
+            "smoking": "Smoking (Mouth)",
             "nervous": "Nervous"
         }
     },
@@ -45,8 +45,7 @@
             "pleaseSelectOneToken": "Please select at least one token.",
             "noPermission": "You do not have permission to use the emote tool on the selected token(s).",
             "selectMultiple": "Hold Shift to select multiple emotes IF YOU DARE.",
-            "selectSingle": "Please select a single token to set offsets.",
-            "noAsecSmoking": "You must have the Animated Spell Effects Cartoon module for the smoke effect."
+            "selectSingle": "Please select a single token to set offsets."
         }
     }
   }

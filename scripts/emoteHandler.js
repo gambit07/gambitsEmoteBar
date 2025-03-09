@@ -62,6 +62,13 @@ function setupCrosshairButton(crosshairButton) {
 
 function getEmoteDialogHTML() {
   return `
+  <style>
+    .emote-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
     <form>
       <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: auto;">
         <!-- Grid with 2 columns and 8 rows: 14 emote cells plus 1 row for the crosshair -->
@@ -69,7 +76,6 @@ function getEmoteDialogHTML() {
             display: grid;
             grid-template-columns: repeat(2, 55px);
             grid-template-rows: repeat(8, 55px);
-            gap: 2px;
             width: fit-content;
             margin: auto;">
           <button type="button" id="laugh" class="emote-btn" 
