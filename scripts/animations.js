@@ -1,4 +1,4 @@
-import getTokenImage from './utils.js';
+import { getTokenImage } from './utils.js';
 
 export async function performLaugh(token) {
   let facing = 1;
