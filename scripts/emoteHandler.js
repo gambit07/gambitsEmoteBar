@@ -263,7 +263,8 @@ async function openSoundSelectionDialog() {
         if (browseButton) {
           browseButton.addEventListener("click", () => {
             const inputEl = element.querySelector(`#soundPath_${emote}`);
-            const startingPath = inputEl && inputEl.value ? inputEl.value : "/";
+            const defaultSoundPath = game.settings.get("gambitsEmoteBar", "emoteSoundDefaultPath") || "/";
+            const startingPath = (inputEl && inputEl.value) ? inputEl.value : defaultSoundPath;
             new FilePicker({
               type: "audio",
               current: startingPath,
@@ -276,12 +277,12 @@ async function openSoundSelectionDialog() {
       }
     },
     close: event => {
-      // Optional cleanup can be added here.
+      return;
     },
     rejectClose: false
   });
 
-  if (result) {
+  if (result && result !== "cancel") {
     if (game.user.isGM) {
       await game.settings.set("gambitsEmoteBar", "emoteSoundPaths", result);
     } else {

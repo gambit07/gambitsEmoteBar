@@ -27,6 +27,16 @@ Hooks.once('init', async function() {
 		default: false
 	});
 
+	game.settings.register("gambitsEmoteBar", "emoteSoundDefaultPath", {
+		name: "Default Sounds Path",
+		hint: "If set, the FilePicker will use this default path for audio files instead of the root.",
+		scope: "world",
+		config: true,
+		restricted: true,
+		type: String,
+		default: "/"
+	  });
+
 	if (!game.gambitsEmoteBar) {
 		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map() };
 	  }
