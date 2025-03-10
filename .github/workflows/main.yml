@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates: If no permissions given for user selected sounds, the sound picker button is now removed and the set offsets button is expanded to cover both columns for non-gm users" >> release_notes.txt
+          echo "Few small bug fixes" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -59,7 +59,7 @@ jobs:
             "id": "'"gambitsEmoteBar"'",
             "release": {
               "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambitsEmoteBar/releases/latest/download/module.json"'",
+              "manifest": "'"https://github.com/gambit07/gambitsEmoteBar/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
               "download": "'"https://github.com/gambit07/gambitsEmoteBar/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
               "notes": "'"https://github.com/gambit07/gambitsEmoteBar/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
