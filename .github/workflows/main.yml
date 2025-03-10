@@ -18,8 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Additions: Added a new setting to provide a default path for audio files." >> release_notes.txt
-          echo "Bugfixes: Fixed sound file paths getting erased if the Cancel button was used." >> release_notes.txt
+          echo "Updates: If no permissions given for user selected sounds, the sound picker button is now removed and the set offsets button is expanded to cover both columns for non-gm users" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
