@@ -6,7 +6,7 @@ Hooks.once('init', async function() {
 
 	if (!game.gambitsEmoteBar) {
 		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map() };
-	  }
+	}
 
 	game.keybindings.register("gambitsEmoteBar", "toggleBar", {
 		name: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.name"),
