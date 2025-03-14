@@ -18,8 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Features: Added a Clear All Emotes button. This button will remove any emotes for tokens that you have applied emotes to. Added an api, accessible via game.gambitsEmoteBar.playEmote. This api is only usable by a GM and can be passed an emote name, array of token objects, and a duration in seconds." >> release_notes.txt
-          echo "Bugfixes: Modified button highlighting functionality to keep the relevant emote button highlighted if any token has that emote assigned. This also allows highlighting to survive a world reload." >> release_notes.txt
+          echo "Bugfixes: Fix the love emote not being applied correctly via api." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

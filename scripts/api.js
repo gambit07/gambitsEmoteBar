@@ -47,7 +47,7 @@ export async function playEmote({emote, tokens = [], duration = null}) {
             break;
           case "slap":
             await animations.performSlap(token);
-            break;
+            return;
           case "cry":
             await animations.performCry(token);
             break;
@@ -58,7 +58,7 @@ export async function playEmote({emote, tokens = [], duration = null}) {
             await animations.performGiggle(token);
             break;
           case "love":
-            await animations.performLove(token);
+            animations.performLove(token);
             break;
           case "rofl":
             await animations.performROFL(token);
@@ -73,11 +73,19 @@ export async function playEmote({emote, tokens = [], duration = null}) {
             return ui.notifications.warn(`Emote "${emote}" not recognized. Valid emotes are: ${game.gambitsEmoteBar.dialogEmotes.join(", ")}`);
         }
     }
-    
+
     if (duration) {
-        setTimeout(() => {
-            tokens.forEach(token => { Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${userId}`, object: token }); });
-        }, duration * 1000);
+      setTimeout(() => {
+        if (emote === "love") {
+          tokens.forEach(token => {
+            if (game.gambitsEmoteBar.loveActive) {
+              game.gambitsEmoteBar.loveActive.set(token.id, false);
+            }
+          });
+        }
+
+        tokens.forEach(token => { Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${userId}`, object: token }); });
+      }, duration * 1000);
     }
 
     return true;
