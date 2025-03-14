@@ -34,7 +34,7 @@ button.emote-btn i {
 }
 
 /* Separate container for action buttons */
-.action-buttons {
+.action-button-grid {
   display: grid;
   grid-auto-rows: auto;
   gap: 1px;

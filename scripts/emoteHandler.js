@@ -155,7 +155,7 @@ function getEmoteDialogHTML() {
             <i class="fas fa-frown-open"></i>
           </button>
 
-          <div class="action-buttons">
+          <div class="action-button-grid">
             <div class="action-container end-all">
               <button type="button" id="endAllEffects" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.endAll')}">
                 <i class="fas fa-eraser"></i>
