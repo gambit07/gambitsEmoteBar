@@ -27,7 +27,7 @@ function setupEmoteButton(button, state) {
     
     if (utils.allEffectsActive(emote, tokens)) {
       utils.endEmoteEffects(emote, tokens);
-      utils.toggleEmoteButton(button, false, state);
+      utils.checkEffectsActive(button, state);
       if(state?.loveActive) game.gambitsEmoteBar.loveActive = false;
     } else {
       if (!e.shiftKey && state.active && state.active !== button) {
@@ -57,6 +57,23 @@ function setupCrosshairButton(crosshairButton) {
       return;
       }
       await utils.setOffsets(tokens[0]);
+  });
+}
+
+function setupEndAllButton(endAllButton) {
+  if (!endAllButton) return;
+
+  endAllButton.addEventListener("click", async () => {
+      utils.endAllEmoteEffects();
+
+      let dialog = game.gambitsEmoteBar.dialogInstance;
+      const { top, left } = dialog.position;
+      await game.user.setFlag("gambitsEmoteBar", "dialog-position-generateEmotes", { top, left });
+      game.gambitsEmoteBar.dialogOpen = false;
+      game.gambitsEmoteBar.dialogInstance = null;
+      await dialog.close();
+
+      await generateEmotes();
   });
 }
 
@@ -138,15 +155,23 @@ function getEmoteDialogHTML() {
             <i class="fas fa-frown-open"></i>
           </button>
 
-          <div class="${actionContainerClass}">
-            <button type="button" id="setOffsets" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
-              <i class="fas fa-bullseye"></i>
-            </button>
-            ${ showFilePicker ? `
-            <button type="button" id="openFilePicker" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
-              <i class="fas fa-file-audio"></i>
-            </button>
-            ` : "" }
+          <div class="action-buttons">
+            <div class="action-container end-all">
+              <button type="button" id="endAllEffects" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.endAll')}">
+                <i class="fas fa-eraser"></i>
+              </button>
+            </div>
+            
+            <div class="${actionContainerClass}">
+              <button type="button" id="setOffsets" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
+                <i class="fas fa-bullseye"></i>
+              </button>
+              ${ showFilePicker ? `
+              <button type="button" id="openFilePicker" class="action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
+                <i class="fas fa-file-audio"></i>
+              </button>
+              ` : "" }
+            </div>
           </div>
         </div>
       </div>
@@ -172,11 +197,12 @@ export async function generateEmotes() {
     }],
     render: (event) => {
       let dialog = event.target;
-      game.gambitsEmoteBar.dialogInstance = dialog;
       utils.animateTitleBar(dialog);
       let dialogElement = dialog?.element;
       let crosshairButton = dialogElement.querySelector('#setOffsets');
       setupCrosshairButton(crosshairButton);
+      let endAllButton = dialogElement.querySelector('#endAllEffects');
+      setupEndAllButton(endAllButton);
       
       const fileSelectButton = dialogElement.querySelector('#openFilePicker');
       if (fileSelectButton) {
@@ -191,14 +217,17 @@ export async function generateEmotes() {
       
       const buttons = dialogElement.querySelectorAll('.emote-btn');
       buttons.forEach(button => {
+        utils.checkEffectsActive(button, state);
         setupTooltip(button);
         setupEmoteButton(button, state);
       });
+
+      game.gambitsEmoteBar.dialogInstance = dialog;
     },
-    close: (event) => {
+    close: async (event) => {
       const dialog = event.target;
       const { top, left } = dialog.position;
-      game.user.setFlag("gambitsEmoteBar", "dialog-position-generateEmotes", { top, left });
+      await game.user.setFlag("gambitsEmoteBar", "dialog-position-generateEmotes", { top, left });
       game.gambitsEmoteBar.dialogOpen = false;
       game.gambitsEmoteBar.dialogInstance = null;
     },
@@ -209,11 +238,7 @@ export async function generateEmotes() {
 }
 
 async function openSoundSelectionDialog() {
-  const emotes = [
-    "laugh", "angry", "surprised", "shout", "drunk",
-    "soul", "slap", "cry", "disgusted", "giggle",
-    "love", "rofl", "smoking", "nervous"
-  ];
+  const emotes = game.gambitsEmoteBar.dialogEmotes;
 
   const moduleDefaults = game.settings.get("gambitsEmoteBar", "emoteSoundPaths") || {};
   const userOverrides = game.user.getFlag("gambitsEmoteBar", "emoteSoundOverrides") || {};

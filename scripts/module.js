@@ -1,12 +1,9 @@
 import { generateEmotes } from './emoteHandler.js';
 import { registerSettings } from './settings.js';
+import { playEmote } from './api.js';
 
 Hooks.once('init', async function() {
 	registerSettings();
-
-	if (!game.gambitsEmoteBar) {
-		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map() };
-	}
 
 	game.keybindings.register("gambitsEmoteBar", "toggleBar", {
 		name: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.name"),
@@ -42,4 +39,10 @@ Hooks.once('init', async function() {
 		});
 	}
 	});
+});
+
+Hooks.once('ready', async function() {
+	if (!game.gambitsEmoteBar) {
+		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map(), dialogUser: game.user.id, dialogEmotes: ["laugh","angry","surprised","shout","drunk","soul","slap","cry","disgusted","giggle","love","rofl","smoking","nervous"], playEmote };
+	}
 });

@@ -33,10 +33,19 @@ button.emote-btn i {
   transform: translateY(1px);
 }
 
+/* Separate container for action buttons */
+.action-buttons {
+  display: grid;
+  grid-auto-rows: auto;
+  gap: 1px;
+  width: 110px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
 /* Base Action button container */
 .action-container {
-  margin-top: 10px;
-  width: 110px; /* 2 x 55px */
+  width: 100%
 }
 
 /* When file picker is displayed: use grid with 2 columns */
@@ -55,6 +64,16 @@ button.emote-btn i {
 
 /* Single button in a no-filepicker container - span both columns */
 .action-container.no-filepicker button.action-button {
+  grid-column: span 2;
+  width: 110px;
+}
+
+.action-container.end-all {
+  grid-row: auto;
+  gap: 0;
+}
+
+.action-container.end-all button.action-button {
   grid-column: span 2;
   width: 110px;
 }

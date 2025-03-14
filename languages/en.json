@@ -37,7 +37,8 @@
             "rofl": "ROFL",
             "smoking": "Smoking (Mouth)",
             "nervous": "Nervous",
-            "filepicker": "Configure Emote Sounds"
+            "filepicker": "Configure Emote Sounds",
+            "endAll": "End all Emotes you have applied"
         }
     },
     "log": {

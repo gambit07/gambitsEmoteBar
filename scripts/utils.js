@@ -120,8 +120,27 @@ export function endEmoteEffects(emote, tokens) {
         });
     }
     tokens.forEach(token => {
-        Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}`, object: token });
+        Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
     });
+}
+
+export function endAllEmoteEffects() {
+  let emotes = game.gambitsEmoteBar.dialogEmotes;
+  let tokens = getOwnedTokens();
+
+  for(let emote of emotes) {
+    if (emote === "love") {
+      tokens.forEach(token => {
+        if (game.gambitsEmoteBar.loveActive) {
+          game.gambitsEmoteBar.loveActive.set(token.id, false);
+        }
+      });
+    }
+
+    tokens.forEach(token => {
+      Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+    });
+  }
 }
 
 export function toggleEmoteButton(button, active, state) {
@@ -158,11 +177,34 @@ export function getPickedTokens(button) {
     return tokens;
 }
 
+export function getOwnedTokens() {
+  const tokens = canvas.tokens.placeables.filter(token =>
+    token.document.testUserPermission(game.user, "OWNER") || game.user.isGM
+  );
+  if (tokens.length === 0) return;
+  return tokens;
+}
+
 export function allEffectsActive(emote, tokens) {
   return tokens.every(token => {
-    const effectName = `emoteBar${capitalize(emote)}_${token.id}`;
+    const effectName = `emoteBar${capitalize(emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
     const effects = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
     return effects.length > 0;
+  });
+}
+
+export function checkEffectsActive(button, state) {
+  let tokens = getOwnedTokens();
+
+  tokens.some(token => {
+    const effectName = `emoteBar${capitalize(button.dataset.emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
+    const effect = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
+    if (effect && effect.length > 0) {
+      toggleEmoteButton(button, true, state);
+      return true;
+    }
+    toggleEmoteButton(button, false, state);
+    return false;
   });
 }
 
