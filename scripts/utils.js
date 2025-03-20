@@ -81,20 +81,14 @@ export function animateTitleBar(dialog) {
     const titleBackground = dialog?.element?.querySelector('.window-header');
     if (!titleBackground) return;
 
-    const hasCarolingianUI = game.modules.get("crlngn-ui")?.active;
     const duration = 5000;
     let startTime = null;
 
     titleBackground.style.border = "2px solid";
     titleBackground.style.borderImageSlice = 1;
 
-    let baseColor = "rgba(255, 165, 0, 1)";
-    let highlightColor = "rgba(181, 99, 69, 1)";
-
-    if(hasCarolingianUI) {
-        baseColor = "rgba(93, 173, 226, 1)";
-        highlightColor = "rgba(26, 82, 118, 1)";
-    }
+    let baseColor = getDialogColors().baseColor;
+    let highlightColor = getDialogColors().highlightColor;
 
     function step(timestamp) {
         if (!startTime) startTime = timestamp;
@@ -111,17 +105,45 @@ export function animateTitleBar(dialog) {
     requestAnimationFrame(step);
 }
 
+function getDialogColors() {
+  const rgbColor = getCssVarValue("--color-warm-2");
+  const rgbColorHighlight = getCssVarValue("--color-warm-3");
+  let baseColor = addAlphaToRgb(rgbColor, 1);
+  let highlightColor = addAlphaToRgb(rgbColorHighlight, 1);
+
+  return { baseColor, highlightColor };
+}
+
+function getCssVarValue(varName) {
+  const tempEl = document.createElement("div");
+  tempEl.style.color = `var(${varName})`;
+  tempEl.style.display = "none";
+  document.body.appendChild(tempEl);
+
+  const computedColor = getComputedStyle(tempEl).color;
+  document.body.removeChild(tempEl);
+  return computedColor;
+}
+
+function addAlphaToRgb(rgbString, alpha) {
+  const match = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  if (match) {
+    return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${alpha})`;
+  }
+  return rgbString;
+}
+
 export function endEmoteEffects(emote, tokens) {
-    if (emote === "love") {
-        tokens.forEach(token => {
-          if (game.gambitsEmoteBar.loveActive) {
-            game.gambitsEmoteBar.loveActive.set(token.id, false);
-          }
-        });
-    }
-    tokens.forEach(token => {
-        Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
-    });
+  if (emote === "love") {
+      tokens.forEach(token => {
+        if (game.gambitsEmoteBar.loveActive) {
+          game.gambitsEmoteBar.loveActive.set(token.id, false);
+        }
+      });
+  }
+  tokens.forEach(token => {
+      Sequencer.EffectManager.endEffects({ name: `emoteBar${capitalize(emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+  });
 }
 
 export function endAllEmoteEffects() {
@@ -146,9 +168,7 @@ export function endAllEmoteEffects() {
 export function toggleEmoteButton(button, active, state) {
     if (active) {
       button.dataset.active = "true";
-      const hasCarolingianUI = game.modules.get("crlngn-ui")?.active;
-      if(hasCarolingianUI) button.style.backgroundColor = "rgba(26, 82, 118, 1)";
-      else button.style.backgroundColor = "rgba(181, 99, 69, 0.80)";
+      button.style.backgroundColor = getDialogColors.baseColor;
       if (state && !state.active) {
         state.active = button;
       }

@@ -1,5 +1,5 @@
 /* Container for the entire form */
-.form-container {
+.gem-form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,7 +8,7 @@
 }
 
 /* Grid container for the emote buttons */
-.emote-buttons {
+.gem-emote-buttons {
   display: grid;
   grid-template-columns: repeat(2, 55px);
   grid-template-rows: repeat(8, 55px);
@@ -17,7 +17,7 @@
 }
 
 /* Style for emote buttons */
-button.emote-btn {
+button.gem-emote-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,14 +27,14 @@ button.emote-btn {
 }
 
 /* Center Font Awesome icons in emote buttons */
-button.emote-btn i {
+button.gem-emote-btn i {
   font-size: 2rem;
   margin: 0;
   transform: translateY(1px);
 }
 
 /* Separate container for action buttons */
-.action-button-grid {
+.gem-action-button-grid {
   display: grid;
   grid-auto-rows: auto;
   gap: 1px;
@@ -44,42 +44,42 @@ button.emote-btn i {
 }
 
 /* Base Action button container */
-.action-container {
+.gem-action-container {
   width: 100%
 }
 
 /* When file picker is displayed: use grid with 2 columns */
-.action-container.with-filepicker {
+.gem-action-container.with-filepicker {
   display: grid;
   grid-template-columns: repeat(2, 55px);
   gap: 0;
 }
 
 /* When file picker is disabled, force the single button to span both columns */
-.action-container.no-filepicker {
+.gem-action-container.no-filepicker {
   display: grid;
   grid-template-columns: repeat(2, 55px);
   gap: 0;
 }
 
 /* Single button in a no-filepicker container - span both columns */
-.action-container.no-filepicker button.action-button {
+.gem-action-container.no-filepicker button.gem-action-button {
   grid-column: span 2;
   width: 110px;
 }
 
-.action-container.end-all {
+.gem-action-container.end-all {
   grid-row: auto;
   gap: 0;
 }
 
-.action-container.end-all button.action-button {
+.gem-action-container.end-all button.gem-action-button {
   grid-column: span 2;
   width: 110px;
 }
 
 /* Style for action buttons */
-button.action-button {
+button.gem-action-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +89,7 @@ button.action-button {
 }
 
 /* Center Font Awesome icons in action buttons */
-button.action-button i {
+button.gem-action-button i {
   font-size: 1rem;
   margin: 0;
   transform: translateY(1px);
