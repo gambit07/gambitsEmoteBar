@@ -168,7 +168,7 @@ export function endAllEmoteEffects() {
 export function toggleEmoteButton(button, active, state) {
     if (active) {
       button.dataset.active = "true";
-      button.style.backgroundColor = getDialogColors.baseColor;
+      button.style.backgroundColor = getDialogColors().baseColor;
       if (state && !state.active) {
         state.active = button;
       }

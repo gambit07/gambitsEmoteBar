@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Bugfixes: Change the class name for the action button container to not interfere with core classes" >> release_notes.txt
+          echo "Updates: Added support for Carolingian UI, dependent on the theme you have enabled the emote dialog color scheme will change. Updated css class names to make sure they're not interfering with anything else." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
