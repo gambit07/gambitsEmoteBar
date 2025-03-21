@@ -2,7 +2,7 @@
 
 <p>Full credit to Eskie (eskiemoh) who is the co-author of this module and the original creator of these animations! You can join their discord <a href="https://discord.gg/rCbY7jAZKh" target="_blank" rel="nofollow noopener">here</a> for many more excellent animations such as spell effects, movement, etc!</p>
 
-<p>The module contains an api for play emotes. For example, you could do something like the following (restricted to GMs)</p>
+<p>The module contains an api for playing emotes. For example, you could do something like the following (restricted to GMs)</p>
 
 ```
 let tokens = canvas.tokens.placeables.filter(token => token.document.hasStatusEffect("surprised"));
