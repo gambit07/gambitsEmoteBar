@@ -2,4 +2,4 @@
 
 <p>Full credit to Eskie (eskiemoh) who is the co-author of this module and the original creator of these animations! You can join their discord <a href="https://discord.gg/rCbY7jAZKh" target="_blank" rel="nofollow noopener">here</a> for many more excellent animations such as spell effects, movement, etc!</p>
 
-[gambitsEmoteBar.webm](https://github.com/user-attachments/assets/df2358a1-612f-4e36-9e7f-71fc800c550c)
+[emoteBar.webm](https://github.com/user-attachments/assets/11021d1a-37b3-4ff9-92f0-7c03ca639a4a)
