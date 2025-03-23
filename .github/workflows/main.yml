@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates: Added support for Carolingian UI, dependent on the theme you have enabled the emote dialog color scheme will change. Updated css class names to make sure they're not interfering with anything else." >> release_notes.txt
+          echo "Updates: Added better compatability with dynamic token rings. Slight positioning updates to a few emotes. Upscaled all images so they look a bit cleaner at high zoom." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

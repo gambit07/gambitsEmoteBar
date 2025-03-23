@@ -6,7 +6,7 @@ export async function setOffsets(token) {
         fillColor: "#FF0000",
         gridHighlight: false,
         snap: { position: 0 },
-        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.leftEye") }
+        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.leftEye"), dx: -50, dy: -50 }
     });
 
     let rightEyeCrosshair = await Sequencer.Crosshair.show({
@@ -16,7 +16,7 @@ export async function setOffsets(token) {
         fillColor: "#FF0000",
         gridHighlight: false,
         snap: { position: 0 },
-        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.rightEye") }
+        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.rightEye"), dx: -50, dy: -50 }
     });
 
     let mouthCrosshair = await Sequencer.Crosshair.show({
@@ -26,7 +26,7 @@ export async function setOffsets(token) {
         fillColor: "FF0000",
         gridHighlight:false,
         snap:{position:0},
-        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.mouth") }
+        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.mouth"), dx: -50, dy: -50 }
     })
 
     let noseCrosshair = await Sequencer.Crosshair.show({
@@ -36,7 +36,7 @@ export async function setOffsets(token) {
         fillColor: "FF0000",
         gridHighlight:false,
         snap:{position:0},
-        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.nose") }
+        label: { text: game.i18n.format("gambitsEmoteBar.selector.sequencer.nose"), dx: -50, dy: -50 }
     })
 
     let leftEyeScale = leftEyeCrosshair.distance / token.document.width;

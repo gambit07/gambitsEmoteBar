@@ -49,10 +49,6 @@ export async function performLaugh(token) {
     .zIndex(1)
     .waitUntilFinished(-200)
 
-  seq.animation()
-    .on(token)
-    .opacity(1)
-
   seq.play()
 }
   
@@ -201,6 +197,10 @@ export async function performDrunk(token) {
 
   applyEmoteSound(seq, "drunk")
   seq.play()
+
+  seq.animation()
+    .on(token)
+    .opacity(0)
   
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_large.webp")
@@ -278,17 +278,13 @@ export async function performDrunk(token) {
     .private()
     .belowTokens(false)
   
-  seq.animation()
-    .on(token)
-    .opacity(0)
-  
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_blush.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .opacity(0.85)
-    .scaleToObject(0.3, {considerTokenScale: true})
+    .scaleToObject(0.2, {considerTokenScale: true})
     .loopProperty("spriteContainer", "position.x", {  from:-20, to: 20, duration: 2500, pingPong: true, ease:"easeInOutSine" })
-    .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
+    .loopProperty("sprite", "position.y", { values: [0, 25, 0, 25], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .rotate(token.rotation)
     .persist()
@@ -471,15 +467,10 @@ export async function performGiggle(token) {
   applyEmoteSound(seq, "giggle")
   seq.play()
 
-  seq.animation()
-    .on(token)
-    .opacity(0)
-
   seq.effect()
     .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/giggle_top.webp")
-    .atLocation(token, {offset:{x:(-0.5*token.document.width)*facing, y:-0.25*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token, {bindAlpha: false})
+    .attachTo(token, {offset:{x:(-0.5*token.document.width)*facing, y:-0.25*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
     .loopProperty("sprite", "rotation", { from: 0, to: -15*facing, duration: 150, ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 150, gridUnits: true, pingPong: false })
     .scaleToObject(0.2, {considerTokenScale: true})
@@ -492,8 +483,7 @@ export async function performGiggle(token) {
   seq.effect()
     .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/giggle_bottom.webp")
-    .atLocation(token, {offset:{x:(-0.55*token.document.width)*facing, y:-0}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token, {bindAlpha: false})
+    .attachTo(token, {offset:{x:(-0.55*token.document.width)*facing, y:-0}, gridUnits: true, local: getTokenRotation(token)})
     .loopProperty("sprite", "rotation", { from: 0, to: 20*facing, duration: 150,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 150, gridUnits: true, pingPong: false })
     .scaleToObject(0.2, {considerTokenScale: true})
@@ -516,10 +506,6 @@ export async function performGiggle(token) {
     .persist()
     .waitUntilFinished(-200)
     .zIndex(1)
-
-  seq.animation()
-    .on(token)
-    .opacity(1)
 
   seq.play()
 }
@@ -570,8 +556,7 @@ export async function performROFL(token) {
   seq.effect()
     .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/rofl_top.webp")
-    .atLocation(token, {offset:{x:-0.45*token.document.width, y:0.4*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token, {bindAlpha: false})
+    .attachTo(token, {offset:{x:-0.45*token.document.width, y:0.4*token.document.width}, bindAlpha: false, gridUnits: true, local: getTokenRotation(token)})
     .loopProperty("sprite", "rotation", { from: 0, to: -15, duration: 250, ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34, {considerTokenScale: true})
@@ -583,8 +568,7 @@ export async function performROFL(token) {
   seq.effect()
     .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/rofl_bottom.webp")
-    .atLocation(token, {offset:{x:-0.5*token.document.width, y:0.55*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token, {bindAlpha: false})
+    .attachTo(token, {offset:{x:-0.5*token.document.width, y:0.55*token.document.width}, bindAlpha: false, gridUnits: true, local: getTokenRotation(token)})
     .loopProperty("sprite", "rotation", { from: 90, to: 105, duration: 250,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34, {considerTokenScale: true})
@@ -603,7 +587,8 @@ export async function performROFL(token) {
     .rotate(90)
     .persist()
     .waitUntilFinished(-200)
-    .zIndex(1)
+    .zIndex(5)
+    .belowTokens(false)
 
   seq.animation()
     .on(token)
@@ -716,10 +701,6 @@ export async function performNervous(token) {
       .persist()
       .rotate(token.rotation)
       .zIndex(1)
-  
-    seq.animation()
-      .on(token)
-      .opacity(1)
     
     seq.play();
 }
