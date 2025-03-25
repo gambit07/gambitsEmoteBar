@@ -82,6 +82,8 @@ export async function playEmote({emote, tokens = [], duration = null}) {
     }
 
     if (duration) {
+      if(emote === "slap" || emote === "thunderHype") return true;
+
       setTimeout(() => {
         if (emote === "love") {
           tokens.forEach(token => {

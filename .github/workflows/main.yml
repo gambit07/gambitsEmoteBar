@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates: Reduced the width of the dialog, goal is to have this as a bar so as not to take up too much space. Slightly increased the height of the dialog to allow no scrolling. Any additional emotes that get added will cause scrolling to begin. Adjusted button sizing and spacing slightly. Fixed an error on startup." >> release_notes.txt
+          echo "Updates: Update api to not try and close non-permanent emotes slap and thunderHype" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
