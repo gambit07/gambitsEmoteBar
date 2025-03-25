@@ -206,18 +206,23 @@ export async function generateEmotes() {
   const state = { active: null };
 
   const emoteDialog = await foundry.applications.api.DialogV2.wait({
-    window: { title: game.i18n.format("gambitsEmoteBar.controls.emoteBar.title"), minimizable: true },
+    window: { title: game.i18n.format("gambitsEmoteBar.controls.emoteBar.title"), minimizable: true, id: "gem-dialog" },
     content: htmlContent,
     buttons: [{
-      action: "close",
+      action: "gem-close",
       label: `<i class='fas fa-times'></i>`,
-      classes: ["default"],
       default: true
     }],
     render: (event) => {
       let dialog = event.target;
       utils.animateTitleBar(dialog);
       let dialogElement = dialog?.element;
+      dialogElement.style.setProperty("width", "150px", "important");
+      dialogElement.style.setProperty("min-width", "100px", "important");
+      dialogElement.style.setProperty("padding-left", "0px", "important");
+      dialogElement.style.setProperty("padding-right", "0px", "important");
+      dialogElement.style.setProperty("margin-left", "0px", "important");
+      dialogElement.style.setProperty("margin-right", "0px", "important");
       let crosshairButton = dialogElement.querySelector('#setOffsets');
       setupCrosshairButton(crosshairButton);
       let endAllButton = dialogElement.querySelector('#endAllEffects');

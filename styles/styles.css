@@ -2,8 +2,8 @@
 .gem-form-container {
   display: flex;
   flex-direction: column;
-  max-height: 500px;
-  padding: 10px;
+  max-height: 600px;
+  padding: 0px 0;  /* 10px top/bottom, 0 left/right */
   box-sizing: border-box;
 }
 
@@ -27,20 +27,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 10px;
+  padding: 0px;
+  margin-top: 20px;
 }
 
 /* Grid container for the emote buttons */
 .gem-emote-buttons {
   display: grid;
-  grid-template-columns: repeat(2, 55px);
-  grid-template-rows: repeat(8, 55px);
+  grid-template-columns: repeat(2, 52px);
+  grid-template-rows: repeat(8, 52px);
   width: fit-content;
   margin: auto;
   max-height: 600px;
   overflow-y: visible;
   overflow-x: hidden;
   scrollbar-width: none;
+  gap: 1px; /* Adds space between buttons */
 }
 .gem-emote-buttons::-webkit-scrollbar {
   display: none;
@@ -51,9 +53,9 @@ button.gem-emote-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2px;
-  width: 55px;
-  height: 55px;
+  padding: 4px;
+  width: 50px;
+  height: 50px;
 }
 
 /* Center Font Awesome icons in emote buttons */
@@ -68,7 +70,7 @@ button.gem-emote-btn i {
   display: grid;
   grid-auto-rows: auto;
   gap: 1px;
-  width: 110px;
+  width: 104px;
   margin: 5px auto 10px; /* Center horizontally with auto margins */
 }
 
@@ -80,19 +82,19 @@ button.gem-emote-btn i {
 /* When file picker is displayed: use grid with 2 columns */
 .gem-action-container.with-filepicker {
   display: grid;
-  grid-template-columns: repeat(2, 55px);
+  grid-template-columns: repeat(2, 52px);
   gap: 0;
 }
 
 /* When file picker is disabled, force the single button to span both columns */
 .gem-action-container.no-filepicker {
   display: grid;
-  grid-template-columns: repeat(2, 55px);
+  grid-template-columns: repeat(2, 52px);
   gap: 0;
 }
 .gem-action-container.no-filepicker button.gem-action-button {
   grid-column: span 2;
-  width: 110px;
+  width: 104px;
 }
 
 .gem-action-container.end-all {
@@ -101,7 +103,7 @@ button.gem-emote-btn i {
 }
 .gem-action-container.end-all button.gem-action-button {
   grid-column: span 2;
-  width: 110px;
+  width: 104px;
 }
 
 /* Style for action buttons */
@@ -109,8 +111,8 @@ button.gem-action-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2px;
-  width: 55px;
+  padding: 0px;
+  width: 52px;
   height: 28px;
 }
 
@@ -119,4 +121,16 @@ button.gem-action-button i {
   font-size: 1rem;
   margin: 0;
   transform: translateY(1px);
+}
+
+.form-footer button[data-action="gem-close"] {
+  width: 120px;
+  min-width: 100px !important;
+  flex: 0 0 120px !important;
+  margin: 0 auto;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
 }

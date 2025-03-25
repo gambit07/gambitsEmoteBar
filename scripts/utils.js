@@ -215,6 +215,7 @@ export function allEffectsActive(emote, tokens) {
 
 export function checkEffectsActive(button, state) {
   let tokens = getOwnedTokens();
+  if(tokens.length === 0 || !tokens) return;
 
   tokens.some(token => {
     const effectName = `emoteBar${capitalize(button.dataset.emote)}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
