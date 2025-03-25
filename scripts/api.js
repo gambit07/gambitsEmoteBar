@@ -6,7 +6,7 @@ import { capitalize } from './utils.js';
  *
  * @param {string} emote - The emote to play. Valid emotes are: "laugh", "angry", "surprised", "shout", "drunk", "soul", "slap", "cry", "disgusted", "giggle", "love", "rofl", "smoking", "nervous".
  * @param {Array} [tokens=[]] - An array of token objects on which to play the emote.
- * @param {number|null} [duration=null] - (Optional) The duration in seconds after which the emote effect will be automatically cleared.
+ * @param {number|null} [duration=10] - (Optional) The duration in seconds after which the emote effect will be automatically cleared, default 10.
  * @returns {Promise<boolean>} Returns a promise that resolves to true if the emote is played successfully.
  *
  * @example
@@ -14,7 +14,7 @@ import { capitalize } from './utils.js';
  * game.gambitsEmoteBar.playEmote({ emote: "laugh", tokens: canvas.tokens.controlled, duration: 5 });
  */
 
-export async function playEmote({emote, tokens = [], duration = null}) {
+export async function playEmote({emote, tokens = [], duration = 10}) {
     if(!game.user.isGM) return ui.notifications.warn("GM level permissions are required to use the emote api.");
     if (!tokens.length) return ui.notifications.warn("No tokens passed to the api.");
 
@@ -68,6 +68,12 @@ export async function playEmote({emote, tokens = [], duration = null}) {
             break;
           case "nervous":
             await animations.performNervous(token);
+            break;
+          case "party":
+            await animations.performParty(token);
+            break;
+          case "thunderHype":
+            await animations.performThunderHype(token);
             break;
           default:
             return ui.notifications.warn(`Emote "${emote}" not recognized. Valid emotes are: ${game.gambitsEmoteBar.dialogEmotes.join(", ")}`);

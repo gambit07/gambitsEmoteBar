@@ -40,7 +40,7 @@ function setupEmoteButton(button, state) {
       if (!e.shiftKey) state.active = button;
       await handleEmoteClick({ emote, pickedTokens: tokens });
 
-      if (emote === "slap") {
+      if (emote === "slap" || emote === "thunderHype") {
         utils.toggleEmoteButton(button, false, state);
       }
     }
@@ -81,101 +81,119 @@ function getEmoteDialogHTML() {
   const showFilePicker = game.user.isGM || game.settings.get("gambitsEmoteBar", "emoteSoundEnablePerUser");
   const actionContainerClass = showFilePicker ? "gem-action-container with-filepicker" : "gem-action-container no-filepicker";
   return `
-    <form>
-      <div class="gem-form-container">
-        <div class="gem-emote-buttons">
-          <button type="button" id="laugh" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.laugh')}" 
-                  data-emote="laugh">
-            <i class="fas fa-laugh-beam"></i>
-          </button>
-          <button type="button" id="angry" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.angry')}" 
-                  data-emote="angry">
-            <i class="fas fa-angry"></i>
-          </button>
-          <button type="button" id="surprised" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.surprised')}" 
-                  data-emote="surprised">
-            <i class="fas fa-surprise"></i>
-          </button>
-          <button type="button" id="shout" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.shout')}" 
-                  data-emote="shout">
-            <i class="fas fa-bullhorn"></i>
-          </button>
-          <button type="button" id="drunk" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.drunk')}" 
-                  data-emote="drunk">
-            <i class="fas fa-wine-glass"></i>
-          </button>
-          <button type="button" id="soul" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.soul')}" 
-                  data-emote="soul">
-            <i class="fas fa-ghost"></i>
-          </button>
-          <button type="button" id="slap" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.slap')}" 
-                  data-emote="slap">
-            <i class="fas fa-hand-paper"></i>
-          </button>
-          <button type="button" id="cry" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.cry')}" 
-                  data-emote="cry">
-            <i class="fas fa-sad-tear"></i>
-          </button>
-          <button type="button" id="disgusted" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.disgusted')}" 
-                  data-emote="disgusted">
-            <i class="fas fa-face-rolling-eyes"></i>
-          </button>
-          <button type="button" id="giggle" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.giggle')}" 
-                  data-emote="giggle">
-            <i class="fas fa-grin-beam"></i>
-          </button>
-          <button type="button" id="love" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.love')}" 
-                  data-emote="love">
-            <i class="fas fa-heart"></i>
-          </button>
-          <button type="button" id="rofl" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.rofl')}" 
-                  data-emote="rofl">
-            <i class="fas fa-laugh-squint"></i>
-          </button>
-          <button type="button" id="smoking" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.smoking')}" 
-                  data-emote="smoking">
-            <i class="fas fa-smoking"></i>
-          </button>
-          <button type="button" id="nervous" class="gem-emote-btn" 
-                  data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.nervous')}" 
-                  data-emote="nervous">
-            <i class="fas fa-frown-open"></i>
-          </button>
-
-          <div class="gem-action-button-grid">
-            <div class="gem-action-container end-all">
-              <button type="button" id="endAllEffects" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.endAll')}">
-                <i class="fas fa-eraser"></i>
+    <body>
+      <form>
+        <div class="gem-form-container">
+          <!-- Scrollable Emote Buttons Container -->
+          <div class="gem-emote-scroll-container">
+            <div class="gem-emote-buttons">
+              <button type="button" id="laugh" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.laugh')}" 
+                      data-emote="laugh">
+                <i class="fas fa-laugh-beam"></i>
+              </button>
+              <button type="button" id="angry" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.angry')}" 
+                      data-emote="angry">
+                <i class="fas fa-angry"></i>
+              </button>
+              <button type="button" id="surprised" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.surprised')}" 
+                      data-emote="surprised">
+                <i class="fas fa-surprise"></i>
+              </button>
+              <button type="button" id="shout" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.shout')}" 
+                      data-emote="shout">
+                <i class="fas fa-bullhorn"></i>
+              </button>
+              <button type="button" id="drunk" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.drunk')}" 
+                      data-emote="drunk">
+                <i class="fas fa-wine-glass"></i>
+              </button>
+              <button type="button" id="soul" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.soul')}" 
+                      data-emote="soul">
+                <i class="fas fa-ghost"></i>
+              </button>
+              <button type="button" id="slap" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.slap')}" 
+                      data-emote="slap">
+                <i class="fas fa-hand-paper"></i>
+              </button>
+              <button type="button" id="cry" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.cry')}" 
+                      data-emote="cry">
+                <i class="fas fa-sad-tear"></i>
+              </button>
+              <button type="button" id="disgusted" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.disgusted')}" 
+                      data-emote="disgusted">
+                <i class="fas fa-face-rolling-eyes"></i>
+              </button>
+              <button type="button" id="giggle" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.giggle')}" 
+                      data-emote="giggle">
+                <i class="fas fa-grin-beam"></i>
+              </button>
+              <button type="button" id="love" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.love')}" 
+                      data-emote="love">
+                <i class="fas fa-heart"></i>
+              </button>
+              <button type="button" id="rofl" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.rofl')}" 
+                      data-emote="rofl">
+                <i class="fas fa-laugh-squint"></i>
+              </button>
+              <button type="button" id="smoking" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.smoking')}" 
+                      data-emote="smoking">
+                <i class="fas fa-smoking"></i>
+              </button>
+              <button type="button" id="nervous" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.nervous')}" 
+                      data-emote="nervous">
+                <i class="fas fa-frown-open"></i>
+              </button>
+              <button type="button" id="party" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.party')}" 
+                      data-emote="party">
+                <i class="fas fa-birthday-cake"></i>
+              </button>
+              <button type="button" id="thunderHype" class="gem-emote-btn" 
+                      data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.thunderHype')}" 
+                      data-emote="thunderHype">
+                <i class="fa-solid fa-sword"></i>
               </button>
             </div>
-            
-            <div class="${actionContainerClass}">
-              <button type="button" id="setOffsets" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
-                <i class="fas fa-bullseye"></i>
-              </button>
-              ${ showFilePicker ? `
-              <button type="button" id="openFilePicker" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
-                <i class="fas fa-file-audio"></i>
-              </button>
-              ` : "" }
+          </div>
+          
+          <!-- Fixed Bottom Buttons Container -->
+          <div class="gem-fixed-action-container">
+            <div class="gem-action-button-grid">
+              <div class="gem-action-container end-all">
+                <button type="button" id="endAllEffects" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.endAll')}">
+                  <i class="fas fa-eraser"></i>
+                </button>
+              </div>
+              <div class="${actionContainerClass}">
+                <button type="button" id="setOffsets" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.offset')}">
+                  <i class="fas fa-bullseye"></i>
+                </button>
+                ${ showFilePicker ? `
+                <button type="button" id="openFilePicker" class="gem-action-button" data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.filepicker')}">
+                  <i class="fas fa-file-audio"></i>
+                </button>
+                ` : "" }
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </body>
+    </html>
   `;
 }
 
@@ -364,6 +382,12 @@ async function handleEmoteClick({ emote, pickedTokens }) {
         break;
       case "nervous":
         await animations.performNervous(token);
+        break;
+      case "party":
+        await animations.performParty(token);
+        break;
+      case "thunderHype":
+        await animations.performThunderHype(token);
         break;
       default:
         console.warn(game.i18n.format("gambitsEmoteBar.log.warning.noEffect"), emote);

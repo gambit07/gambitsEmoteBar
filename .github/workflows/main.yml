@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates: Added better compatability with dynamic token rings. Slight positioning updates to a few emotes. Upscaled all images so they look a bit cleaner at high zoom." >> release_notes.txt
+          echo "Updates: Added two new emotes! Dialog slightly re-worked to allow scrolling for emotes while fixing the general buttons on the bottom in place." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

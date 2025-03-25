@@ -2,9 +2,32 @@
 .gem-form-container {
   display: flex;
   flex-direction: column;
+  max-height: 500px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Scroll container for emote buttons */
+.gem-emote-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.gem-emote-scroll-container::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Container for the fixed bottom action buttons */
+.gem-fixed-action-container {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: fit-content;
-  margin: auto;
+  padding-top: 10px;
 }
 
 /* Grid container for the emote buttons */
@@ -14,6 +37,13 @@
   grid-template-rows: repeat(8, 55px);
   width: fit-content;
   margin: auto;
+  max-height: 600px;
+  overflow-y: visible;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.gem-emote-buttons::-webkit-scrollbar {
+  display: none;
 }
 
 /* Style for emote buttons */
@@ -33,19 +63,18 @@ button.gem-emote-btn i {
   transform: translateY(1px);
 }
 
-/* Separate container for action buttons */
+/* Grid container for action buttons */
 .gem-action-button-grid {
   display: grid;
   grid-auto-rows: auto;
   gap: 1px;
   width: 110px;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin: 5px auto 10px; /* Center horizontally with auto margins */
 }
 
 /* Base Action button container */
 .gem-action-container {
-  width: 100%
+  width: 100%;
 }
 
 /* When file picker is displayed: use grid with 2 columns */
@@ -61,8 +90,6 @@ button.gem-emote-btn i {
   grid-template-columns: repeat(2, 55px);
   gap: 0;
 }
-
-/* Single button in a no-filepicker container - span both columns */
 .gem-action-container.no-filepicker button.gem-action-button {
   grid-column: span 2;
   width: 110px;
@@ -72,7 +99,6 @@ button.gem-emote-btn i {
   grid-row: auto;
   gap: 0;
 }
-
 .gem-action-container.end-all button.gem-action-button {
   grid-column: span 2;
   width: 110px;

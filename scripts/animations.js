@@ -350,12 +350,14 @@ export async function performSlap(token) {
   
   if (hasAnimatedSpellEffects) {
     seq.effect()
+      .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .attachTo(location, { offset: { x: 0.1, y: -0.1 }, gridUnits: true })
       .file("animated-spell-effects-cartoon.magic.impact.02")
       .scaleToObject(token.document.width, {considerTokenScale: true})
   }
   
   seq.effect()
+    .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .attachTo(location)
     .file("modules/gambitsEmoteBar/assets/slap.webp")
     .size(0.55, { gridUnits: true })
@@ -367,6 +369,7 @@ export async function performSlap(token) {
     .scaleToObject(token.document.width / 2, {considerTokenScale: true})
   
   seq.effect()
+    .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .attachTo(location)
     .file("modules/gambitsEmoteBar/assets/slap.webp")
     .size(0.55, { gridUnits: true })
@@ -703,4 +706,113 @@ export async function performNervous(token) {
       .zIndex(1)
     
     seq.play();
+}
+
+export async function performParty(token) {
+  const keyframes = 24;
+  const radius = 20;
+  const valuesX = [];
+  const valuesY = [];
+
+  for (let i = 0; i <= keyframes; i++) {
+    let angle = (2 * Math.PI * i) / keyframes;
+    valuesX.push(radius * Math.cos(angle));
+    valuesY.push(radius * Math.sin(angle));
+  }
+
+  const hues = [];
+  for (let h = 0; h <= 360; h += 10) {
+    hues.push(h);
+  }
+
+  const fullHueCycle = hues.concat(hues.slice(1, hues.length - 1).reverse());
+
+  let seq = new Sequence();
+
+  seq.animation()
+    .on(token)
+    .opacity(0);
+
+  seq.effect()
+    .name(`emoteBarParty_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file(getTokenImage(token))
+    .attachTo(token, { gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+    .scaleToObject(1, { considerTokenScale: true })
+    .filter("ColorMatrix", { hue: 0 }, `emoteBarParty_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .loopProperty("effect", `effectFilters.emoteBarParty_${token.id}_${game.gambitsEmoteBar.dialogUser}.hue`, { values: fullHueCycle, duration: 80 })
+    .loopProperty("spriteContainer", "position.x", { values: valuesX, duration: 40, ease: "linear" })
+    .loopProperty("spriteContainer", "position.y", { values: valuesY, duration: 40, ease: "linear" })
+    .rotate(token.rotation)
+    .persist()
+    .waitUntilFinished()
+
+  seq.animation()
+    .on(token)
+    .opacity(1);
+
+  seq.play();
+}
+
+export async function performThunderHype(token) {
+  let seq = new Sequence()
+
+  seq.effect()
+    .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("modules/gambitsEmoteBar/assets/thunder_sword.webp")
+    .attachTo(token, {offset:{x:0, y:-0.60*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
+    .scaleToObject(0.7)
+    .rotate(token.rotation)
+    .fadeIn(500)
+    .fadeOut(500)
+    .private()
+    .zIndex(2)
+    .duration(8500)
+
+  seq.effect()
+    .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("jb2a.markers.bubble.loop.rainbow")
+    .attachTo(token)
+    .scaleToObject(1.1, {considerTokenScale: true})
+    .rotate(token.rotation)
+    .fadeIn(500)
+    .mask(token)
+    .fadeOut(500)
+    .filter("ColorMatrix", { saturate: 2 })
+    .private()
+    .zIndex(1)
+    .duration(8500)
+
+  seq.effect()
+    .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .attachTo(token, {offset:{ x:0, y:-1.35*token.document.width}, gridUnits: true })
+    .file("jb2a.electric_arc.blue02.04")
+    .scaleToObject(2, {gridUnits: true})
+    .rotate(270)
+    .filter("ColorMatrix", { hue: 160 })
+    .fadeIn(500)
+    .fadeOut(500)
+    .zIndex(3)
+    .wait(4000)
+
+  seq.effect()
+    .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .attachTo(token, {offset:{ x:0, y: -0.55*token.document.width}, gridUnits: true })
+    .file("jb2a.static_electricity.02.red")
+    .scaleToObject(1, {considerTokenScale: true, gridUnits: true})
+    .rotate(270)
+    .filter("ColorMatrix", { saturate: 0.8 })
+    .zIndex(3)
+    .waitUntilFinished(-200)
+
+  seq.effect()
+    .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .attachTo(token, {offset:{ x:0, y: 0}, gridUnits: true })
+    .file("jb2a.explosion.02.orange")
+    .scaleToObject(2, {considerTokenScale: true, gridUnits: true})
+    .rotate(270)
+    .filter("ColorMatrix", { hue: -30 })
+    .zIndex(3)
+    .waitUntilFinished()
+
+  seq.play()
 }

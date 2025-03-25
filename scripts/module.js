@@ -43,6 +43,6 @@ Hooks.once('init', async function() {
 
 Hooks.once('ready', async function() {
 	if (!game.gambitsEmoteBar) {
-		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map(), dialogUser: game.user.id, dialogEmotes: ["laugh","angry","surprised","shout","drunk","soul","slap","cry","disgusted","giggle","love","rofl","smoking","nervous"], playEmote };
+		game.gambitsEmoteBar = { dialogOpen: false, dialogInstance: null, loveActive: new Map(), dialogUser: game.user.id, dialogEmotes: ["laugh","angry","surprised","shout","drunk","soul","slap","cry","disgusted","giggle","love","rofl","smoking","nervous","party","thunderHype"], playEmote };
 	}
 });
