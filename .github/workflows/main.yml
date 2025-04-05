@@ -18,7 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates: Update api to not try and close non-permanent emotes slap and thunderHype" >> release_notes.txt
+          echo "HUGE update, marking as version 2.0." >> release_notes.txt
+          echo "- V13 Compatability (Still will need to wait on Sequencer's update to V13 to test)" >> release_notes.txt
+          echo "- Emotes can now be re-ordered via drag and drop." >> release_notes.txt
+          echo "- New menu for hiding emotes, any emote can now be hidden on a per user basis." >> release_notes.txt
+          echo "- You now have the ability to register and add your own custom emotes! Custom macro creation functionality is limited to GMs, but players will have access to play all custom emotes. These emotes will be displayed in a list where you can edit or remove them as you wish. In the macro text editor, you have access to the token object as token. All custom emotes are also registered in the api and can be accessed there." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

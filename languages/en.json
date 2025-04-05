@@ -1,56 +1,109 @@
 {
-  "I18N.LANGUAGE": "English",
-  "gambitsEmoteBar": {
-    "controls": {
-        "emoteBar": {
-            "title": "Emote Bar"
-        }
-    },
-    "selector": {
-        "sequencer": {
-            "leftEye": "Left Eye",
-            "rightEye": "Right Eye",
-            "mouth": "Mouth",
-            "nose": "Nose"
-        }
-    },
-    "keybinds": {
-        "toggleEmoteBar": {
-            "name": "Toggle Emote Bar",
-            "hint": "Press this key to open/close the emote bar"
-        }
-    },
-    "menu": {
-        "emote": {
-            "laugh": "Laugh",
-            "angry": "Angry",
-            "surprised": "Surprised",
-            "shout": "Shout",
-            "drunk": "Drunk (Nose)",
-            "soul": "Soul",
-            "slap": "Slap",
-            "cry": "Cry (Eyes)",
-            "offset": "Configure Offsets (Eyes, Mouth, Nose)",
-            "disgusted": "Disgusted",
-            "giggle": "Giggle",
-            "love": "Love",
-            "rofl": "ROFL",
-            "smoking": "Smoking (Mouth)",
-            "nervous": "Nervous",
-            "party": "Party",
-            "thunderHype": "THUNDER!",
-            "filepicker": "Configure Emote Sounds",
-            "endAll": "End all Emotes you have applied"
-        }
-    },
-    "log": {
-        "warning": {
-            "noEffect": "No effect defined for emote:",
-            "pleaseSelectOneToken": "Please select at least one token.",
-            "noPermission": "You do not have permission to use the emote tool on the selected token(s).",
-            "selectMultiple": "Hold Shift to select multiple emotes IF YOU DARE.",
-            "selectSingle": "Please select a single token to set offsets."
+    "I18N.LANGUAGE": "English",
+    "gambitsEmoteBar": {
+        "controls": {
+            "emoteBar": {
+                "title": "Emote Bar"
+            }
+        },
+        "selector": {
+            "sequencer": {
+                "leftEye": "Left Eye",
+                "rightEye": "Right Eye",
+                "mouth": "Mouth",
+                "nose": "Nose"
+            }
+        },
+        "keybinds": {
+            "toggleEmoteBar": {
+                "name": "Toggle Emote Bar",
+                "hint": "Press this key to open/close the emote bar"
+            }
+        },
+        "menu": {
+            "emote": {
+                "laugh": "Laugh",
+                "angry": "Angry",
+                "surprised": "Surprised",
+                "shout": "Shout",
+                "drunk": "Drunk (Nose)",
+                "soul": "Soul",
+                "slap": "Slap",
+                "cry": "Cry (Eyes)",
+                "offset": "Configure Offsets (Eyes, Mouth, Nose)",
+                "disgusted": "Disgusted",
+                "giggle": "Giggle",
+                "love": "Love",
+                "rofl": "ROFL",
+                "smoking": "Smoking (Mouth)",
+                "nervous": "Nervous",
+                "party": "Party",
+                "thunderHype": "THUNDER!",
+                "filepicker": "Configure Default Emote Sounds",
+                "endAll": "End all Emotes you have applied",
+                "registerDialog": "Register Custom Emote",
+                "hideUnhideEmote": "Hide/Unhide Emotes"
+            }
+        },
+        "log": {
+            "warning": {
+                "noEffect": "No effect defined for emote:",
+                "pleaseSelectOneToken": "Please select at least one token.",
+                "noPermission": "You do not have permission to use the emote tool on the selected token(s).",
+                "selectMultiple": "Hold Shift to select multiple emotes IF YOU DARE.",
+                "selectSingle": "Please select a single token to set offsets."
+            }
+        },
+        "dialog": {
+            "placeholder": {
+                "openIconPicker": "Search icons...",
+                "emoteName": "Enter emote name...",
+                "emoteTooltipText": "Enter emote tooltip text...",
+                "soundFilePath": "Enter sound file path..."
+            },
+            "window": {
+                "openIconPicker": "Pick Icon",
+                "editMacroCode": "Edit Macro Code",
+                "manageHidingEmotes": "Manage Hiding Emotes",
+                "customEmoteMacros": "Custom Emote Macros",
+                "pickIcon": "Pick Icon",
+                "emoteSoundFiles": "Select Emote Sound Files"
+            },
+            "field": {
+                "uniqueEmoteName": "Unique Emote Name (no spaces):",
+                "emoteTooltipText": "Emote Tooltip Text:",
+                "emoteIcon": "Emote Icon:",
+                "macro": "Macro:",
+                "generatedName": ".name:",
+                "macroCode": "Macro Code:"
+            },
+            "tooltip": {
+                "generatedName": "If using a persistent effect, input this .name value (if you ignore this, things WILL break)",
+                "openEmoteEditor": "The token object can be referenced in this macro as token"
+            },
+            "button": {
+                "select": "Select",
+                "cancel": "Cancel",
+                "saveEmote": "Save Emote",
+                "openEmoteEditor": "Open Emote Editor",
+                "save": "Save",
+                "close": "Close",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "heading": {
+                "defaultEmotes": "Default Emotes",
+                "customEmotes": "Custom Emotes"
+            },
+            "message": {
+                "noDefaultEmotes": "No default emotes defined.",
+                "noCustomEmotes": "No custom emotes defined."
+            }
+        },
+        "error": {
+            "uniqueEmoteNameNoSpaces": "Unique Emote Name cannot contain spaces.",
+            "fillAllFields": "You must fill in all fields.",
+            "emoteNameExists": "An emote with this name already exists. Please choose a unique name."
         }
     }
-  }
 }

@@ -80,28 +80,35 @@ button.gem-emote-btn i {
 }
 
 /* When file picker is displayed: use grid with 2 columns */
-.gem-action-container.with-filepicker {
+.gem-action-container.dual-column {
+  display: grid;
+  grid-template-columns: repeat(2, 52px);
+  gap: 0;
+}
+
+/* When file picker is displayed: use grid with 2 columns */
+.gem-action-container.dual-column-custom {
   display: grid;
   grid-template-columns: repeat(2, 52px);
   gap: 0;
 }
 
 /* When file picker is disabled, force the single button to span both columns */
-.gem-action-container.no-filepicker {
+.gem-action-container.single-column-custom {
   display: grid;
   grid-template-columns: repeat(2, 52px);
   gap: 0;
 }
-.gem-action-container.no-filepicker button.gem-action-button {
+.gem-action-container.single-column-custom button.gem-action-button {
   grid-column: span 2;
   width: 104px;
 }
 
-.gem-action-container.end-all {
+.gem-action-container.register-emote {
   grid-row: auto;
   gap: 0;
 }
-.gem-action-container.end-all button.gem-action-button {
+.gem-action-container.register-emote button.gem-action-button {
   grid-column: span 2;
   width: 104px;
 }
@@ -127,6 +134,34 @@ button.gem-action-button i {
   width: 120px;
   min-width: 100px !important;
   flex: 0 0 120px !important;
+  margin: 0 auto;
+}
+
+.form-footer button[data-action="gem-wide-close"] {
+  width: 150px;
+  min-width: 100px !important;
+  flex: 0 0 150px !important;
+  margin: 0 auto;
+}
+
+.form-footer button[data-action="gem-ultrawide-close"] {
+  width: 300px;
+  min-width: 100px !important;
+  flex: 0 0 300px !important;
+  margin: 0 auto;
+}
+
+.form-footer button[data-action="gem-ultrawide-save"] {
+  width: 300px;
+  min-width: 100px !important;
+  flex: 0 0 300px !important;
+  margin: 0 auto;
+}
+
+.form-footer button[data-action="gem-wide-save"] {
+  width: 150px;
+  min-width: 100px !important;
+  flex: 0 0 150px !important;
   margin: 0 auto;
 }
 

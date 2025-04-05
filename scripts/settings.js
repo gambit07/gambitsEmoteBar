@@ -34,4 +34,12 @@ export function registerSettings() {
         type: String,
         default: "/"
     });
+
+    game.settings.register("gambitsEmoteBar", "customEmotes", {
+        name: "Custom Emotes",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: {}
+    });
 }

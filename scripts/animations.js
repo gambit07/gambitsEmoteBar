@@ -6,7 +6,7 @@ export async function performLaugh(token) {
   
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "laugh")
+  applyEmoteSound(seq, "Laugh")
   seq.play()
 
   seq.effect()
@@ -55,7 +55,7 @@ export async function performLaugh(token) {
 export async function performAngry(token) {      
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "angry")
+  applyEmoteSound(seq, "Angry")
   seq.play()
 
   seq.effect()
@@ -92,7 +92,7 @@ export async function performAngry(token) {
 export async function performSurprised(token) {
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "surprised")
+  applyEmoteSound(seq, "Surprised")
   seq.play()
 
   seq.effect()
@@ -132,7 +132,7 @@ export async function performShout(token) {
   
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "shout")
+  applyEmoteSound(seq, "Shout")
   seq.play()
 
   seq.effect()
@@ -195,7 +195,7 @@ export async function performDrunk(token) {
   
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "drunk")
+  applyEmoteSound(seq, "Drunk")
   seq.play()
 
   seq.animation()
@@ -318,7 +318,7 @@ export async function performSoul(token) {
     
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "soul")
+  applyEmoteSound(seq, "Soul")
   seq.play()
   
   seq.effect()
@@ -345,7 +345,7 @@ export async function performSlap(token) {
 
   let seq = new Sequence();
 
-  applyEmoteSound(seq, "slap")
+  applyEmoteSound(seq, "Slap")
   seq.play()
   
   if (hasAnimatedSpellEffects) {
@@ -404,7 +404,7 @@ export async function performCry(token) {
   
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "cry")
+  applyEmoteSound(seq, "Cry")
   seq.play()
   
     seq.effect()
@@ -441,7 +441,7 @@ export async function performCry(token) {
 export async function performDisgusted(token) {
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "disgusted")
+  applyEmoteSound(seq, "Disgusted")
   seq.play()
   
   seq.effect()
@@ -467,7 +467,7 @@ export async function performGiggle(token) {
 
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "giggle")
+  applyEmoteSound(seq, "Giggle")
   seq.play()
 
   seq.effect()
@@ -518,7 +518,7 @@ export async function performLove(token) {
 
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "love")
+  applyEmoteSound(seq, "Love")
   seq.play()
   
   while (game.gambitsEmoteBar.loveActive.get(token.id)) {
@@ -549,7 +549,7 @@ export async function performROFL(token) {
 
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "rofl")
+  applyEmoteSound(seq, "Rofl")
   seq.play()
 
   seq.animation()
@@ -613,7 +613,7 @@ export async function performSmoking(token) {
 
   let seq = new Sequence();
 
-  applyEmoteSound(seq, "smoking")
+  applyEmoteSound(seq, "Smoking")
   seq.play()
   
   if (hasAnimatedSpellEffects) {
@@ -648,7 +648,7 @@ export async function performNervous(token) {
 
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "nervous")
+  applyEmoteSound(seq, "Nervous")
   seq.play()
 
     seq.effect()
@@ -729,6 +729,9 @@ export async function performParty(token) {
 
   let seq = new Sequence();
 
+  applyEmoteSound(seq, "Party")
+  seq.play()
+
   seq.animation()
     .on(token)
     .opacity(0);
@@ -755,6 +758,9 @@ export async function performParty(token) {
 
 export async function performThunderHype(token) {
   let seq = new Sequence()
+
+  applyEmoteSound(seq, "Thunderhype")
+  seq.play()
 
   seq.effect()
     .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
