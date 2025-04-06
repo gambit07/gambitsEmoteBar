@@ -320,7 +320,7 @@ async function openSoundSelectionDialog() {
       <div style="display: flex; align-items: center; margin-bottom: 4px;">
         <label for="soundPath_${emote}" style="width: 80px;">${emote}:</label>
         <input type="text" name="soundPath_${emote}" id="soundPath_${emote}" value="${initialValue}" placeholder="${game.i18n.format("gambitsEmoteBar.dialog.placeholder.soundFilePath")}" style="flex: 1; margin-right: 4px;" />
-        <button type="button" id="browseSound_${emote}" title="Browse sound files" style="width: 30px; height: 30px; padding: 2px; flex-shrink: 0;">
+        <button type="button" id="browseSound_${emote}" title="${game.i18n.format("gambitsEmoteBar.dialog.heading.browseSoundFiles")}" style="width: 30px; height: 30px; padding: 2px; flex-shrink: 0;">
           <i class="fas fa-folder-open" style="font-size: 0.8rem;"></i>
         </button>
       </div>
@@ -393,16 +393,14 @@ async function openSoundSelectionDialog() {
 }
 
 async function handleEmoteClick({ emote, pickedTokens }) {
-  // Determine if the emote is custom (an object with a 'macro' property)
   const isCustom = typeof emote === "object" && emote.macro;
   
   for (let token of pickedTokens) {
     if (isCustom) {
       try {
-        // Execute the custom macro code for this token.
         await executeCustomMacro(emote.macro, token);
       } catch (err) {
-        console.error("Error executing custom emote macro:", err);
+        console.error(`${game.i18n.format("gambitsEmoteBar.log.warning.handleEmoteClick")}`, err);
       }
     } else {
       switch (emote) {
@@ -461,13 +459,11 @@ async function handleEmoteClick({ emote, pickedTokens }) {
   }
 }
 
-// Sample implementation for executing a custom macro.
-// Note: Using `new Function` executes arbitrary code. Ensure that only trusted users can input custom macros.
 async function executeCustomMacro(macroCode, token) {
   try {
     const func = new Function("token", macroCode);
     await func(token);
   } catch (error) {
-    console.error("Error executing custom macro:", error);
+    console.error(`${game.i18n.format("gambitsEmoteBar.log.warning.handleEmoteClick")}`, error);
   }
 }

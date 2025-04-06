@@ -51,7 +51,8 @@
                 "pleaseSelectOneToken": "Please select at least one token.",
                 "noPermission": "You do not have permission to use the emote tool on the selected token(s).",
                 "selectMultiple": "Hold Shift to select multiple emotes IF YOU DARE.",
-                "selectSingle": "Please select a single token to set offsets."
+                "selectSingle": "Please select a single token to set offsets.",
+                "handleEmoteClick": "Error executing custom emote macro:"
             }
         },
         "dialog": {
@@ -93,7 +94,8 @@
             },
             "heading": {
                 "defaultEmotes": "Default Emotes",
-                "customEmotes": "Custom Emotes"
+                "customEmotes": "Custom Emotes",
+                "browseSoundFiles": "Browse sound files"
             },
             "message": {
                 "noDefaultEmotes": "No default emotes defined.",
