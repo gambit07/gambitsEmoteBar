@@ -1,3 +1,5 @@
+<p><b>To support my continued work on this module! Join my Patreon at https://www.patreon.com/GambitsLounge or donate on Kofi at https://ko-fi.com/gambit07</b></p>
+<p><b>Join my Discord! If you have any questions, feature requests, or just generally want to chat feel free to join Gambit's Lounge: https://discord.gg/BA7SQKqMpa</b></p>
 <p>A small module adding some basic emotes accessible via the Token Controls bar that players can use whenever they want to have some fun! An emote can be applied to multiple tokens at once as long as they are owned, so if the GM wants to emote surprised on a pack of baddies that can be done as well. Emotes can be re-ordered via drag and drop per user in the menu, and any emote can be hidden or revealed on a per-user basis as well. All animations use the brilliant Sequencer module.</p>
 
 <p>Full credit to Eskie (eskiemoh) who is the co-author of this module and the original creator of these animations! You can join their discord <a href="https://discord.gg/rCbY7jAZKh" target="_blank" rel="nofollow noopener">here</a> for many more excellent animations such as spell effects, movement, etc!</p>
