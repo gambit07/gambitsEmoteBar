@@ -20,7 +20,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Initial release for Emote Triggers: You will now have the ability to add triggers for emotes! These triggers include Combat Start/End, Round Start, Turn Start, Combatant added to combat, Long Rest, and Short Rest. You can access the trigger list by right clicking an emote in the emote bar, or in a Register Custom Emote dialog." >> release_notes.txt
+          echo "Small bugfix for version finder" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

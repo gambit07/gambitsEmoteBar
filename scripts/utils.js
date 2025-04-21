@@ -1115,7 +1115,7 @@ export async function displayNewVersion() {
   const module = game.modules.get(MODULE_ID);
   if (!module) return;
 
-  const currentVersion = module.data.version;
+  const currentVersion = module.version;
   const lastVersion = game.settings.get(MODULE_ID, 'lastViewedVersion');
 
   if (currentVersion !== lastVersion) {
