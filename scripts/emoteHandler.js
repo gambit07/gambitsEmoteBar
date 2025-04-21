@@ -1,11 +1,31 @@
 import * as animations from './animations.js';
 import * as utils from './utils.js';
+import { MODULE_ID } from "./module.js";
 
 function setupTooltip(button) {
-  button.addEventListener('mouseenter', () => {
-    const tooltipText = button.getAttribute('data-tooltip');
-    game.tooltip.activate(button, { text: tooltipText, direction: "UP" });
-  });
+  if(game.user.isGM) {
+    button.addEventListener('mouseenter', () => {
+      const baseText = button.getAttribute('data-tooltip');
+      
+      const emoteId = button.dataset.emote;
+      const triggersMap = game.settings.get(MODULE_ID, "emoteTriggers") || {};
+      const count = (triggersMap[emoteId] || []).length;
+      
+      const suffix = count ? ` (${count} ${count === 1 ? `${game.i18n.format("gambitsEmoteBar.dialog.tooltip.trigger")}` : `${game.i18n.format("gambitsEmoteBar.dialog.tooltip.triggers")}`})` : "";
+
+      game.tooltip.activate(button, { text: `${baseText}${suffix}`, direction: "UP" });
+    });
+  }
+  else {
+    button.addEventListener('mouseenter', () => {
+      const tooltipText = button.getAttribute('data-tooltip');
+      game.tooltip.activate(button, { text: tooltipText, direction: "UP" });
+    });
+    button.addEventListener('mouseleave', () => {
+      game.tooltip.deactivate();
+    });
+  }
+
   button.addEventListener('mouseleave', () => {
     game.tooltip.deactivate();
   });
@@ -24,7 +44,7 @@ export function setupEmoteButton(button, state) {
     const tokens = utils.getPickedTokens(button);
     if (!tokens.length) return;
 
-    const customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+    const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
     let persistentEffect = false;
     let customEmote = false;
     if (customEmotes.hasOwnProperty(emote)) {
@@ -53,6 +73,15 @@ export function setupEmoteButton(button, state) {
       }
     }
   });
+
+  button.addEventListener('contextmenu', (e) => {
+    e.preventDefault();            // don’t show browser menu
+    e.stopPropagation();           // don’t let other listeners see it
+    e.stopImmediatePropagation();  // especially block duplicate handlers
+
+    const emoteId = button.dataset.emote;
+    utils.openTriggerListDialog(emoteId);
+  });
 }
 
 function setupCrosshairButton(crosshairButton) {
@@ -76,7 +105,7 @@ function setupEndAllButton(endAllButton) {
 
       let dialog = game.gambitsEmoteBar.dialogInstance;
       const { top, left } = dialog.position;
-      await game.user.setFlag("gambitsEmoteBar", "dialog-position-generateEmotes", { top, left });
+      await game.user.setFlag(MODULE_ID, "dialog-position-generateEmotes", { top, left });
       game.gambitsEmoteBar.dialogOpen = false;
       game.gambitsEmoteBar.dialogInstance = null;
       await dialog.close();
@@ -86,7 +115,7 @@ function setupEndAllButton(endAllButton) {
 }
 
 function getEmoteDialogHTML() {
-  const showFilePicker = game.user.isGM || game.settings.get("gambitsEmoteBar", "emoteSoundEnablePerUser");
+  const showFilePicker = game.user.isGM || game.settings.get(MODULE_ID, "emoteSoundEnablePerUser");
   const actionContainerClass = showFilePicker ? "gem-action-container dual-column-custom" : "gem-action-container single-column-custom";
   return `
     <html>
@@ -223,7 +252,7 @@ export async function generateEmotes() {
   if (game.gambitsEmoteBar.dialogOpen) return;
   game.gambitsEmoteBar.dialogOpen = true;
 
-  const userFlags = game.user.getFlag("gambitsEmoteBar", "dialog-position-generateEmotes");
+  const userFlags = game.user.getFlag(MODULE_ID, "dialog-position-generateEmotes");
   const htmlContent = getEmoteDialogHTML();
   const state = { active: null };
 
@@ -295,7 +324,7 @@ export async function generateEmotes() {
     close: async (event) => {
       const dialog = event.target;
       const { top, left } = dialog.position;
-      await game.user.setFlag("gambitsEmoteBar", "dialog-position-generateEmotes", { top, left });
+      await game.user.setFlag(MODULE_ID, "dialog-position-generateEmotes", { top, left });
       game.gambitsEmoteBar.dialogOpen = false;
       game.gambitsEmoteBar.dialogInstance = null;
     },
@@ -308,8 +337,8 @@ export async function generateEmotes() {
 async function openSoundSelectionDialog() {
   const emotes = game.gambitsEmoteBar.dialogEmotes;
 
-  const moduleDefaults = game.settings.get("gambitsEmoteBar", "emoteSoundPaths") || {};
-  const userOverrides = game.user.getFlag("gambitsEmoteBar", "emoteSoundOverrides") || {};
+  const moduleDefaults = game.settings.get(MODULE_ID, "emoteSoundPaths") || {};
+  const userOverrides = game.user.getFlag(MODULE_ID, "emoteSoundOverrides") || {};
 
   let content = `<form>`;
   for (const emote of emotes) {
@@ -362,7 +391,7 @@ async function openSoundSelectionDialog() {
         if (browseButton) {
           browseButton.addEventListener("click", () => {
             const inputEl = element.querySelector(`#soundPath_${emote}`);
-            const defaultSoundPath = game.settings.get("gambitsEmoteBar", "emoteSoundDefaultPath") || "/";
+            const defaultSoundPath = game.settings.get(MODULE_ID, "emoteSoundDefaultPath") || "/";
             const startingPath = (inputEl && inputEl.value) ? inputEl.value : defaultSoundPath;
             new FilePicker({
               type: "audio",
@@ -383,9 +412,9 @@ async function openSoundSelectionDialog() {
 
   if (result && result !== "cancel") {
     if (game.user.isGM) {
-      await game.settings.set("gambitsEmoteBar", "emoteSoundPaths", result);
+      await game.settings.set(MODULE_ID, "emoteSoundPaths", result);
     } else {
-      await game.user.setFlag("gambitsEmoteBar", "emoteSoundOverrides", result);
+      await game.user.setFlag(MODULE_ID, "emoteSoundOverrides", result);
     }
   }
 

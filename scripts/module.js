@@ -1,11 +1,14 @@
 import { generateEmotes } from './emoteHandler.js';
 import { registerSettings } from './settings.js';
 import { playEmote } from './api.js';
+import { registerHooks } from './hooks.js';
+import { displayNewVersion } from './utils.js'
+export const MODULE_ID = "gambitsEmoteBar";
 
 Hooks.once('init', async function() {
 	registerSettings();
 
-	game.keybindings.register("gambitsEmoteBar", "toggleBar", {
+	game.keybindings.register(MODULE_ID, "toggleBar", {
 		name: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.name"),
 		hint: game.i18n.format("gambitsEmoteBar.keybinds.toggleEmoteBar.hint"),
 		editable: [{
@@ -63,6 +66,7 @@ Hooks.once('ready', async function() {
 			loveActive: new Map(),
 			dialogUser: game.user.id,
 			dialogEmotes: ["Laugh","Angry","Surprised","Shout","Drunk","Soul","Slap","Cry","Disgusted","Giggle","Love","Rofl","Smoking","Nervous","Party","ThunderHype"],
+			isV13: foundry.utils.isNewerVersion(game.version, "13.0.0"),
 			playEmote,
 			defaultEmoteMapping: {
 				"Laugh": { icon: "fa-laugh-beam", label: game.i18n.format("gambitsEmoteBar.menu.emote.laugh") },
@@ -84,4 +88,6 @@ Hooks.once('ready', async function() {
 			}
 		};
 	}
+	registerHooks();
+	await displayNewVersion();
 });

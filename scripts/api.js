@@ -1,4 +1,5 @@
 import * as animations from './animations.js';
+import { MODULE_ID } from "./module.js";
 
 /**
  * Plays an emote animation for each provided token.
@@ -21,7 +22,7 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
 
   const userId = game.user.id;
 
-  const customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+  const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
 
   if (customEmotes.hasOwnProperty(emote)) {
     const customEmoteData = customEmotes[emote];

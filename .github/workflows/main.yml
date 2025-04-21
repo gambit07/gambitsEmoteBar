@@ -10,18 +10,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      release-notes: ${{ steps.set-release-notes.outputs.release-notes }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Added some missing localization keys and bumped version max to 13." >> release_notes.txt
+          echo "Initial release for Emote Triggers: You will now have the ability to add triggers for emotes! These triggers include Combat Start/End, Round Start, Turn Start, Combatant added to combat, Long Rest, and Short Rest. You can access the trigger list by right clicking an emote in the emote bar, or in a Register Custom Emote dialog" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+
+      - name: Format Release Notes for Discord
+        id: format-release-notes-discord
+        run: |
+          DISCORD_NOTES=$(awk '{printf "%s\\n", $0}' release_notes.txt \
+            | sed "s/'/'\"'\"'/g" \
+            | sed 's/\\n$//')
+          echo "release-notes-discord=$DISCORD_NOTES" >> $GITHUB_OUTPUT
 
       - name: Get Version from Commit Message
         id: get-version
@@ -32,6 +38,28 @@ jobs:
 
       - name: Update module.json with Version
         run: node update-module.js ${{ steps.get-version.outputs.version }}
+
+      - name: Prepare to update CHANGELOG
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+   
+      - name: Append to CHANGELOG.md
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+   
+          # blank line before the new section
+          echo "" >> CHANGELOG.md
+          # version header
+          echo "## [v${{ steps.get-version.outputs.version }}] - $(date +'%Y-%m-%d')" >> CHANGELOG.md
+          # your release‑notes body
+          cat release_notes.txt >> CHANGELOG.md
+   
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG for v${{ steps.get-version.outputs.version }}"
+          git push
 
       - name: Zip Files
         working-directory: ./
@@ -69,3 +97,18 @@ jobs:
               }
             }
           }'
+
+      - name: Post to GEM Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_GEM_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+          "embeds": [{
+            "title": "Gambit'"'"'s Emote Bar Release: ${{ steps.get-version.outputs.version }}",
+            "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambitsEmoteBar/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "image": {
+              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+            }
+          }]
+          }' $DISCORD_WEBHOOK

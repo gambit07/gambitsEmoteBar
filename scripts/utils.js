@@ -1,4 +1,5 @@
 import { setupEmoteButton } from './emoteHandler.js';
+import { MODULE_ID } from "./module.js";
 
 export async function setOffsets(token) {
     let leftEyeCrosshair = await Sequencer.Crosshair.show({
@@ -63,7 +64,7 @@ export async function setOffsets(token) {
         y:(noseCrosshair.y/canvas.grid.size) - (token.center.y/canvas.grid.size)
     };
 
-    await token.document.setFlag("gambitsEmoteBar", "offsets", {
+    await token.document.setFlag(MODULE_ID, "offsets", {
         leftEyeOffset,
         rightEyeOffset,
         leftEyeScale,
@@ -165,7 +166,7 @@ export function endAllEmoteEffects() {
     });
   }
 
-  const customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+  const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
   if (customEmotes) {
     for (const [emoteName, emoteData] of Object.entries(customEmotes)) {
       tokens.forEach(token => {
@@ -248,15 +249,15 @@ export function getTokenImage(token) {
 }
 
 export function applyEmoteSound(sequence, emote) {
-  if (!game.settings.get("gambitsEmoteBar", "emoteSoundEnable")) {
+  if (!game.settings.get(MODULE_ID, "emoteSoundEnable")) {
     return sequence;
   }
   
-  const moduleSoundPaths = game.settings.get("gambitsEmoteBar", "emoteSoundPaths") || {};
+  const moduleSoundPaths = game.settings.get(MODULE_ID, "emoteSoundPaths") || {};
   let soundPath = moduleSoundPaths[emote] || "";
 
-  if (!game.user.isGM && game.settings.get("gambitsEmoteBar", "emoteSoundEnablePerUser")) {
-    const userOverrides = game.user.getFlag("gambitsEmoteBar", "emoteSoundOverrides") || {};
+  if (!game.user.isGM && game.settings.get(MODULE_ID, "emoteSoundEnablePerUser")) {
+    const userOverrides = game.user.getFlag(MODULE_ID, "emoteSoundOverrides") || {};
     soundPath = userOverrides[emote] || soundPath;
   }
 
@@ -481,7 +482,7 @@ export function updateEmoteButtons() {
 
   container.innerHTML = "";
 
-  const hiddenEmotes = game.user.getFlag("gambitsEmoteBar", "hiddenEmotes") || [];
+  const hiddenEmotes = game.user.getFlag(MODULE_ID, "hiddenEmotes") || [];
   const defaultEmotes = game.gambitsEmoteBar.dialogEmotes || [];
 
   defaultEmotes.forEach(emoteName => {
@@ -502,7 +503,7 @@ export function updateEmoteButtons() {
     container.appendChild(btn);
   });
 
-  const customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+  const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
   for (const [emoteName, data] of Object.entries(customEmotes)) {
 
     if (hiddenEmotes.includes(emoteName)) continue;
@@ -524,191 +525,9 @@ export function updateEmoteButtons() {
   });
 }
 
-/**
- * Opens the dialog for registering (or editing) a custom emote.
- * If an emoteId is passed, the dialog is in edit mode.
- */
-export async function openRegisterCustomEmoteDialog(emoteId = null) {
-  if(!game.user.isGM) return;
-  // Load existing custom emotes from settings.
-  let customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
-  let data = emoteId ? customEmotes[emoteId] : { tooltip: "", icon: "", macro: "" };
-
-  // Use a <div> wrapper instead of a <form> to avoid auto-submit behavior.
-  const content = `
-    <div id="registerCustomEmoteForm">
-      <div style="margin-bottom: 8px;">
-        <label for="emoteId"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.uniqueEmoteName")}</strong></label><br />
-        <input type="text" id="emoteId" name="emoteId" value="${emoteId || ""}" ${emoteId ? "readonly" : ""} required pattern="^\\S+$" style="width: 100%;" placeholder="${game.i18n.format("gambitsEmoteBar.dialog.placeholder.emoteName")}"/>
-      </div>
-
-      <div style="margin-bottom: 8px;">
-        <label for="tooltipText"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.emoteTooltipText")}</strong></label><br />
-        <input type="text" id="tooltipText" name="tooltipText" value="${data.tooltip}" required style="width: 100%;" placeholder="${game.i18n.format("gambitsEmoteBar.dialog.placeholder.emoteTooltipText")}"/>
-      </div>
-
-      <div style="margin-bottom: 8px;">
-        <label><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.emoteIcon")}</strong></label><br />
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <button type="button" id="pickIconBtn">Pick Emote Icon</button>
-          <span id="selectedIconPreview">${ data.icon ? `<i class="fas ${data.icon}" style="font-size: 24px;"></i>` : "" }</span>
-        </div>
-        <input type="hidden" id="iconSelect" name="iconSelect" value="${data.icon}" />
-      </div>
-
-      <div style="margin-bottom: 8px;">
-        <label><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.macro")}</strong></label><br />
-        <button type="button" id="editMacroBtn" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.openEmoteEditor")}">${game.i18n.format("gambitsEmoteBar.dialog.button.openEmoteEditor")}</button>
-        <textarea id="macroCode" name="macroCode" style="display: none;">${data.macro}</textarea>
-      </div>
-
-      <div style="margin-bottom: 8px;">
-        <label for="generatedName" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.generatedName")}"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.generatedName")}</strong></label><br />
-        <input type="text" id="generatedName" style="width: 100%;" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.generatedName")}"/>
-      </div>
-    </div>
-  `;
-
-  const result = await foundry.applications.api.DialogV2.wait({
-    window: { title: emoteId ? "Edit Custom Emote" : "Register Custom Emote", id: "registerCustomEmoteDialog" },
-    content: content,
-    buttons: [
-      {
-        action: "gem-wide-save",
-        label: `${game.i18n.format("gambitsEmoteBar.dialog.button.saveEmote")}`,
-        icon: "fas fa-save",
-        close: false // Prevent auto-closing on button click.
-      },
-      {
-        action: "gem-wide-close",
-        label: `${game.i18n.format("gambitsEmoteBar.dialog.button.cancel")}`,
-        icon: "fas fa-times",
-        callback: async () => { openCustomEmoteListDialog(); }
-      }
-    ],
-    render: (event, dialogRef) => {
-      const element = event.target.element;
-      animateTitleBar(event.target);
-
-      // Update the generated name field in real time.
-      const emoteIdInput = element.querySelector("#emoteId");
-      const generatedNameInput = element.querySelector("#generatedName");
-      if (emoteIdInput && generatedNameInput) {
-        emoteIdInput.addEventListener("input", (e) => {
-          const value = e.target.value.trim();
-          generatedNameInput.value = !value ? "" : `.name(\`emoteBar${value}_\${token.id}_\${game.gambitsEmoteBar.dialogUser}\`)`;
-        });
-      }
-
-      // Pick Icon button handler.
-      element.querySelector('#pickIconBtn').addEventListener("click", async () => {
-        const icon = await openIconPicker();
-        if (icon) {
-          element.querySelector('#iconSelect').value = icon;
-          element.querySelector('#selectedIconPreview').innerHTML = `<i class="fas ${icon}" style="font-size:24px;"></i>`;
-        }
-      });
-
-      // Macro Editor button handler.
-      element.querySelector('#editMacroBtn').addEventListener("click", async () => {
-        const currentEmoteId = element.querySelector(`#emoteId`).value;
-        if (!currentEmoteId) {
-          ui.notifications.error("You must enter your emote name before adding a macro.");
-          return;
-        }
-        const macroTextarea = element.querySelector('#macroCode');
-        const currentCode = macroTextarea.value;
-
-        const macroEditorContent = `
-          <form id="macroEditorForm">
-            <div style="margin-bottom: 8px;">
-              <label for="macroInput"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.macroCode")}</strong></label>
-            </div>
-            <div>
-              <textarea id="macroInput" name="macroInput" style="width:100%; height:600px;">${currentCode}</textarea>
-            </div>
-          </form>
-        `;
-
-        await foundry.applications.api.DialogV2.wait({
-          window: { title: `${game.i18n.format("gambitsEmoteBar.dialog.window.editMacroCode")}`, id: "macroEditorDialog", minimizable: false },
-          content: macroEditorContent,
-          buttons: [
-            {
-              action: "gem-ultrawide-save",
-              label: `${game.i18n.format("gambitsEmoteBar.dialog.button.save")}`,
-              icon: "fas fa-save",
-              callback: (event, button, dialog) => {
-                const newCode = button.form?.elements["macroInput"]?.value;
-                macroTextarea.value = newCode;
-                return newCode;
-              },
-              default: true
-            },
-            {
-              action: "gem-ultrawide-close",
-              label: `${game.i18n.format("gambitsEmoteBar.dialog.button.cancel")}`,
-              icon: "fas fa-times"
-            }
-          ],
-          rejectClose: false
-        });
-      });
-
-      // Remove any built-in callback on the Save button so it doesn't auto-close.
-      const saveButton = element.querySelector('button[data-action="gem-wide-save"]');
-      if (saveButton) {
-        // Remove any attached click listeners by cloning the node.
-        const newSaveButton = saveButton.cloneNode(true);
-        saveButton.parentNode.replaceChild(newSaveButton, saveButton);
-
-        newSaveButton.addEventListener("click", async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          // Instead of using FormData (which expects a <form> element), grab the values directly.
-          const newEmoteId = element.querySelector("#emoteId")?.value.trim();
-          const tooltip = element.querySelector("#tooltipText")?.value.trim();
-          const icon = element.querySelector("#iconSelect")?.value.trim();
-          const macro = element.querySelector("#macroCode")?.value.trim();
-
-          if (!newEmoteId || !/^\S+$/.test(newEmoteId)) {
-            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.uniqueEmoteNameNoSpaces")}`);
-            element.querySelector("#emoteId")?.focus();
-            return;
-          }
-          if (!newEmoteId || !tooltip || !icon || !macro) {
-            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.fillAllFields")}`);
-            return;
-          }
-
-          const lowerNewEmoteId = newEmoteId.toLowerCase();
-          const customExists = Object.keys(customEmotes).some(key => key.toLowerCase() === lowerNewEmoteId);
-          const defaultExists = game.gambitsEmoteBar.dialogEmotes.some(emote => emote.toLowerCase() === lowerNewEmoteId);
-
-          if (!emoteId && (customExists || defaultExists)) {
-            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.emoteNameExists")}`);
-            return;
-          }
-
-          // Save the new custom emote.
-          customEmotes[newEmoteId] = { name: newEmoteId, tooltip, icon, macro };
-          await game.settings.set("gambitsEmoteBar", "customEmotes", customEmotes);
-
-          updateEmoteButtons();
-          openCustomEmoteListDialog();
-          dialogRef.close();
-        });
-      }
-    },
-    rejectClose: false
-  });
-
-  return result;
-}
-
 export async function showHideUnhideDialog() {
-  let hiddenEmotes = game.user.getFlag("gambitsEmoteBar", "hiddenEmotes") || [];
-  const customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+  let hiddenEmotes = game.user.getFlag(MODULE_ID, "hiddenEmotes") || [];
+  const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
   const defaultEmotes = game.gambitsEmoteBar.dialogEmotes || [];
 
   let content = `<div style="display: flex; flex-direction: column; gap: 10px; max-height: 600px; overflow-y: auto;">`;
@@ -778,11 +597,11 @@ export async function showHideUnhideDialog() {
           if (toggleType === "hide") {
             if (!hiddenEmotes.includes(emoteName)) {
               hiddenEmotes.push(emoteName);
-              await game.user.setFlag("gambitsEmoteBar", "hiddenEmotes", hiddenEmotes);
+              await game.user.setFlag(MODULE_ID, "hiddenEmotes", hiddenEmotes);
             }
           } else {
             hiddenEmotes = hiddenEmotes.filter(name => name !== emoteName);
-            await game.user.setFlag("gambitsEmoteBar", "hiddenEmotes", hiddenEmotes);
+            await game.user.setFlag(MODULE_ID, "hiddenEmotes", hiddenEmotes);
           }
 
           updateEmoteButtons()
@@ -804,16 +623,205 @@ export async function showHideUnhideDialog() {
 }
 
 /**
- * Opens a dialog listing the current custom emotes.
- * Each emote entry has Edit and Delete buttons.
- * A plus button allows adding a new custom emote.
- * This dialog is restricted to GM users.
+ * Opens the dialog for registering (or editing) a custom emote.
+ * If an emoteId is passed, the dialog is in edit mode.
  */
+export async function openRegisterCustomEmoteDialog(emoteId = null) {
+  if(!game.user.isGM) return;
+
+  let customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
+  let data = emoteId ? customEmotes[emoteId] : { tooltip: "", icon: "", macro: "" };
+
+  const content = `
+    <div id="registerCustomEmoteForm">
+      <div style="margin-bottom: 8px;">
+        <label for="emoteId"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.uniqueEmoteName")}</strong></label><br />
+        <input type="text" id="emoteId" name="emoteId" value="${emoteId || ""}" ${emoteId ? "readonly" : ""} required pattern="^\\S+$" style="width: 100%;" placeholder="${game.i18n.format("gambitsEmoteBar.dialog.placeholder.emoteName")}"/>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label for="tooltipText"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.emoteTooltipText")}</strong></label><br />
+        <input type="text" id="tooltipText" name="tooltipText" value="${data.tooltip}" required style="width: 100%;" placeholder="${game.i18n.format("gambitsEmoteBar.dialog.placeholder.emoteTooltipText")}"/>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.emoteIcon")}</strong></label><br />
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" id="pickIconBtn">Pick Emote Icon</button>
+          <span id="selectedIconPreview">${ data.icon ? `<i class="fas ${data.icon}" style="font-size: 24px;"></i>` : "" }</span>
+        </div>
+        <input type="hidden" id="iconSelect" name="iconSelect" value="${data.icon}" />
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.macro")}</strong></label><br />
+        <button type="button" id="editMacroBtn" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.openEmoteEditor")}">${game.i18n.format("gambitsEmoteBar.dialog.button.openEmoteEditor")}</button>
+        ${game.gambitsEmoteBar.isV13 ? `<code-mirror id="macroCode" name="macroCode" language="javascript" style="display: none;">${data.macro}</code-mirror>` : `<textarea id="macroCode" name="macroCode" style="display: none;">${data.macro}</textarea>`}
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label for="generatedName" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.generatedName")}"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.generatedName")}</strong></label><br />
+        <input type="text" id="generatedName" style="width: 100%;" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.generatedName")}"/>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.openTriggers")}</strong></label><br />
+        <button type="button" id="addTriggerBtn" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.openTriggers")}">${game.i18n.format("gambitsEmoteBar.dialog.button.openTriggers")}</button>
+      </div>
+    </div>
+  `;
+
+  const result = await foundry.applications.api.DialogV2.wait({
+    window: { title: emoteId ? "Edit Custom Emote" : "Register Custom Emote", id: "registerCustomEmoteDialog" },
+    content: content,
+    buttons: [
+      {
+        action: "gem-wide-save",
+        label: `${game.i18n.format("gambitsEmoteBar.dialog.button.saveEmote")}`,
+        icon: "fas fa-save",
+        close: false
+      },
+      {
+        action: "gem-wide-close",
+        label: `${game.i18n.format("gambitsEmoteBar.dialog.button.cancel")}`,
+        icon: "fas fa-times",
+        callback: async () => { openCustomEmoteListDialog(); }
+      }
+    ],
+    render: (event, dialogRef) => {
+      const element = event.target.element;
+      const dialog = event.target;
+      animateTitleBar(event.target);
+
+      // Update the generated name field
+      const emoteIdInput = element.querySelector("#emoteId");
+      const generatedNameInput = element.querySelector("#generatedName");
+      if (emoteIdInput && generatedNameInput) {
+        emoteIdInput.addEventListener("input", (e) => {
+          const value = e.target.value.trim();
+          generatedNameInput.value = !value ? "" : `.name(\`emoteBar${value}_\${token.id}_\${game.gambitsEmoteBar.dialogUser}\`)`;
+        });
+      }
+
+      // Pick Icon button handler.
+      element.querySelector('#pickIconBtn').addEventListener("click", async () => {
+        const icon = await openIconPicker();
+        if (icon) {
+          element.querySelector('#iconSelect').value = icon;
+          element.querySelector('#selectedIconPreview').innerHTML = `<i class="fas ${icon}" style="font-size:24px;"></i>`;
+        }
+      });
+
+      element.querySelector('#addTriggerBtn').addEventListener("click", async () => {
+          openTriggerListDialog(emoteIdInput.value);
+      });
+
+      // Macro Editor button handler.
+      element.querySelector('#editMacroBtn').addEventListener("click", async () => {
+        const currentEmoteId = element.querySelector(`#emoteId`).value;
+        if (!currentEmoteId) {
+          ui.notifications.error("You must enter your emote name before adding a macro.");
+          return;
+        }
+        const macroTextarea = element.querySelector('#macroCode');
+        const currentCode = macroTextarea.value;
+
+        const macroEditorContent = `
+        <form id="macroEditorForm">
+          <div style="margin-bottom: 8px;">
+            <label for="macroInput"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.macroCode")}</strong></label>
+          </div>
+          <div>
+          ${game.gambitsEmoteBar.isV13 ? `<code-mirror id="macroInput" name="macroInput" language="javascript" aria-label="${game.i18n.format("gambitsEmoteBar.dialog.field.macroCode")}" style="width:100%; height:600px;">${currentCode?.trim()}</code-mirror>` : `<textarea id="macroInput" name="macroInput" style="width:100%; height:600px;">${currentCode}</textarea>`}
+          </div>
+        </form>
+      `;
+
+        await foundry.applications.api.DialogV2.wait({
+          window: { title: `${game.i18n.format("gambitsEmoteBar.dialog.window.editMacroCode")}`, id: "macroEditorDialog", minimizable: false },
+          content: macroEditorContent,
+          buttons: [
+            {
+              action: "gem-ultrawide-save",
+              label: `${game.i18n.format("gambitsEmoteBar.dialog.button.save")}`,
+              icon: "fas fa-save",
+              callback: (event, button, dialog) => {
+                const newCode = button.form?.elements["macroInput"]?.value;
+                macroTextarea.value = newCode;
+                return newCode;
+              },
+              default: true
+            },
+            {
+              action: "gem-ultrawide-close",
+              label: `${game.i18n.format("gambitsEmoteBar.dialog.button.cancel")}`,
+              icon: "fas fa-times"
+            }
+          ],
+          rejectClose: false
+        });
+      });
+
+      const saveButton = element.querySelector('button[data-action="gem-wide-save"]');
+      if (saveButton) {
+        // Remove any attached click listeners by cloning the node.
+        const newSaveButton = saveButton.cloneNode(true);
+        saveButton.parentNode.replaceChild(newSaveButton, saveButton);
+
+        newSaveButton.addEventListener("click", async (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const newEmoteId = element.querySelector("#emoteId")?.value.trim();
+          const tooltip = element.querySelector("#tooltipText")?.value.trim();
+          const icon = element.querySelector("#iconSelect")?.value.trim();
+          const macro = element.querySelector("#macroCode")?.value.trim();
+
+          if (!newEmoteId || !/^\S+$/.test(newEmoteId)) {
+            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.uniqueEmoteNameNoSpaces")}`);
+            element.querySelector("#emoteId")?.focus();
+            return;
+          }
+          if (!newEmoteId || !tooltip || !icon || !macro) {
+            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.fillAllFields")}`);
+            return;
+          }
+
+          const lowerNewEmoteId = newEmoteId.toLowerCase();
+          const customExists = Object.keys(customEmotes).some(key => key.toLowerCase() === lowerNewEmoteId);
+          const defaultExists = game.gambitsEmoteBar.dialogEmotes.some(emote => emote.toLowerCase() === lowerNewEmoteId);
+
+          if (!emoteId && (customExists || defaultExists)) {
+            ui.notifications.error(`${game.i18n.format("gambitsEmoteBar.error.emoteNameExists")}`);
+            return;
+          }
+
+          customEmotes[newEmoteId] = { name: newEmoteId, tooltip, icon, macro };
+          await game.settings.set(MODULE_ID, "customEmotes", customEmotes);
+
+          updateEmoteButtons();
+          openCustomEmoteListDialog();
+          dialog?.close();
+        });
+      }
+    },
+    rejectClose: false
+  });
+
+  return result;
+}
+
+/**
+* Opens a dialog listing the current custom emotes.
+* Each emote entry has Edit and Delete buttons.
+* A plus button allows adding a new custom emote.
+* This dialog is restricted to GM users.
+*/
 export async function openCustomEmoteListDialog() {
   if(!game.user.isGM) return;
-  let customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+  let customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
   let listHtml = `<div id="customEmoteList">`;
-  
+
   for (const [id, data] of Object.entries(customEmotes)) {
     listHtml += `
       <div class="custom-emote-item" style="margin-bottom: 8px;">
@@ -830,7 +838,7 @@ export async function openCustomEmoteListDialog() {
       </div>
     `;
   }
-  
+
   listHtml += `
     </div>
     <div style="margin-top:10px; text-align: center;">
@@ -862,9 +870,9 @@ export async function openCustomEmoteListDialog() {
       element.querySelectorAll('button[data-action="delete"]').forEach(btn => {
         btn.addEventListener("click", async (ev) => {
           const id = btn.getAttribute("data-id");
-          let customEmotes = game.settings.get("gambitsEmoteBar", "customEmotes") || {};
+          let customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
           delete customEmotes[id];
-          await game.settings.set("gambitsEmoteBar", "customEmotes", customEmotes);
+          await game.settings.set(MODULE_ID, "customEmotes", customEmotes);
           openCustomEmoteListDialog();
           updateEmoteButtons();
         });
@@ -877,4 +885,276 @@ export async function openCustomEmoteListDialog() {
     rejectClose: false
   });
   return result;
+}
+
+export async function openTriggerListDialog(emoteId) {
+  if (!game.user.isGM) return;
+  const all = game.settings.get(MODULE_ID, "emoteTriggers") || {};
+  const triggers = all[emoteId] || [];
+
+  let listHtml = `<div id="triggerList">`;
+  for (const t of triggers) {
+    const names = Array.isArray(t.tokenIds) && t.tokenIds.length
+      ? t.tokenIds
+          .map(u => {
+            const tk = canvas.tokens.get(u);
+            return tk?.name ?? "empty";
+          })
+          .join(", ")
+      : "";
+    listHtml += `
+      <div class="trigger-item" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center; border:1px solid var(--color-warm-2);border-radius:5px;padding:5px;">
+          <div style="flex:1;display:flex;align-items:center;gap:6px;">
+            <strong>Hook:</strong> ${t.hook}, 
+            <strong>Target:</strong> ${t.target}
+            ${names ? `, <strong>Tokens:</strong> (${names})` : ""}
+            , <strong>Duration:</strong> ${t.duration}s
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button data-action="edit" data-id="${t.id}">Edit</button>
+            <button data-action="delete" data-id="${t.id}">Delete</button>
+          </div>
+        </div>
+      </div>`;
+  }
+  listHtml += `
+    </div>
+    <div style="margin-top:10px;text-align:center;">
+      <button id="addTrigger" style="font-size:1.5rem;padding:5px 10px;">+</button>
+    </div>`;
+
+  await foundry.applications.api.DialogV2.wait({
+    window: { title: `${game.i18n.format("gambitsEmoteBar.dialog.window.manageTriggers")}: ${emoteId}`, id: "triggerListDialog" },
+    content: listHtml,
+    buttons: [{ action: "gem-ultrawide-close", label: "Close", icon: "fas fa-times" }],
+    render: (event) => {
+      const element = event.target.element;
+      const dialog = event.target;
+      console.log(dialog, "dialog")
+
+      element.querySelectorAll('button[data-action="edit"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          dialog?.close();
+          openRegisterTriggerDialog(emoteId, id);
+        });
+      });
+
+      element.querySelectorAll('button[data-action="delete"]').forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.id;
+          all[emoteId] = (all[emoteId] || []).filter(t => t.id !== id);
+          await game.settings.set(MODULE_ID, "emoteTriggers", all);
+          dialog?.close();
+          openTriggerListDialog(emoteId);
+        });
+      });
+
+      element.querySelector("#addTrigger").addEventListener("click", () => {
+        dialog?.close();
+        openRegisterTriggerDialog(emoteId);
+      });
+    },
+    rejectClose: false
+  });
+}
+
+async function openRegisterTriggerDialog(emoteId, triggerId = null) {
+  if (!game.user.isGM) return;
+  const all  = game.settings.get(MODULE_ID, "emoteTriggers") || {};
+  const list = all[emoteId] || [];
+  const data = triggerId
+    ? list.find(t => t.id === triggerId)
+    : { id: foundry.utils.randomID(), hook: "", target: "", tokenIds: "", duration: null };
+
+  const hooks   = ["combatStart","combatEnd","roundStart","turnStart","restLong","restShort","combatantEnter"];
+  const targets = ["all","ally","enemy","neutral","selected"];
+
+  const content = `
+    <form id="triggerForm">
+      <div style="margin-bottom:8px;">
+        <label for="hookSelect"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hook")}</strong></label><br/>
+        <select id="hookSelect" name="hook">
+          ${hooks.map(h => `<option value="${h}"${h === data.hook ? " selected" : ""}>${h}</option>`).join("")}
+        </select>
+      </div>
+      <div style="margin-bottom:8px;">
+        <label for="targetSelect"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.target")}</strong></label><br/>
+        <select id="targetSelect" name="target">
+          ${targets.map(t => `<option value="${t}"${t === data.target ? " selected" : ""}>${t}</option>`).join("")}
+        </select>
+      </div>
+      <div id="tokenRow" style="margin-bottom:8px;display:${data.target === "selected" ? "block" : "none"};">
+        <label for="tokenIdInput" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.tokenIds")}"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.tokenIds")}</strong></label><br/>
+        <input type="text" id="tokenIdInput" name="tokenIds" value="${data.tokenIds||""}" style="width:100%;" />
+      </div>
+      <div style="margin-bottom:8px;">
+        <label for="durationInput" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.duration")}"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.duration")}</strong></label><br/>
+        <input type="number" id="durationInput" name="duration" min="0" value="${data.duration}" style="width:100px;" />
+      </div>
+    </form>`;
+
+  await foundry.applications.api.DialogV2.wait({
+    window: {
+      title: triggerId ? game.i18n.format("gambitsEmoteBar.dialog.window.editTrigger") : game.i18n.format("gambitsEmoteBar.dialog.window.newTrigger"),
+      id:    "registerTriggerDialog",
+      minimizable: false
+    },
+    content,
+    buttons: [
+      { action: "gem-wide-save",  label: "Save",  icon: "fas fa-save",  close: false },
+      { action: "gem-wide-close", label: "Cancel", icon: "fas fa-times", callback: async () => { openTriggerListDialog(emoteId); } }
+    ],
+    render: (event) => {
+      const element = event.target.element;
+      const dialog  = event.target;
+
+      element.querySelector("#targetSelect").addEventListener("change", ev => {
+        element.querySelector("#tokenRow").style.display =
+          ev.target.value === "selected" ? "block" : "none";
+      });
+
+      element.querySelector('button[data-action="gem-wide-save"]')
+        .addEventListener("click", async (ev) => {
+          ev.preventDefault();
+          const hookInput      = element.querySelector("#hookSelect").value;
+          const targetInput    = element.querySelector("#targetSelect").value;
+          const tokenIdsRaw = element.querySelector("#tokenIdInput").value;
+          const tokenIds    = tokenIdsRaw
+            .split(",")
+            .map(s => s.trim())
+            .filter(s => s);
+          const durationInput  = Number(element.querySelector("#durationInput").value);
+
+          if (!hookInput || !targetInput || (targetInput === "selected" && !tokenIds.length) || isNaN(durationInput) || durationInput < 0) {
+            return ui.notifications.error("Please fill out all fields correctly.");
+          }
+
+          const newTrigger = {
+            id:        data.id,
+            hook:      hookInput,
+            target:    targetInput,
+            tokenIds: targetInput === "selected" ? tokenIds : [],
+            duration:  durationInput
+          };
+          const idx = list.findIndex(t => t.id === data.id);
+          if (idx > -1) list[idx] = newTrigger;
+          else list.push(newTrigger);
+          all[emoteId] = list;
+          await game.settings.set(MODULE_ID, "emoteTriggers", all);
+
+          dialog?.close();
+          openTriggerListDialog(emoteId);
+        });
+    },
+    rejectClose: false
+  });
+}
+
+/**
+ * Determine the tokens array based on the stored trigger and current subject.
+ * @param {object} trigger - The trigger definition ({ hook, target, tokenIds }).
+ * @param {object} subject - The object passed from the Hook (Combat, Combatant, or Actor).
+ * @returns {Token[]} - Array of Token objects to apply the emote to.
+ */
+export function resolveTokens(trigger, subject) {
+  const { hook, target, tokenIds = [] } = trigger;
+  let baseTokens;
+  if (hook.startsWith("rest")) {
+    baseTokens = canvas.tokens.placeables.filter(t => t.actor?.id === subject.id);
+  } else if (hook === "combatantEnter") {
+    baseTokens = canvas.tokens.placeables.filter(t => t.actor?.id === subject.actorId);
+  } else if (hook === "turnStart") {
+    baseTokens = canvas.tokens.placeables.filter(t => t.actor?.id === subject.combatant.actorId);
+  } else if (subject?.combatants) {
+    baseTokens = Array.from(subject.combatants.values())
+      .map(c => c.token?.object)
+      .filter(t => t);
+  } else {
+    baseTokens = canvas.tokens.placeables;
+  }
+
+  switch (target) {
+    case "all":
+      return baseTokens;
+    case "selected":
+      if (Array.isArray(tokenIds) && tokenIds.length) {
+        return tokenIds.map(u => canvas.tokens.get(u)).filter(t => t);
+      }
+      return [];
+    case "ally":
+      return baseTokens.filter(t => t.document.disposition === 1);
+    case "enemy":
+      return baseTokens.filter(t => t.document.disposition === -1);
+    case "neutral":
+      return baseTokens.filter(t => t.document.disposition === 0);
+    default:
+      return [];
+  }
+}
+
+/**
+ * Dispatch all stored triggers matching this hook.
+ * @param {string} hook - The name of the fired hook (e.g. "combatStart").
+ * @param {object} subject - The primary object of the hook event.
+ */
+export function handleHook(hook, subject) {
+  const map = game.settings.get(MODULE_ID, "emoteTriggers") || {};
+  for (const [emoteId, triggers] of Object.entries(map)) {
+    for (const trig of triggers) {
+      if (trig.hook !== hook) continue;
+      const tokens = resolveTokens(trig, subject);
+      if (!tokens.length) continue;
+      game.gambitsEmoteBar.playEmote({ emote: emoteId, tokens, duration: trig?.duration ? trig.duration : null });
+    }
+  }
+}
+
+export async function displayNewVersion() {
+  const module = game.modules.get(MODULE_ID);
+  if (!module) return;
+
+  const currentVersion = module.data.version;
+  const lastVersion = game.settings.get(MODULE_ID, 'lastViewedVersion');
+
+  if (currentVersion !== lastVersion) {
+    let notes;
+    try {
+    const resp = await fetch(`modules/${MODULE_ID}/CHANGELOG.md`);
+    const md   = await resp.text();
+    notes = extractChangelogSection(md, currentVersion);
+    }
+    catch (err) {
+    console.error(`${MODULE_ID} | Could not load CHANGELOG:`, err);
+    notes = `*(No changelog entry found for v${currentVersion})*`;
+    }
+
+    await foundry.applications.api.DialogV2.wait({
+    window: {
+      title: `What's New in v${currentVersion}`,
+      id:   "gem-changelog-dialog",
+      minimizable: false
+    },
+    content: `<div style="white-space: pre-wrap; font-family: monospace;">${notes}</div>`,
+    buttons: [
+      {
+      action: "gem-changelog-close",
+      label: game.i18n.format("gambitsEmoteBar.dialog.button.close"),
+      icon:  "fas fa-check"
+      }
+    ],
+    rejectClose: false
+    });
+
+    await game.settings.set(MODULE_ID, 'lastViewedVersion', currentVersion);
+  }
+}
+
+function extractChangelogSection(markdown, version) {
+	const pattern = new RegExp(
+	  `## \\[?v?${version.replace(/\./g, '\\.')}\\]? - [0-9]{4}-[0-9]{2}-[0-9]{2}[\\r\\n]+([\\s\\S]*?)(?=\\n## \\[|$)`
+	);
+	const m = markdown.match(pattern);
+	return m?.[1]?.trim() || `*(No changelog entry found for v${version})*`;
 }

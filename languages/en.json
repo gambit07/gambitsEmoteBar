@@ -68,7 +68,11 @@
                 "manageHidingEmotes": "Manage Hiding Emotes",
                 "customEmoteMacros": "Custom Emote Macros",
                 "pickIcon": "Pick Icon",
-                "emoteSoundFiles": "Select Emote Sound Files"
+                "emoteSoundFiles": "Select Emote Sound Files",
+                "editTriggers": "Edit Triggers",
+                "editTrigger": "Edit Trigger",
+                "newTrigger": "New Trigger",
+                "manageTriggers": "Manage Triggers"
             },
             "field": {
                 "uniqueEmoteName": "Unique Emote Name (no spaces):",
@@ -76,11 +80,21 @@
                 "emoteIcon": "Emote Icon:",
                 "macro": "Macro:",
                 "generatedName": ".name:",
-                "macroCode": "Macro Code:"
+                "macroCode": "Macro Code:",
+                "triggers": "Triggers:",
+                "openTriggers": "Open Triggers",
+                "hook": "Hook:",
+                "target": "Target:",
+                "tokenIds": "Token ID's:",
+                "duration": "Duration:"
             },
             "tooltip": {
                 "generatedName": "If using a persistent effect, input this .name value (if you ignore this, things WILL break)",
-                "openEmoteEditor": "The token object can be referenced in this macro as token"
+                "openEmoteEditor": "The token object can be referenced in this macro as token",
+                "tokenIds": "Use a comma to separate ID's when using multiple",
+                "duration": "Value in seconds",
+                "trigger": "Trigger",
+                "triggers": "Triggers"
             },
             "button": {
                 "select": "Select",
@@ -90,7 +104,9 @@
                 "save": "Save",
                 "close": "Close",
                 "edit": "Edit",
-                "delete": "Delete"
+                "delete": "Delete",
+                "configureTriggers": "Configure Triggers",
+                "openTriggers": "Open Triggers"
             },
             "heading": {
                 "defaultEmotes": "Default Emotes",

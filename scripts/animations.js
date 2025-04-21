@@ -1,4 +1,5 @@
 import { getTokenImage, applyEmoteSound, getTokenRotation } from './utils.js';
+import { MODULE_ID } from "./module.js";
 
 export async function performLaugh(token) {
   let facing = 1;
@@ -190,7 +191,7 @@ export async function performShout(token) {
 }
   
 export async function performDrunk(token) {
-  let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
+  let offsets = token.document.getFlag(MODULE_ID, "offsets");
   let noseOffset = offsets?.noseOffset ?? { x: 0, y: 0 };
   
   let seq = new Sequence()
@@ -387,7 +388,7 @@ export async function performSlap(token) {
 
 export async function performCry(token) {
   const isMirrored = token.document.texture.scaleX < 0;
-  const offsets = token.document.getFlag("gambitsEmoteBar", "offsets") ?? {};
+  const offsets = token.document.getFlag(MODULE_ID, "offsets") ?? {};
   const leftEyeOffset = offsets.leftEyeOffset ?? { x: 0, y: 0 };
   const rightEyeOffset = offsets.rightEyeOffset ?? { x: 0, y: 0 };
   const leftEyeScale = offsets.leftEyeScale ?? 0.25;
@@ -601,7 +602,7 @@ export async function performROFL(token) {
 }
 
 export async function performSmoking(token) {
-  let offsets = token.document.getFlag("gambitsEmoteBar", "offsets");
+  let offsets = token.document.getFlag(MODULE_ID, "offsets");
   let mouthOffset = offsets?.mouthOffset ?? { x: 0, y: 0 };
   
   let facing = -1;
