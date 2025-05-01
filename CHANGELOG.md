@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.3] - 2025-05-01
+- Updated module.json to enable 5e V5 compatibility
+- Fixed V13 compatability, forgot to set the new max versions in the foundry release api
+
 ## [2.1.1] - 2025-04-21
 
 Small bugfix for version finder syntax
