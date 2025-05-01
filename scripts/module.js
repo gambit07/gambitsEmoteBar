@@ -2,7 +2,7 @@ import { generateEmotes } from './emoteHandler.js';
 import { registerSettings } from './settings.js';
 import { playEmote } from './api.js';
 import { registerHooks } from './hooks.js';
-import { displayNewVersion } from './utils.js'
+import { displayNewVersionDialog } from './utils.js';
 export const MODULE_ID = "gambitsEmoteBar";
 
 Hooks.once('init', async function() {
@@ -89,5 +89,5 @@ Hooks.once('ready', async function() {
 		};
 	}
 	registerHooks();
-	await displayNewVersion();
+	await displayNewVersionDialog();
 });

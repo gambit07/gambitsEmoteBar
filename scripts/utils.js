@@ -1111,50 +1111,147 @@ export function handleHook(hook, subject) {
   }
 }
 
-export async function displayNewVersion() {
-  const module = game.modules.get(MODULE_ID);
-  if (!module) return;
+export async function displayNewVersionDialog() {
+  if(game.settings.get(MODULE_ID, 'lastViewedVersion') === game.modules.get(MODULE_ID).version) return;
+  const ICON_PATH = `modules/${MODULE_ID}/assets/gambit.webp`;
 
-  const currentVersion = module.version;
-  const lastVersion = game.settings.get(MODULE_ID, 'lastViewedVersion');
-
-  if (currentVersion !== lastVersion) {
-    let notes;
-    try {
+  let notesMd;
+  try {
     const resp = await fetch(`modules/${MODULE_ID}/CHANGELOG.md`);
-    const md   = await resp.text();
-    notes = extractChangelogSection(md, currentVersion);
-    }
-    catch (err) {
-    console.error(`${MODULE_ID} | Could not load CHANGELOG:`, err);
-    notes = `*(No changelog entry found for v${currentVersion})*`;
-    }
-
-    await foundry.applications.api.DialogV2.wait({
-    window: {
-      title: `What's New in v${currentVersion}`,
-      id:   "gem-changelog-dialog",
-      minimizable: false
-    },
-    content: `<div style="white-space: pre-wrap; font-family: monospace;">${notes}</div>`,
-    buttons: [
-      {
-      action: "gem-changelog-close",
-      label: game.i18n.format("gambitsEmoteBar.dialog.button.close"),
-      icon:  "fas fa-check"
-      }
-    ],
-    rejectClose: false
-    });
-
-    await game.settings.set(MODULE_ID, 'lastViewedVersion', currentVersion);
+    const md = await resp.text();
+    notesMd = extractChangelogSection(md, game.modules.get(MODULE_ID).version);
   }
+  catch {
+    notesMd = "";
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+  }
+
+  function markdownToHtml(md) {
+    const lines = md.split(/\r?\n/).filter(l => l.trim() !== "");
+    if (!lines.length) return `<p><em>No release notes provided.</em></p>`;
+
+    let html = "";
+    const indentStack = [];
+    let prevIndent = -1;
+
+    for (let line of lines) {
+      const m = line.match(/^(\s*)-\s*(.*)$/);
+      const indent = m ? Math.floor(m[1].length / 2) : 0;
+      const text   = m ? m[2] : line;
+
+      if (indent > prevIndent) {
+        for (let i = prevIndent + 1; i <= indent; i++) {
+          html += "<ul>";
+          indentStack.push("ul");
+        }
+      }
+      else if (indent < prevIndent) {
+        for (let i = indent; i < prevIndent; i++) {
+          html += "</li></ul>";
+          indentStack.pop();
+        }
+      }
+      else if (prevIndent >= 0) {
+        html += "</li>";
+      }
+
+      html += `<li>${escapeHtml(text)}`;
+      prevIndent = indent;
+    }
+
+    if (prevIndent >= 0) html += "</li>";
+    while (indentStack.length) {
+      html += "</ul>";
+      indentStack.pop();
+    }
+
+    return html;
+  }
+
+  const contentHtml = markdownToHtml(notesMd);
+
+  await foundry.applications.api.DialogV2.wait({
+    window: {
+      title: `What's New in v${game.modules.get(MODULE_ID).version} of Gambit's Template Previewer`,
+      id:    "gem-changelog-dialog",
+      width: 800,
+      minimizable: true
+    },
+    content: `
+      <div style="
+        display: flex !important;
+        width: 800px !important;
+        max-width: 800px !important;
+        font-family: var(--font-base) !important;
+        align-items: center !important;
+      ">
+        <!-- Notes panel (75%) -->
+        <div style="
+          flex: 3 0 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          padding: 1rem !important;
+          overflow-y: auto !important;
+          border-right: 1px solid #777 !important;
+          box-sizing: border-box !important;
+        ">
+          ${contentHtml}
+        </div>
+
+        <!-- Image panel (25%) -->
+        <div style="
+          flex: 1 0 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          padding: 1rem !important;
+          box-sizing: border-box !important;
+          overflow: hidden !important;
+        ">
+          <img src="${ICON_PATH}" alt="Previewer Icon" style="
+            max-width: 100% !important;
+            max-height: 150px !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            border-radius: 4px !important;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3) !important;
+          ">
+        </div>
+      </div>
+    `,
+    buttons: [{
+      action: "close",
+      label: "Close",
+      icon:  "fas fa-check"
+    }],
+    rejectClose: false
+  });
+
+  await game.settings.set(MODULE_ID, 'lastViewedVersion', game.modules.get(MODULE_ID).version);
 }
 
-function extractChangelogSection(markdown, version) {
-	const pattern = new RegExp(
-	  `## \\[?v?${version.replace(/\./g, '\\.')}\\]? - [0-9]{4}-[0-9]{2}-[0-9]{2}[\\r\\n]+([\\s\\S]*?)(?=\\n## \\[|$)`
-	);
-	const m = markdown.match(pattern);
-	return m?.[1]?.trim() || `*(No changelog entry found for v${version})*`;
+function extractChangelogSection(md, version) {
+  const verEscaped = version.replace(/\./g, "\\.");
+  const headerRe = new RegExp(`^## \\[v?${verEscaped}\\].*$`, "m");
+  const allLines = md.split(/\r?\n/);
+  const startIdx = allLines.findIndex(line => headerRe.test(line));
+  if (startIdx === -1) return "";
+
+  const nextIdx = allLines.slice(startIdx + 1)
+    .findIndex(line => /^## \[/.test(line));
+  const endIdx = nextIdx === -1 ? allLines.length : startIdx + 1 + nextIdx;
+  const sectionLines = allLines.slice(startIdx + 1, endIdx);
+
+  while (sectionLines.length && !sectionLines[0].trim()) sectionLines.shift();
+  while (sectionLines.length && !sectionLines.at(-1).trim()) sectionLines.pop();
+
+  return sectionLines.join("\n");
 }

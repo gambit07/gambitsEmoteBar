@@ -1,0 +1,2 @@
+- Updated module.json to enable 5e V5 compatibility
+- Fixed V13 compatability, forgot to set the new max versions in the foundry release api
