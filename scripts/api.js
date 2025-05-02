@@ -52,7 +52,6 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
     return true;
   }
 
-  // If not a custom emote, use built-in handling.
   for (let token of tokens) {
     switch (emote) {
       case "Laugh":
@@ -75,7 +74,6 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
         break;
       case "Slap":
         await animations.performSlap(token);
-        // For some effects, you may want to return early.
         return;
       case "Cry":
         await animations.performCry(token);
@@ -105,12 +103,18 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
       case "ThunderHype":
         await animations.performThunderHype(token);
         break;
+      case "Bloodied":
+        await animations.performBloodied(token);
+        break;
+      case "Suspicious":
+        if (!duration) duration = 10;
+        animations.performSuspicious(token);
+        break;
       default:
         return ui.notifications.warn(`Emote "${emote}" not recognized. Valid emotes are: ${game.gambitsEmoteBar.dialogEmotes.join(", ")}`);
     }
   }
 
-  // Handle clearing persistent effects after the duration if needed.
   if (duration) {
     if (emote === "Slap" || emote === "ThunderHype")
       return true;
@@ -119,6 +123,12 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
         tokens.forEach(token => {
           if (game.gambitsEmoteBar.loveActive)
             game.gambitsEmoteBar.loveActive.set(token.id, false);
+        });
+      }
+      if (emote === "Suspicious") {
+        tokens.forEach(token => {
+          if (game.gambitsEmoteBar.suspiciousActive)
+            game.gambitsEmoteBar.suspiciousActive.set(token.id, false);
         });
       }
       tokens.forEach(token => {

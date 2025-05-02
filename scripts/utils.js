@@ -140,6 +140,13 @@ export function endEmoteEffects(emote, tokens) {
         }
       });
   }
+  if (emote === "Suspicious") {
+    tokens.forEach(token => {
+      if (game.gambitsEmoteBar.suspiciousActive) {
+        game.gambitsEmoteBar.suspiciousActive.set(token.id, false);
+      }
+    });
+  }
   const isCustom = typeof emote === "object";
   if(isCustom) emote = emote.name;
   
@@ -157,6 +164,13 @@ export function endAllEmoteEffects() {
       tokens.forEach(token => {
         if (game.gambitsEmoteBar.loveActive) {
           game.gambitsEmoteBar.loveActive.set(token.id, false);
+        }
+      });
+    }
+    if (emote === "Suspicious") {
+      tokens.forEach(token => {
+        if (game.gambitsEmoteBar.suspiciousActive) {
+          game.gambitsEmoteBar.suspiciousActive.set(token.id, false);
         }
       });
     }
@@ -814,8 +828,6 @@ export async function openRegisterCustomEmoteDialog(emoteId = null) {
 /**
 * Opens a dialog listing the current custom emotes.
 * Each emote entry has Edit and Delete buttons.
-* A plus button allows adding a new custom emote.
-* This dialog is restricted to GM users.
 */
 export async function openCustomEmoteListDialog() {
   if(!game.user.isGM) return;
@@ -906,14 +918,15 @@ export async function openTriggerListDialog(emoteId) {
       <div class="trigger-item" style="margin-bottom:8px;">
         <div style="display:flex;justify-content:space-between;align-items:center; border:1px solid var(--color-warm-2);border-radius:5px;padding:5px;">
           <div style="flex:1;display:flex;align-items:center;gap:6px;">
-            <strong>Hook:</strong> ${t.hook}, 
-            <strong>Target:</strong> ${t.target}
-            ${names ? `, <strong>Tokens:</strong> (${names})` : ""}
-            , <strong>Duration:</strong> ${t.duration}s
+            <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hook")}</strong> ${t.hook}, 
+            <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.target")}</strong> ${t.target}
+            ${names ? `, <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.tokens")}</strong> (${names})` : ""}
+            , <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.duration")}</strong> ${t.duration}s
+            ${t.hook === "hpPercentage" ? `, <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hpThreshold")}:</strong> ${t.threshold}%` : ""}
           </div>
           <div style="display:flex;gap:6px;">
-            <button data-action="edit" data-id="${t.id}">Edit</button>
-            <button data-action="delete" data-id="${t.id}">Delete</button>
+            <button data-action="edit" data-id="${t.id}">${game.i18n.format("gambitsEmoteBar.dialog.button.edit")}</button>
+            <button data-action="delete" data-id="${t.id}">${game.i18n.format("gambitsEmoteBar.dialog.button.delete")}</button>
           </div>
         </div>
       </div>`;
@@ -931,7 +944,6 @@ export async function openTriggerListDialog(emoteId) {
     render: (event) => {
       const element = event.target.element;
       const dialog = event.target;
-      console.log(dialog, "dialog")
 
       element.querySelectorAll('button[data-action="edit"]').forEach(btn => {
         btn.addEventListener("click", () => {
@@ -965,10 +977,17 @@ async function openRegisterTriggerDialog(emoteId, triggerId = null) {
   const all  = game.settings.get(MODULE_ID, "emoteTriggers") || {};
   const list = all[emoteId] || [];
   const data = triggerId
-    ? list.find(t => t.id === triggerId)
-    : { id: foundry.utils.randomID(), hook: "", target: "", tokenIds: "", duration: null };
+  ? list.find(t => t.id === triggerId)
+  : {
+      id:        foundry.utils.randomID(),
+      hook:      "",
+      target:    "",
+      tokenIds:  "",
+      duration:  null,
+      threshold: 50
+    };
 
-  const hooks   = ["combatStart","combatEnd","roundStart","turnStart","restLong","restShort","combatantEnter"];
+  const hooks   = ["combatStart","combatEnd","roundStart","turnStart","restLong","restShort","combatantEnter","hpPercentage"];
   const targets = ["all","ally","enemy","neutral","selected"];
 
   const content = `
@@ -993,6 +1012,29 @@ async function openRegisterTriggerDialog(emoteId, triggerId = null) {
         <label for="durationInput" data-tooltip="${game.i18n.format("gambitsEmoteBar.dialog.tooltip.duration")}"><strong>${game.i18n.format("gambitsEmoteBar.dialog.field.duration")}</strong></label><br/>
         <input type="number" id="durationInput" name="duration" min="0" value="${data.duration}" style="width:100px;" />
       </div>
+         <!-- HP-Percentage Threshold Slider -->
+      ${data.hook === "hpPercentage"
+        ? `<div id="thresholdRow" style="margin-bottom:8px;">
+            <label for="thresholdSlider">
+              <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hpThreshold")}</strong>
+              <span id="thresholdValue">${data.threshold}</span>%
+            </label><br/>
+            <input type="range"
+                    id="thresholdSlider"
+                    min="10" max="90" step="1"
+                    value="${data.threshold}" />
+          </div>`
+        : `<div id="thresholdRow" style="display:none; margin-bottom:8px;">
+            <label for="thresholdSlider">
+              <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hpThreshold")}</strong>
+              <span id="thresholdValue">${data.threshold}</span>%
+            </label><br/>
+            <input type="range"
+                    id="thresholdSlider"
+                    min="10" max="90" step="1"
+                    value="${data.threshold}" />
+          </div>`
+      }
     </form>`;
 
   await foundry.applications.api.DialogV2.wait({
@@ -1015,38 +1057,55 @@ async function openRegisterTriggerDialog(emoteId, triggerId = null) {
           ev.target.value === "selected" ? "block" : "none";
       });
 
-      element.querySelector('button[data-action="gem-wide-save"]')
-        .addEventListener("click", async (ev) => {
-          ev.preventDefault();
-          const hookInput      = element.querySelector("#hookSelect").value;
-          const targetInput    = element.querySelector("#targetSelect").value;
-          const tokenIdsRaw = element.querySelector("#tokenIdInput").value;
-          const tokenIds    = tokenIdsRaw
-            .split(",")
-            .map(s => s.trim())
-            .filter(s => s);
-          const durationInput  = Number(element.querySelector("#durationInput").value);
+      element.querySelector('button[data-action="gem-wide-save"]').addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        const hookInput = element.querySelector("#hookSelect").value;
+        const targetInput = element.querySelector("#targetSelect").value;
+        const tokenIdsRaw = element.querySelector("#tokenIdInput").value;
+        const tokenIds = tokenIdsRaw
+          .split(",")
+          .map(s => s.trim())
+          .filter(s => s);
+        const durationInput  = Number(element.querySelector("#durationInput").value);
 
-          if (!hookInput || !targetInput || (targetInput === "selected" && !tokenIds.length) || isNaN(durationInput) || durationInput < 0) {
-            return ui.notifications.error("Please fill out all fields correctly.");
-          }
+        if (!hookInput || !targetInput || (targetInput === "selected" && !tokenIds.length) || isNaN(durationInput) || durationInput < 0) {
+          return ui.notifications.error("Please fill out all fields correctly.");
+        }
 
-          const newTrigger = {
-            id:        data.id,
-            hook:      hookInput,
-            target:    targetInput,
-            tokenIds: targetInput === "selected" ? tokenIds : [],
-            duration:  durationInput
-          };
-          const idx = list.findIndex(t => t.id === data.id);
-          if (idx > -1) list[idx] = newTrigger;
-          else list.push(newTrigger);
-          all[emoteId] = list;
-          await game.settings.set(MODULE_ID, "emoteTriggers", all);
+        const threshold = (hookInput === "hpPercentage") ? Number(element.querySelector("#thresholdSlider").value) : undefined;
+      
+        const newTrigger = {
+          id:        data.id,
+          hook:      hookInput,
+          target:    targetInput,
+          tokenIds:  targetInput === "selected" ? tokenIds : [],
+          duration:  durationInput,
+          ...(threshold !== undefined ? { threshold } : {})
+        };
 
-          dialog?.close();
-          openTriggerListDialog(emoteId);
-        });
+        const idx = list.findIndex(t => t.id === data.id);
+        if (idx > -1) list[idx] = newTrigger;
+        else list.push(newTrigger);
+        all[emoteId] = list;
+        await game.settings.set(MODULE_ID, "emoteTriggers", all);
+
+        dialog?.close();
+        openTriggerListDialog(emoteId);
+      });
+
+      const hookSelect = element.querySelector("#hookSelect");
+      const thresholdRow    = element.querySelector("#thresholdRow");
+      const thresholdSlider = element.querySelector("#thresholdSlider");
+      const thresholdValue  = element.querySelector("#thresholdValue");
+
+      hookSelect.addEventListener("change", ev => {
+        thresholdRow.style.display = ev.target.value === "hpPercentage"
+          ? "block" : "none";
+      });
+
+      thresholdSlider?.addEventListener("input", ev => {
+        thresholdValue.textContent = ev.target.value;
+      });
     },
     rejectClose: false
   });
@@ -1061,7 +1120,7 @@ async function openRegisterTriggerDialog(emoteId, triggerId = null) {
 export function resolveTokens(trigger, subject) {
   const { hook, target, tokenIds = [] } = trigger;
   let baseTokens;
-  if (hook.startsWith("rest")) {
+  if (hook.startsWith("rest") || hook === "hpPercentage") {
     baseTokens = canvas.tokens.placeables.filter(t => t.actor?.id === subject.id);
   } else if (hook === "combatantEnter") {
     baseTokens = canvas.tokens.placeables.filter(t => t.actor?.id === subject.actorId);
@@ -1177,7 +1236,7 @@ export async function displayNewVersionDialog() {
 
   await foundry.applications.api.DialogV2.wait({
     window: {
-      title: `What's New in v${game.modules.get(MODULE_ID).version} of Gambit's Template Previewer`,
+      title: `What's New in v${game.modules.get(MODULE_ID).version} of Gambit's Emote Bar`,
       id:    "gem-changelog-dialog",
       width: 800,
       minimizable: true

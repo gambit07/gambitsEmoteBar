@@ -64,8 +64,9 @@ Hooks.once('ready', async function() {
 			dialogOpen: false,
 			dialogInstance: null,
 			loveActive: new Map(),
+			suspiciousActive: new Map(),
 			dialogUser: game.user.id,
-			dialogEmotes: ["Laugh","Angry","Surprised","Shout","Drunk","Soul","Slap","Cry","Disgusted","Giggle","Love","Rofl","Smoking","Nervous","Party","ThunderHype"],
+			dialogEmotes: ["Laugh","Angry","Surprised","Shout","Drunk","Soul","Slap","Cry","Disgusted","Giggle","Love","Rofl","Smoking","Nervous","Party","ThunderHype","Bloodied","Suspicious"],
 			isV13: foundry.utils.isNewerVersion(game.version, "13.0.0"),
 			playEmote,
 			defaultEmoteMapping: {
@@ -84,7 +85,9 @@ Hooks.once('ready', async function() {
 				"Smoking": { icon: "fa-smoking", label: game.i18n.format("gambitsEmoteBar.menu.emote.smoking") },
 				"Nervous": { icon: "fa-frown-open", label: game.i18n.format("gambitsEmoteBar.menu.emote.nervous") },
 				"Party": { icon: "fa-birthday-cake", label: game.i18n.format("gambitsEmoteBar.menu.emote.party") },
-				"ThunderHype": { icon: "fa-sword", label: game.i18n.format("gambitsEmoteBar.menu.emote.thunderHype") }
+				"ThunderHype": { icon: "fa-sword", label: game.i18n.format("gambitsEmoteBar.menu.emote.thunderHype") },
+				"Bloodied": { icon: "fa-user-injured", label: game.i18n.format("gambitsEmoteBar.menu.emote.bloodied") },
+				"Suspicious": { icon: "fa-eyes", label: game.i18n.format("gambitsEmoteBar.menu.emote.suspicious") }
 			}
 		};
 	}

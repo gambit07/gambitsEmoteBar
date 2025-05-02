@@ -57,6 +57,7 @@ export function setupEmoteButton(button, state) {
       utils.endEmoteEffects(emote, tokens);
       utils.checkEffectsActive(button, state);
       if(state?.loveActive) game.gambitsEmoteBar.loveActive = false;
+      if(state?.suspiciousActive) game.gambitsEmoteBar.suspiciousActive = false;
     } else {
       if (!e.shiftKey && state.active && state.active !== button) {
         ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.selectMultiple"));
@@ -205,6 +206,16 @@ function getEmoteDialogHTML() {
                         data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.thunderHype')}" 
                         data-emote="ThunderHype" draggable="true">
                   <i class="fa-solid fa-sword"></i>
+                </button>
+                <button type="button" id="bloodied" class="gem-emote-btn" 
+                        data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.bloodied')}" 
+                        data-emote="Bloodied" draggable="true">
+                  <i class="fas fa-user-injured"></i>
+                </button>
+                <button type="button" id="suspicious" class="gem-emote-btn" 
+                        data-tooltip="${game.i18n.format('gambitsEmoteBar.menu.emote.suspicious')}" 
+                        data-emote="Suspicious" draggable="true">
+                  <i class="fas fa-eyes"></i>
                 </button>
               </div>
             </div>
@@ -480,6 +491,12 @@ async function handleEmoteClick({ emote, pickedTokens }) {
           break;
         case "ThunderHype":
           await animations.performThunderHype(token);
+          break;
+        case "Bloodied":
+          await animations.performBloodied(token);
+          break;
+        case "Suspicious":
+          animations.performSuspicious(token);
           break;
         default:
           console.warn(game.i18n.format("gambitsEmoteBar.log.warning.noEffect"), emote);

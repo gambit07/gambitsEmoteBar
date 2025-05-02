@@ -823,3 +823,102 @@ export async function performThunderHype(token) {
 
   seq.play()
 }
+
+export async function performBloodied(token) {
+  let seq = new Sequence()
+
+  /*const hasJAA = game.modules.get("jaamod")?.active;
+  let fileName = hasJAA ? "jaamod.sequencer_fx_master.blood_splat.red" : "modules/gambitsEmoteBar/assets/bloodied.webp";
+  let scale = hasJAA ? 1.25 : 1;
+  let opacity = hasJAA ? 0.6 : 1;*/
+
+  applyEmoteSound(seq, "Bloodied")
+  seq.play()
+
+  seq.animation()
+    .on(token)
+    .opacity(0)
+  
+  seq.effect()
+    .name(`emoteBarBloodied_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("modules/gambitsEmoteBar/assets/bloodied.webp")
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
+    .scaleToObject(1, {considerTokenScale: true})
+    .rotate(token.rotation)
+    .persist()
+    .belowTokens(false)
+    .zIndex(2)
+    .loopProperty("sprite", "position.y", { from: 0, to: -0.03, duration: 1200, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
+    .opacity(1)
+
+  seq.effect()
+    .name(`emoteBarBloodied_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file(getTokenImage(token))
+    .scaleToObject(1, {considerTokenScale: true})
+    .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
+    .loopProperty("sprite", "position.y", { from: 0, to: -0.03, duration: 1200, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
+    .rotate(token.rotation)
+    .persist()
+    .mirrorY(false)
+    .waitUntilFinished()
+
+  seq.animation()
+    .on(token)
+    .opacity(1)
+  
+  seq.play();
+}
+
+export async function performSuspicious(token) {
+  game.gambitsEmoteBar.suspiciousActive.set(token.id, true);
+
+  let seq = new Sequence()
+
+  applyEmoteSound(seq, "Suspicious")
+  seq.play()
+
+  let mirrored = token.document.texture.scaleX < 0;
+  const offsets = token.document.getFlag("gambitsEmoteBar", "offsets") || {};
+  const leftEyeOffset  = offsets.leftEyeOffset  || { x:0, y:0 };
+  const rightEyeOffset = offsets.rightEyeOffset || { x:0, y:0 };
+  const leftEyeScale   = offsets.leftEyeScale   || 0.25;
+  const rightEyeScale  = offsets.rightEyeScale  || 0.25;
+  const adjustedLeftEyeOffset = {
+    x: mirrored ? -leftEyeOffset.x : leftEyeOffset.x,
+    y: leftEyeOffset.y
+  };
+  const adjustedRightEyeOffset = {
+    x: mirrored ? -rightEyeOffset.x : rightEyeOffset.x,
+    y: rightEyeOffset.y
+  };
+
+  while ( game.gambitsEmoteBar.suspiciousActive.get(token.id) ) {
+    await new Sequence()
+      .effect()
+        .name(`emoteBarSuspicious_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+        .file("modules/gambitsEmoteBar/assets/suspicious_lefteye.webp")
+        .attachTo(token, {offset: { x: adjustedLeftEyeOffset.x, y: adjustedLeftEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
+        .scaleToObject(leftEyeScale)
+        .mirrorX(mirrored)
+        .belowTokens(false)
+        .rotate(token.rotation)
+        .duration(2100)
+
+      .effect()
+        .name(`emoteBarSuspicious_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+        .file("modules/gambitsEmoteBar/assets/suspicious_lefteye.webp")
+        .attachTo(token, {offset: { x: adjustedRightEyeOffset.x, y: adjustedRightEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
+        .scaleToObject(rightEyeScale)
+        .mirrorX(mirrored)
+        .belowTokens(false)
+        .rotate(token.rotation)
+        .duration(2100)
+        .wait(2000)
+
+      .play();
+
+    mirrored = !mirrored;
+  }
+
+  game.gambitsEmoteBar.suspiciousActive.delete(token.id);
+}

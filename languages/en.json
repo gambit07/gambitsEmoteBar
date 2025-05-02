@@ -42,7 +42,9 @@
                 "filepicker": "Configure Default Emote Sounds",
                 "endAll": "End all Emotes you have applied",
                 "registerDialog": "Register Custom Emote",
-                "hideUnhideEmote": "Hide/Unhide Emotes"
+                "hideUnhideEmote": "Hide/Unhide Emotes",
+                "bloodied": "Bloodied",
+                "suspicious": "Suspicious (Eyes)"
             }
         },
         "log": {
@@ -86,7 +88,9 @@
                 "hook": "Hook:",
                 "target": "Target:",
                 "tokenIds": "Token ID's:",
-                "duration": "Duration:"
+                "tokens": "Tokens:",
+                "duration": "Duration:",
+                "hpThreshold": "HP Threshold %:"
             },
             "tooltip": {
                 "generatedName": "If using a persistent effect, input this .name value (if you ignore this, things WILL break)",
