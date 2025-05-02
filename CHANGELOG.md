@@ -6,6 +6,12 @@
 - Added new Trigger hpPercentage. This trigger can be setup with a custom percentage range to trigger an emote when a given tokens HP goes below the threshold. When the tokens HP goes back above the threshold, the emote is removed.
 - Cleaned up some errant system files left in module.zip after the last update
 
+## [v2.1.5] - 2025-05-02
+- Added Emote Bloodied
+- Added Emote Suspicious
+- Added new Trigger hpPercentage. This trigger can be setup with a custom percentage range to trigger an emote when a given tokens HP goes below the threshold. When the tokens HP goes back above the threshold, the emote is removed.
+- Cleaned up some errant system files left in module.zip after the last update
+
 ## [v2.1.4] - 2025-05-01
 - Updated module.json to enable 5e V5 compatibility
 - Fixed V13 compatability, forgot to set the new max versions in the foundry release api
