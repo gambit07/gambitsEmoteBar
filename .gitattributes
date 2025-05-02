@@ -1,0 +1,15 @@
+# Exclude workflows & hooks
+.github/         export-ignore
+.husky/          export-ignore
+
+# Exclude your local scripts & notes
+package.json     export-ignore
+package-lock.json export-ignore
+release_notes.txt export-ignore
+update-module.js export-ignore
+
+# Exclude dev dependencies
+node_modules/    export-ignore
+
+# Exclude the zip if somehow tracked
+module.zip       export-ignore

@@ -74,16 +74,9 @@ try {
 
 // ─── 5) Build the ZIP ────────────────────────────────────────────────────
 
-console.log('📦  Creating module.zip (excluding CI, hooks, scripts, etc.)');
+console.log('📦  Creating module.zip from current HEAD');
 execSync(
-  `zip -r module.zip . \
-    -x ".git/*" \
-       ".github/*" \
-       ".husky/*" \
-       "package.json" \
-       "package-lock.json" \
-       "release_notes.txt" \
-       "update-module.js"`,
+  'git archive --format=zip --output module.zip HEAD',
   { stdio: 'inherit' }
 );
 
