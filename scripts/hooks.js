@@ -73,6 +73,7 @@ export function registerHooks() {
   });
 
   Hooks.on('updateActor', async (actor, diff, options, userID) => {
+    const token = actor.getActiveTokens()?.[0];
     const emoteTriggers = game.settings.get(MODULE_ID, "emoteTriggers") || {};
     const thresholdTriggers = Object.entries(emoteTriggers).flatMap(([emoteName, triggers]) => {
       return triggers
@@ -86,18 +87,18 @@ export function registerHooks() {
   
     if (!diff.system?.attributes?.hp) return;
   
-    const hpPrev    = options.oldHpVal;
     const hpCurr    = actor.system.attributes.hp.value;
     const hpMax     = actor.system.attributes.hp.max;
-    const prevPct   = (hpPrev / hpMax) * 100;
     const currPct   = (hpCurr / hpMax) * 100;
-  
+
     for (const { emote, threshold } of thresholdTriggers) {
-      if (currPct < threshold && prevPct >= threshold) {
+      const effectName = `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
+      const effect = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
+
+      if ((currPct < threshold) && !effect.length) {
         handleHook("hpPercentage", actor);
       }
-      else if (currPct >= threshold && prevPct < threshold) {
-        const token = actor.getActiveTokens()?.[0];
+      else if ((currPct >= threshold) && effect.length > 0) {
         if (!token) continue;
         endEmoteEffects(emote, [token]);
       }

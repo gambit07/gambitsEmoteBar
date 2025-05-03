@@ -922,7 +922,7 @@ export async function openTriggerListDialog(emoteId) {
             <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.target")}</strong> ${t.target}
             ${names ? `, <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.tokens")}</strong> (${names})` : ""}
             , <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.duration")}</strong> ${t.duration}s
-            ${t.hook === "hpPercentage" ? `, <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hpThreshold")}:</strong> ${t.threshold}%` : ""}
+            ${t.hook === "hpPercentage" ? `, <strong>${game.i18n.format("gambitsEmoteBar.dialog.field.hpThreshold")}</strong> ${t.threshold}%` : ""}
           </div>
           <div style="display:flex;gap:6px;">
             <button data-action="edit" data-id="${t.id}">${game.i18n.format("gambitsEmoteBar.dialog.button.edit")}</button>
