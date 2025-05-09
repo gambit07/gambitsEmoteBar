@@ -1,5 +1,8 @@
 # Changelog
 
+## [v2.1.7] - 2025-05-09
+- Fixed missing functionality causing the copy-able .name value of a custom emote to be empty when editing a custom emote that was already saved
+
 ## [v2.1.6] - 2025-05-03
 - Fixed a bug that would cause the hpPercentage trigger to not work in certain (most) worlds.
 - Fixed a small display bug in HP Percentage causing two colon's before the percentage is displayed
