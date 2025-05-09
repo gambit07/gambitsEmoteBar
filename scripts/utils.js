@@ -711,6 +711,11 @@ export async function openRegisterCustomEmoteDialog(emoteId = null) {
       const emoteIdInput = element.querySelector("#emoteId");
       const generatedNameInput = element.querySelector("#generatedName");
       if (emoteIdInput && generatedNameInput) {
+        const initValue = emoteIdInput.value.trim();
+        generatedNameInput.value = initValue
+          ? `.name(\`emoteBar${initValue}_\${token.id}_\${game.gambitsEmoteBar.dialogUser}\`)`
+          : "";
+
         emoteIdInput.addEventListener("input", (e) => {
           const value = e.target.value.trim();
           generatedNameInput.value = !value ? "" : `.name(\`emoteBar${value}_\${token.id}_\${game.gambitsEmoteBar.dialogUser}\`)`;
