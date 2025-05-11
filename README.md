@@ -3,11 +3,9 @@
 <p style="text-align: center;"><img src="https://img.shields.io/github/v/release/gambit07/gambitsEmoteBar?style=for-the-badge" alt="GitHub release" /> <img src="https://img.shields.io/github/downloads/gambit07/gambitsEmoteBar/total?style=for-the-badge" alt="GitHub all releases" /> <a href="https://discord.gg/BA7SQKqMpa" target="_blank" rel="nofollow noopener"><img src="https://dcbadge.limes.pink/api/server/BA7SQKqMpa" alt="Discord" /></a></p>
 <h2 style="text-align: center;">Supporting The Module</h2>
 <p style="text-align: center;"><a href="https://ko-fi.com/gambit07" target="_blank" rel="nofollow noopener"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a> <a href="https://www.patreon.com/GambitsLounge" target="_blank" rel="nofollow noopener"> <img src="https://img.shields.io/badge/Patreon-Gambits Lounge-F96854?style=for-the-badge&amp;logo=patreon" alt="Patreon Gambits Lounge" /> </a></p>
-<hr />
 <p>This module adds emotes accessible via the Token Controls bar that players/gms can use whenever they want to have some fun! An emote can be applied to multiple tokens at once as long as they are owned, so if the GM wants to emote surprised on a pack of baddies that can be done as well. All animations use the brilliant Sequencer module.</p>
 <p>&nbsp;</p>
 <p>Full credit to Eskie (eskiemoh) who is the co-author of this module and the original creator of these animations! You can join their discord <a href="https://discord.gg/rCbY7jAZKh" target="_blank" rel="nofollow noopener">here</a> for many more excellent animations such as spell effects, movement, etc!</p>
-<hr />
 <ul>
 <li>Create your own custom macros controllable through the bar (alongside the default emotes)</li>
 <li>Add specific triggers for any emotes (ex. trigger On Long Rest, On Combat Start, On HP % Threshold, etc)</li>
