@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.9] - 2025-06-24
+- Fixed a couple hooks firing for non-gm users.
+- Updated module.json to 13.345 verified
+
 ## [v2.1.8] - 2025-06-24
 - Fixed a couple hooks firing for non-gm users.
 
