@@ -1,5 +1,8 @@
 # Changelog
 
+## [v2.1.8] - 2025-06-24
+- Fixed a couple hooks firing for non-gm users
+
 ## [v2.1.7] - 2025-05-09
 - Fixed missing functionality causing the copy-able .name value of a custom emote to be empty when editing a custom emote that was already saved
 
