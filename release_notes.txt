@@ -1,1 +1,1 @@
-- Fixed missing functionality causing the copy-able .name value of a custom emote to be empty when editing a custom emote that was already saved
+- Fixed a couple hooks firing for non-gm users

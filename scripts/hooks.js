@@ -4,6 +4,8 @@ import { MODULE_ID } from "./module.js";
 export function registerHooks() {
   // Pre-hook to stash previous Combat state: started, round, turn
   Hooks.on("preUpdateCombat", (combat, update, options) => {
+    if(!game.user.isGM) return;
+    
     const emoteTriggers = game.settings.get(MODULE_ID, "emoteTriggers") || {};
     const hasHook = Object.values(emoteTriggers).some(triggerList =>
       triggerList.some(trigger => trigger.hook === "combatStart" || trigger.hook === "combatEnd" || trigger.hook === "roundStart" || trigger.hook === "turnStart")
@@ -58,6 +60,8 @@ export function registerHooks() {
   });
 
   Hooks.on("dnd5e.restCompleted", (actor, restData) => {
+    if(!game.user.isGM) return;
+
     const emoteTriggers = game.settings.get(MODULE_ID, "emoteTriggers") || {};
     const hasHook = Object.values(emoteTriggers).some(triggerList =>
       triggerList.some(trigger => trigger.hook === "restLong" || trigger.hook === "restShort")
@@ -73,6 +77,8 @@ export function registerHooks() {
   });
 
   Hooks.on('updateActor', async (actor, diff, options, userID) => {
+    if(!game.user.isGM) return;
+
     const token = actor.getActiveTokens()?.[0];
     const emoteTriggers = game.settings.get(MODULE_ID, "emoteTriggers") || {};
     const thresholdTriggers = Object.entries(emoteTriggers).flatMap(([emoteName, triggers]) => {
