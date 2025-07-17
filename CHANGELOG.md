@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.10] - 2025-07-16
+- Removed a few unnecessary console logs that were spammy
+- Added handling if a token is deleted while they have an active emote applied. Any active emotes will now be removed from a token if it is deleted.
+
 ## [v2.1.9] - 2025-06-24
 - Fixed a couple hooks firing for non-gm users.
 - Updated module.json to 13.345 verified
