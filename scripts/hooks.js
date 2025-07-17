@@ -1,4 +1,4 @@
-import { handleHook, endEmoteEffects } from './utils.js';
+import { handleHook, endEmoteEffects, endAllEmoteEffects } from './utils.js';
 import { MODULE_ID } from "./module.js";
 
 export function registerHooks() {
@@ -15,6 +15,10 @@ export function registerHooks() {
     foundry.utils.setProperty(options, "flags.gambitsEmoteBar.prevStarted", combat.started);
     foundry.utils.setProperty(options, "flags.gambitsEmoteBar.prevRound", combat.round ?? 0);
     foundry.utils.setProperty(options, "flags.gambitsEmoteBar.prevTurn", combat.turn  ?? 0);
+  });
+
+  Hooks.on("preDeleteToken", (tokenDoc, _options) => {
+    endAllEmoteEffects([tokenDoc?.object]);
   });
 
   // Detect combat start/end, round and turn

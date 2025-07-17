@@ -155,9 +155,9 @@ export function endEmoteEffects(emote, tokens) {
   });
 }
 
-export function endAllEmoteEffects() {
+export function endAllEmoteEffects(tokens) {
   let emotes = game.gambitsEmoteBar.dialogEmotes;
-  let tokens = getOwnedTokens();
+  if(!tokens) tokens = getOwnedTokens();
 
   for(let emote of emotes) {
     if (emote === "Love") {
@@ -194,9 +194,8 @@ export function toggleEmoteButton(button, active, state) {
     if (active) {
       button.dataset.active = "true";
       button.style.backgroundColor = getDialogColors().baseColor;
-      console.log(state, "toggleEmoteButtonState")
+
       if (state && !state.active) {
-        console.log("state not active, set active?")
         state.active = button;
       }
     } else {
@@ -238,19 +237,17 @@ export function allEffectsActive(emote, tokens) {
   return tokens.every(token => {
     const effectName = `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
     const effects = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
-    console.log(effects, "effectsAllEffectsActive")
     return effects.length > 0;
   });
 }
 
 export function checkEffectsActive(button, state) {
   let tokens = getOwnedTokens();
-  if(tokens.length === 0 || !tokens) return;
+  if(tokens?.length === 0 || !tokens) return;
 
   tokens.some(token => {
     const effectName = `emoteBar${button.dataset.emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
     const effect = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
-    console.log(effect, "effectCheckEffectsActive")
     if (effect && effect.length > 0) {
       toggleEmoteButton(button, true, state);
       return true;
