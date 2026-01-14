@@ -1,0 +1,34 @@
+<form class="gem-v2-form">
+  {{#if isGM}}
+    <div class="gem-v2-body">
+      <div class="gem-list-scroll">
+        {{#each entries}}
+          <div style="display:flex; justify-content: space-between; align-items:center; border:1px solid var(--color-warm-2); border-radius:5px; padding:5px;">
+            <div style="flex: 1; display:flex; align-items:center; gap: 6px;">
+              <strong>{{id}}</strong>
+              <i class="{{iconClass}}" style="font-size: 1.2rem;"></i>
+            </div>
+            <div style="display:flex; gap: 6px;">
+              <button type="button" data-action="edit" data-id="{{id}}">
+                {{localize 'gambitsEmoteBar.dialog.button.edit'}}
+              </button>
+              <button type="button" data-action="del" data-id="{{id}}">
+                {{localize 'gambitsEmoteBar.dialog.button.delete'}}
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <footer class="sheet-footer flexrow gem-v2-footer">
+      <button type="button" data-action="add">
+        <i class="fas fa-plus"></i>
+      </button>
+    </footer>
+  {{else}}
+    <div class="gem-v2-body">
+      <p>You must be a GM to manage custom emotes.</p>
+    </div>
+  {{/if}}
+</form>

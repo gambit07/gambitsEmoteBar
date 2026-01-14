@@ -1,63 +1,111 @@
-import { getTokenImage, applyEmoteSound, getTokenRotation } from './utils.js';
-import { MODULE_ID } from "./module.js";
+import { getTokenImage, applyEmoteSound, getTokenRotation, getEskieModules, resolveEskieFile, requireEskiePatreon, getTokenFacing, getTokenMirrorFacing, getTokenIsMirrored, applyCapturedMirrorToOffset } from './utils.js';
+import { packageId } from "./constants.js";
 
 export async function performLaugh(token) {
-  let facing = 1;
-  let mirrorFace = true;
-  
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Laugh")
-  seq.play()
+
+  const eskieFile = resolveEskieFile("eskie.emote.laugh.02.yellow", "eskie-free.emote.laugh.01.yellow");
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarLaugh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: (-0.4 * token.document.width * getTokenFacing(token)), y: -0.45 * token.document.width }, gridUnits: true, local: getTokenRotation(token) })
+      .scaleToObject(0.8, { considerTokenScale: true })
+      .mirrorX(true)
+      .spriteRotation(getTokenIsMirrored(token) ? -20 : 20)
+      .zIndex(2)
+      .rotate(token.rotation)
+      .private()
+      .persist(true);
+
+    seq.effect()
+      .name(`emoteBarLaugh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .copySprite(token)
+      .scaleToObject(1, { considerTokenScale: true })
+      .attachTo(token, { bindAlpha: false })
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.01, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+      .loopProperty("sprite", "width", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+      .loopProperty("sprite", "height", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+      .rotate(token.rotation)
+      .persist(true)
+      .zIndex(1);
+
+    seq.play();
+    return;
+  }
 
   seq.effect()
     .name(`emoteBarLaugh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/laugh_large.webp")
-    .attachTo(token, {offset:{x:(-0.4*token.document.width*facing), y:-0.45*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .loopProperty("sprite", "rotation", { from: 0, to: -15*facing, duration: 250, ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.4*token.document.width*getTokenFacing(token)), y:-0.45*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
+    .loopProperty("sprite", "rotation", { from: 0, to: -15*getTokenFacing(token), duration: 250, ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34)
-    .mirrorX(mirrorFace)
+    .mirrorX(!getTokenIsMirrored(token))
     .zIndex(2)
     .rotate(token.rotation)
     .private()
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
 
   seq.effect()
     .name(`emoteBarLaugh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/laugh_small.webp")
-    .attachTo(token, {offset:{x:(-0.55*token.document.width*facing), y:0*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .loopProperty("sprite", "rotation", { from: 0, to: 20*facing, duration: 250,ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.55*token.document.width*getTokenFacing(token)), y:0*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
+    .loopProperty("sprite", "rotation", { from: 0, to: 20*getTokenFacing(token), duration: 250,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34)
-    .mirrorX(mirrorFace)
+    .mirrorX(!getTokenIsMirrored(token))
     .zIndex(2)
     .rotate(token.rotation)
     .private()
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
 
   seq.effect()
     .name(`emoteBarLaugh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file(getTokenImage(token))
+    .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token)
     .loopProperty("sprite", "position.y", { from: 0, to: -0.01, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
     .loopProperty("sprite", "width", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
     .loopProperty("sprite", "height", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad"  })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .mirrorY(false)
     .zIndex(1)
     .waitUntilFinished(-200)
 
   seq.play()
 }
-  
-export async function performAngry(token) {      
+
+export async function performAngry(token) {
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Angry")
-  seq.play()
+
+  const eskie = getEskieModules();
+  const eskieFile = resolveEskieFile("eskie.emote.angry.02", "eskie-free.emote.angry.01");
+
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarAngry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token)
+      .scaleIn(0, 250, { ease: "easeOutBack" })
+      .scaleOut(0, 250, { ease: "easeOutCubic" })
+      .spriteOffset({x:0.3*token.document.width, y:-0.3*token.document.width}, { gridUnits: true, local: getTokenRotation(token)})
+      .scaleToObject(0.8, { considerTokenScale: true })
+      .spriteRotation(eskie.hasPatreon ? 25 : 0)
+      .rotate(token.rotation)
+      .persist(true)
+      .attachTo(token, { bindAlpha: false })
+      .private()
+      .waitUntilFinished();
+
+    seq.play();
+    return;
+  }
 
   seq.effect()
     .name(`emoteBarAngry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -68,11 +116,11 @@ export async function performAngry(token) {
     .spriteOffset({x:0.3*token.document.width, y:-0.3*token.document.width}, { gridUnits: true, local: getTokenRotation(token)})
     .scaleToObject(0.45)
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {bindAlpha:false })
     .loopProperty("alphaFilter", "alpha", { values: [1,1,1, 1,1,1,1, 1, -1, -1, -1, -1, -1, -1, -1, -1], duration: 25, pingPong: false })
     .private()
-  
+
   seq.effect()
     .name(`emoteBarAngry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file(`modules/gambitsEmoteBar/assets/angry_narrow.webp`)
@@ -82,127 +130,388 @@ export async function performAngry(token) {
     .spriteOffset({x:0.3*token.document.width, y:-0.3*token.document.width}, { gridUnits: true, local: getTokenRotation(token)})
     .scaleToObject(0.45)
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {bindAlpha: false})
     .loopProperty("alphaFilter", "alpha", { values: [-1, -1,-1,-1,-1, -1,-1,-1, 1, 1,1,1, 1, 1,1,1], duration: 25, pingPong: false })
     .waitUntilFinished()
 
   seq.play();
 }
-  
+
 export async function performSurprised(token) {
+  const { hasPatreon } = getEskieModules();
+  const eskieFile = resolveEskieFile("eskie.emote.surprised.02", "eskie-free.emote.surprised.01");
+
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Surprised")
-  seq.play()
 
-  seq.effect()
-    .name(`emoteBarSurprised_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file("modules/gambitsEmoteBar/assets/surprised_exclamation.webp")
-    .attachTo(token)
-    .anchor({x: 0.5, y: 1.55})
-    .scaleIn(0, 500, {ease: "easeOutElastic"})
-    .scaleOut(0, 500, {ease: "easeOutExpo"})
-    .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true})
-    .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
-    .scaleToObject(0.6)
-    .attachTo(token, {bindAlpha: false})
-    .private()
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarSurprised_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: 0.5 * token.document.width * getTokenFacing(token), y: -0.5 * token.document.width }, gridUnits: true, bindRotation: false, local: getTokenRotation(token) })
+      .scaleToObject(0.7, { considerTokenScale: true })
+      .scaleIn(0.25, 150, { ease: "easeOutBack" })
+      .scaleOut(0, 250, { ease: "easeOutBack" })
+      .persist(true)
+      .rotate(token.rotation)
+      .private()
+      .addOverride(async (_effect, data) => {
+        if (!hasPatreon) {
+          data.scaleToObject = { scale: 1.5, considerTokenScale: true };
+          data.offset.source = { x: 0 * token.document.width * getTokenFacing(token), y: -0.3 * token.document.width, gridUnits: true };
+          data.animations = [{
+            delay: 0,
+            screenSpace: false,
+            looping: true,
+            indefinite: true,
+            target: "sprite",
+            propertyName: "position.y",
+            duration: 100,
+            pingPong: true,
+            gridUnits: true,
+            values: [-0.015, 0.015]
+          }];
+        }
+        return data;
+      });
+  } else {
+    seq.effect()
+      .name(`emoteBarSurprised_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file("modules/gambitsEmoteBar/assets/surprised_exclamation.webp")
+      .attachTo(token)
+      .anchor({ x: 0.5, y: 1.55 })
+      .scaleIn(0, 500, { ease: "easeOutElastic" })
+      .scaleOut(0, 500, { ease: "easeOutExpo" })
+      .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
+      .rotate(token.rotation)
+      .persist(true)
+      .scaleToObject(0.6)
+      .attachTo(token, { bindAlpha: false })
+      .private();
 
-  seq.effect()
-    .name(`emoteBarSurprised_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file("modules/gambitsEmoteBar/assets/surprised.webp")
-    .attachTo(token)
-    .anchor({x: -0.3, y: 1.25})
-    .scaleIn(0, 500, {ease: "easeOutElastic"})
-    .scaleOut(0, 500, {ease: "easeOutExpo"})
-    .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true})
-    .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
-    .scaleToObject(0.45)
-    .attachTo(token, {bindAlpha: false})
-    .waitUntilFinished()
+    seq.effect()
+      .name(`emoteBarSurprised_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file("modules/gambitsEmoteBar/assets/surprised.webp")
+      .attachTo(token)
+      .anchor({ x: -0.3, y: 1.25 })
+      .scaleIn(0, 500, { ease: "easeOutElastic" })
+      .scaleOut(0, 500, { ease: "easeOutExpo" })
+      .loopProperty("sprite", "position.y", { from: 0, to: -15, duration: 750, pingPong: true })
+      .rotate(token.rotation)
+      .persist(true)
+      .scaleToObject(0.45)
+      .attachTo(token, { bindAlpha: false })
+      .waitUntilFinished();
+  }
 
   seq.play();
 }
-  
+
+export async function performThankYou(token) {
+  if (!requireEskiePatreon()) return;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "ThankYou");
+
+  seq.effect()
+    .name(`emoteBarThankYou_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.emote_bubble.thank_you")
+    .attachTo(token, {
+      offset: { x: -0.65 * token.document.width, y: -0.35 * token.document.width },
+      bindAlpha: false,
+      bindRotation: false,
+      gridUnits: true,
+      local: false,
+    })
+    .scaleToObject(1, { considerTokenScale: true })
+    .mirrorX(!getTokenMirrorFacing(token))
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
+export async function performWink(token) {
+  if (!requireEskiePatreon()) return;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "Wink");
+
+  seq.effect()
+    .name(`emoteBarWink_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.emote_bubble.wink")
+    .attachTo(token, {
+      offset: { x: -0.65 * token.document.width * getTokenFacing(token), y: -0.35 * token.document.width },
+      bindAlpha: false,
+      bindRotation: false,
+      gridUnits: true,
+      local: false,
+    })
+    .scaleToObject(1, { considerTokenScale: true })
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
+export async function performSmug(token) {
+  if (!requireEskiePatreon()) return;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "Smug");
+
+  seq.effect()
+    .name(`emoteBarSmug_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.emote_bubble.smug")
+    .attachTo(token, {
+      offset: { x: -0.65 * token.document.width * getTokenFacing(token), y: -0.3 * token.document.width },
+      bindAlpha: false,
+      bindRotation: false,
+      gridUnits: true,
+      local: false,
+    })
+    .scaleToObject(1, { considerTokenScale: true })
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
+export async function performHuh(token) {
+  if (!requireEskiePatreon()) return;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "Huh");
+
+  seq.effect()
+    .name(`emoteBarHuh_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.emote_bubble.confused")
+    .attachTo(token, {
+      offset: { x: 0.65 * token.document.width * getTokenFacing(token), y: -0.3 * token.document.width },
+      bindAlpha: false,
+      bindRotation: false,
+      gridUnits: true,
+      local: false,
+    })
+    .scaleToObject(1, { considerTokenScale: true })
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
+export async function performConfused(token) {
+  if (!requireEskiePatreon()) return;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "Confused");
+
+  seq.effect()
+    .name(`emoteBarConfused_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.confused.01")
+    .attachTo(token, {
+      offset: { x: 0.45 * token.document.width * getTokenFacing(token), y: -0.5 * token.document.width },
+      bindAlpha: false,
+      bindRotation: false,
+      gridUnits: true,
+      local: false,
+    })
+    .scaleToObject(0.7, { considerTokenScale: true })
+    .scaleIn(0, 500, { ease: "easeOutCubic" })
+    .scaleOut(0, 50, { ease: "easeOutQuint" })
+    .animateProperty("sprite", "position.y", { from: -0.2, to: 0, duration: 500, gridUnits: true, ease: "easeOutElastic" })
+    .animateProperty("sprite", "position.x", { from: 0.2, to: 0, duration: 500, gridUnits: true, ease: "easeOutElastic" })
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
+export async function performWhistle(token) {
+  if (!requireEskiePatreon()) return;
+
+  const offsets = token.document.getFlag(packageId, "offsets");
+  const savedMouthOffset = offsets?.mouthOffset;
+  const capturedMirrored = offsets?.capturedMirrored ?? false;
+
+  const fallback = { x: 0.5 * token.document.width * getTokenFacing(token), y: -0.1 * token.document.width };
+  const mouthOffset = savedMouthOffset
+    ? {
+        x: applyCapturedMirrorToOffset(token, savedMouthOffset, capturedMirrored).x + (getTokenIsMirrored(token) ? -0.3 : 0.3),
+        y: savedMouthOffset.y
+      }
+    : fallback;
+
+  let seq = new Sequence();
+  applyEmoteSound(seq, "Whistle");
+
+  seq.effect()
+    .name(`emoteBarWhistle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+    .file("eskie.emote.whistle")
+    .attachTo(token, { offset: mouthOffset, gridUnits: true, local: getTokenRotation(token), bindAlpha: false })
+    .scaleToObject(0.6, { considerTokenScale: true })
+    .scaleIn(0, 500, { ease: "easeOutCubic" })
+    .scaleOut(0, 50, { ease: "easeOutQuint" })
+    .zIndex(2)
+    .private()
+    .persist(true);
+
+  seq.play();
+}
+
 export async function performShout(token) {
-  let facing = 1;
-  let mirrorFace = false;
-  
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Shout")
-  seq.play()
+
+  const eskieFile = resolveEskieFile("eskie.emote.shout.01", "eskie-free.emote.shout.01");
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarShout_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: (-0.45 * token.document.width) * getTokenFacing(token), y: -0.3 * token.document.width }, gridUnits: true, local: getTokenRotation(token) })
+      .spriteRotation(-10 * getTokenFacing(token))
+      .loopProperty("sprite", "rotation", { from: 0, to: 15 * getTokenFacing(token), duration: 250, ease: "easeOutCubic" })
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
+      .loopProperty("sprite", "position.x", { from: 0, to: -0.025 * getTokenFacing(token), duration: 250, gridUnits: true, pingPong: false })
+      .scaleIn(0, 250, { ease: "easeOutBack" })
+      .scaleOut(0, 250, { ease: "easeOutCubic" })
+      .scaleToObject(1.25, { considerTokenScale: true })
+      .rotate(token.rotation)
+      .persist(true)
+      .mirrorX(true)
+      .private();
+
+    seq.play();
+    return;
+  }
 
   seq.effect()
     .name(`emoteBarShout_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/shout_small.webp")
-    .attachTo(token, {offset:{x:(-0.45*token.document.width)*facing, y:(-0.4*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token)
-    .spriteRotation(35*facing)
-    .loopProperty("sprite", "rotation", { from: 0, to: 15*facing, duration: 250,ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.45*token.document.width)*getTokenFacing(token), y:(-0.4*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
+    .spriteRotation(35*getTokenFacing(token))
+    .loopProperty("sprite", "rotation", { from: 0, to: 15*getTokenFacing(token), duration: 250,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*facing, duration: 250, gridUnits: true, pingPong: false })
+    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*getTokenFacing(token), duration: 250, gridUnits: true, pingPong: false })
     .scaleIn(0, 1500, {ease: "easeOutElastic"})
     .scaleOut(0, 500, {ease: "easeOutExpo"})
     .scaleToObject(0.3)
     .private()
-    .mirrorX(mirrorFace)
+    .mirrorX(getTokenIsMirrored(token))
     .mirrorY()
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
 
   seq.effect()
     .name(`emoteBarShout_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/shout_large.webp")
-    .attachTo(token, {offset:{x:(-0.6*token.document.width)*facing, y:(-0.25*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token)
-    .spriteRotation(-15*facing)
-    .loopProperty("sprite", "rotation", { from: 0, to: -10*facing, duration: 250, ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.6*token.document.width)*getTokenFacing(token), y:(-0.25*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
+    .spriteRotation(-15*getTokenFacing(token))
+    .loopProperty("sprite", "rotation", { from: 0, to: -10*getTokenFacing(token), duration: 250, ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*facing, duration: 250, gridUnits: true, pingPong: false })
+    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*getTokenFacing(token), duration: 250, gridUnits: true, pingPong: false })
     .scaleIn(0, 1500, {ease: "easeOutElastic"})
     .scaleOut(0, 500, {ease: "easeOutExpo"})
     .scaleToObject(0.37)
     .private()
-    .mirrorX(mirrorFace)
+    .mirrorX(getTokenIsMirrored(token))
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
 
   seq.effect()
     .name(`emoteBarShout_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/shout_small.webp")
-    .attachTo(token, {offset:{x:(-0.6*token.document.width)*facing, y:(-0.05*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
-    .attachTo(token)
-    .loopProperty("sprite", "rotation", { from: 0, to: 15*facing, duration: 250,ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.6*token.document.width)*getTokenFacing(token), y:(-0.05*token.document.width)}, gridUnits: true, local: getTokenRotation(token)})
+    .loopProperty("sprite", "rotation", { from: 0, to: 15*getTokenFacing(token), duration: 250,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
-    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*facing, duration: 250, gridUnits: true, pingPong: false })
+    .loopProperty("sprite", "position.x", { from: 0, to: -0.025*getTokenFacing(token), duration: 250, gridUnits: true, pingPong: false })
     .scaleIn(0, 1500, {ease: "easeOutElastic"})
     .scaleOut(0, 500, {ease: "easeOutExpo"})
     .scaleToObject(0.3)
-    .mirrorX(mirrorFace)
-    .persist(true, { persistTokenPrototype: true })
+    .mirrorX(getTokenIsMirrored(token))
+    .persist(true)
     .rotate(token.rotation)
     .waitUntilFinished(-200)
 
   seq.play()
 }
-  
+
 export async function performDrunk(token) {
-  let offsets = token.document.getFlag(MODULE_ID, "offsets");
+  let offsets = token.document.getFlag(packageId, "offsets");
   let noseOffset = offsets?.noseOffset ?? { x: 0, y: 0 };
-  
+  const capturedMirrored = offsets?.capturedMirrored ?? false;
+  noseOffset = applyCapturedMirrorToOffset(token, noseOffset, capturedMirrored);
+
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Drunk")
-  seq.play()
+
+  const fileBubbles = resolveEskieFile("eskie.emote.drunk_bubbles.01", "eskie-free.emote.drunk_bubbles.01");
+  const fileBlush = resolveEskieFile("eskie.emote.blush.01.red", "eskie-free.emote.blush.01.red");
+
+  if (fileBubbles && fileBlush) {
+    seq.animation()
+      .delay(100)
+      .on(token)
+      .opacity(0)
+
+    seq.effect()
+      .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(fileBubbles)
+      .attachTo(token, {offset:{x:-0.2*token.document.width, y:-0.6*token.document.width}, gridUnits: true, bindAlpha:false, local: getTokenRotation(token)})
+      .scaleToObject(0.75, {considerTokenScale: true})
+      .persist(true)
+      .rotate(token.rotation)
+      .zIndex(1)
+      .private()
+      .belowTokens(false)
+
+    seq.effect()
+      .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(fileBlush)
+      .attachTo(token, {offset: {x:noseOffset.x, y:noseOffset.y}, gridUnits: true, bindAlpha:false, local: getTokenRotation(token)})
+      .scaleToObject(0.4, {considerTokenScale: true})
+      .persist(true)
+      .loopProperty("spriteContainer", "position.x", {  from:-0.1, to: 0.1, duration: 2500, pingPong: true, ease:"easeInOutSine", gridUnits:true, delay: 100 })
+      .loopProperty("spriteContainer", "position.y", { values: [0, 0.05, 0, 0.05], duration: 2500, pingPong: true, gridUnits:true, delay: 100 })
+      .loopProperty("spriteContainer", "rotation", { from: -10, to: 25, duration: 2500, pingPong: true, ease:"easeInOutSine", delay: 100 })
+      .rotate(token.rotation)
+      .zIndex(0)
+      .private()
+
+    seq.effect()
+      .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .copySprite(token)
+      .attachTo(token, {bindAlpha:false, local: getTokenRotation(token)})
+      .scaleToObject(1, {considerTokenScale:true})
+      .persist(true)
+      .loopProperty("spriteContainer", "position.x", {  from:-0.05, to: 0.05, duration: 2500, pingPong: true, ease:"easeInOutSine", gridUnits:true, delay: 100 })
+      .loopProperty("spriteContainer", "position.y", { values: [0, 0.05, 0, 0.05], duration: 2500, pingPong: true, gridUnits:true, delay: 100 })
+      .loopProperty("spriteContainer", "rotation", { from: -10, to: 25, duration: 2500, pingPong: true, ease:"easeInOutSine", delay: 100 })
+      .rotate(token.rotation)
+      .extraEndDuration(500)
+      .waitUntilFinished()
+
+    seq.animation()
+      .on(token)
+      .opacity(1)
+
+    seq.play();
+    return;
+  }
 
   seq.animation()
     .on(token)
     .opacity(0)
-  
+
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_large.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -216,12 +525,12 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "width", {  from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .rotate(token.rotation)
     .private()
     .belowTokens(false)
-  
+
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_small.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -236,11 +545,11 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .private()
     .belowTokens(false)
-  
+
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_medium.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -255,11 +564,11 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .private()
     .belowTokens(false)
-  
+
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_tiny.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -274,11 +583,11 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "height", { from:0, to: 0.1, duration: 6000, pingPong: false, gridUnits: true, ease:"easeOutCubic" })
     .loopProperty("alphaFilter", "alpha", { values: [-1, 1, 1, 1, 1, -1], duration: 1000, pingPong: true, ease:"easeOutCubic" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .private()
     .belowTokens(false)
-  
+
   seq.effect()
     .file("modules/gambitsEmoteBar/assets/drunk_blush.webp")
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -288,11 +597,11 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "position.y", { values: [0, 25, 0, 25], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {offset: {x:noseOffset.x-0.0, y:noseOffset.y+0.0}, gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .zIndex(0)
     .private()
-  
+
   seq.effect()
     .file(getTokenImage(token))
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -302,44 +611,57 @@ export async function performDrunk(token) {
     .loopProperty("sprite", "position.y", { values: [0, 20, 0, 20], duration: 2500, pingPong: true })
     .loopProperty("sprite", "rotation", { from: -10, to: 10, duration: 2500, pingPong: true,ease:"easeInOutSine" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .waitUntilFinished()
-  
+
   seq.animation()
     .on(token)
     .opacity(1)
-  
+
   seq.play();
 }
-  
+
 export async function performSoul(token) {
-  let facing = 1;
-  let mirrorFace = false; 
-    
+  const eskieFile = resolveEskieFile("eskie.emote.soul_sucked.01", "eskie-free.emote.soul_sucked.01");
+
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Soul")
-  seq.play()
-  
-  seq.effect()
-    .name(`emoteBarSoul_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file("modules/gambitsEmoteBar/assets/soul.webp")
-    .attachTo(token)
-    .scaleIn(0, 1000, {ease: "easeOutElastic"})
-    .scaleOut(0, 1000, {ease: "easeOutExpo"})
-    .spriteOffset({x:(-0.45*token.document.width)*facing, y:-0.25}, { gridUnits: true, local: getTokenRotation(token)})
-    .scaleToObject(0.45)
-    .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
-    .attachTo(token, {bindAlpha: false})
-    .mirrorX(mirrorFace)
-    .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits:true, pingPong: true})
-    .waitUntilFinished()
+
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarSoul_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: -0.5 * getTokenFacing(token) * token.document.width, y: -0.3 * token.document.width }, gridUnits: true, local: getTokenRotation(token) })
+      .scaleToObject(1, { considerTokenScale: true })
+      .scaleIn(0, 250, { ease: "easeOutBack" })
+      .scaleOut(0, 250, { ease: "easeOutCubic" })
+      .rotate(token.rotation)
+      .persist(true)
+      .attachTo(token, { bindAlpha: false })
+      .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits: true, pingPong: true })
+      .waitUntilFinished();
+  } else {
+    seq.effect()
+      .name(`emoteBarSoul_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file("modules/gambitsEmoteBar/assets/soul.webp")
+      .attachTo(token)
+      .scaleIn(0, 1000, { ease: "easeOutElastic" })
+      .scaleOut(0, 1000, { ease: "easeOutExpo" })
+      .spriteOffset({ x: (-0.45 * token.document.width) * getTokenFacing(token), y: -0.25 }, { gridUnits: true, local: getTokenRotation(token) })
+      .scaleToObject(0.45)
+      .rotate(token.rotation)
+      .persist(true)
+      .attachTo(token, { bindAlpha: false })
+      .mirrorX(!getTokenMirrorFacing(token))
+      .loopProperty("sprite", "position.y", { from: -0.05, to: 0.05, duration: 3000, gridUnits: true, pingPong: true })
+      .waitUntilFinished();
+  }
 
   seq.play();
 }
-  
+
 export async function performSlap(token) {
   let location = token.center;
   const hasAnimatedSpellEffects = game.modules.get("animated-spell-effects")?.active;
@@ -347,8 +669,7 @@ export async function performSlap(token) {
   let seq = new Sequence();
 
   applyEmoteSound(seq, "Slap")
-  seq.play()
-  
+
   if (hasAnimatedSpellEffects) {
     seq.effect()
       .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -356,7 +677,7 @@ export async function performSlap(token) {
       .file("animated-spell-effects-cartoon.magic.impact.02")
       .scaleToObject(token.document.width, {considerTokenScale: true})
   }
-  
+
   seq.effect()
     .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .attachTo(location)
@@ -368,7 +689,7 @@ export async function performSlap(token) {
     .delay(50)
     .zIndex(1)
     .scaleToObject(token.document.width / 2, {considerTokenScale: true})
-  
+
   seq.effect()
     .name(`emoteBarSlap_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .attachTo(location)
@@ -382,32 +703,60 @@ export async function performSlap(token) {
     .delay(50)
     .zIndex(0)
     .scaleToObject(token.document.width / 2, {considerTokenScale: true})
-  
+
   seq.play();
 }
 
 export async function performCry(token) {
-  const isMirrored = token.document.texture.scaleX < 0;
-  const offsets = token.document.getFlag(MODULE_ID, "offsets") ?? {};
+  const offsets = token.document.getFlag(packageId, "offsets") ?? {};
   const leftEyeOffset = offsets.leftEyeOffset ?? { x: 0, y: 0 };
   const rightEyeOffset = offsets.rightEyeOffset ?? { x: 0, y: 0 };
   const leftEyeScale = offsets.leftEyeScale ?? 0.25;
   const rightEyeScale = offsets.rightEyeScale ?? 0.25;
-  
-  const adjustedLeftEyeOffset = {
-    x: isMirrored ? -leftEyeOffset.x : leftEyeOffset.x,
-    y: leftEyeOffset.y
-  };
-  const adjustedRightEyeOffset = {
-    x: isMirrored ? -rightEyeOffset.x : rightEyeOffset.x,
-    y: rightEyeOffset.y
-  };
-  
+  const capturedMirrored = offsets.capturedMirrored ?? false;
+
+  const adjustedLeftEyeOffset = applyCapturedMirrorToOffset(token, leftEyeOffset, capturedMirrored);
+  const adjustedRightEyeOffset = applyCapturedMirrorToOffset(token, rightEyeOffset, capturedMirrored);
+
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Cry")
-  seq.play()
-  
+
+  const eskieFile = resolveEskieFile("eskie.emote.cry.01", "eskie-free.emote.cry.01");
+
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarCry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: adjustedLeftEyeOffset.x, y: adjustedLeftEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+      .fadeIn(500)
+      .fadeOut(500)
+      .scaleToObject(leftEyeScale, {considerTokenScale: true})
+      .mirrorX(!getTokenIsMirrored(token))
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
+      .rotate(token.rotation)
+      .persist(true)
+      .private()
+      .belowTokens(false)
+
+    seq.effect()
+      .name(`emoteBarCry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: adjustedRightEyeOffset.x, y: adjustedRightEyeOffset.y + 0.02 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+      .fadeIn(500)
+      .fadeOut(500)
+      .scaleToObject(rightEyeScale, {considerTokenScale: true})
+      .mirrorX(getTokenIsMirrored(token))
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
+      .waitUntilFinished()
+      .belowTokens(false)
+      .rotate(token.rotation)
+      .persist(true)
+
+    seq.play();
+    return;
+  }
+
     seq.effect()
       .name(`emoteBarCry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .file("modules/gambitsEmoteBar/assets/cry_lefteye.webp")
@@ -415,13 +764,13 @@ export async function performCry(token) {
       .fadeIn(500)
       .fadeOut(500)
       .scaleToObject(leftEyeScale)
-      .mirrorX(!isMirrored)
+      .mirrorX(!getTokenIsMirrored(token))
       .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
       .rotate(token.rotation)
-      .persist(true, { persistTokenPrototype: true })
+      .persist(true)
       .private()
       .belowTokens(false)
-  
+
     seq.effect()
       .name(`emoteBarCry_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .file("modules/gambitsEmoteBar/assets/cry_righteye.webp")
@@ -429,13 +778,13 @@ export async function performCry(token) {
       .fadeIn(500)
       .fadeOut(500)
       .scaleToObject(rightEyeScale)
-      .mirrorX(isMirrored)
+      .mirrorX(getTokenIsMirrored(token))
       .loopProperty("sprite", "position.y", { from: 0, to: -0.0025, duration: 200, gridUnits: true, pingPong: true })
       .waitUntilFinished()
       .belowTokens(false)
       .rotate(token.rotation)
-      .persist(true, { persistTokenPrototype: true })
-  
+      .persist(true)
+
     seq.play();
 }
 
@@ -443,58 +792,107 @@ export async function performDisgusted(token) {
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Disgusted")
-  seq.play()
-  
+
+  const eskie = getEskieModules();
+  const eskieFile = resolveEskieFile("eskie.emote.disgusted.02", "eskie-free.emote.disgusted.01");
+
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarDisgusted_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
+      .scaleToObject(1, {considerTokenScale: true})
+      .rotate(token.rotation)
+      .persist(true)
+      .addOverride(async (effect, data) => {
+        if (!eskie.hasPatreon) data.masks = [data.source];
+        return data;
+      })
+      .waitUntilFinished()
+
+    seq.play();
+    return;
+  }
+
   seq.effect()
     .name(`emoteBarDisgusted_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/disgusted.webp")
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .scaleToObject(1, {considerTokenScale: true})
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .attachTo(token, {offset:{y:-1}, gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .animateProperty("sprite", "position.y", { from: 0, to: 1, duration: 500, gridUnits:true, fromEnd: false })
     .animateProperty("sprite", "position.y", { from: 0, to: -0.8, duration: 500, gridUnits:true, fromEnd: true })
     .mask()
     .opacity(0.9)
     .waitUntilFinished()
-  
+
   seq.play();
 }
 
 export async function performGiggle(token) {
-  let facing = -1
-  let mirrorFace = false;
-
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Giggle")
-  seq.play()
+
+  const eskieFile = resolveEskieFile("eskie.emote.laugh.02.blue", "eskie-free.emote.laugh.01.blue");
+
+  if (eskieFile) {
+    seq.effect()
+      .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, {offset:{x:(-0.5*token.document.width), y:-0.25*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
+      .scaleToObject(0.5, {considerTokenScale: true})
+      .mirrorX(getTokenMirrorFacing(token))
+      .zIndex(2)
+      .rotate(token.rotation)
+      .persist(true)
+      .playbackRate(1.3)
+      .private()
+
+    seq.effect()
+      .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .copySprite(token)
+      .scaleToObject(1, {considerTokenScale: true})
+      .atLocation(token)
+      .attachTo(token, {bindAlpha: false})
+      .loopProperty("sprite", "position.y", { from: 0, to: -0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
+      .loopProperty("sprite", "width", { from: 0, to: 0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
+      .loopProperty("sprite", "height", { from: 0, to: 0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad"  })
+      .rotate(token.rotation)
+      .persist(true)
+      .waitUntilFinished(-200)
+      .zIndex(1)
+
+    seq.play();
+    return;
+  }
 
   seq.effect()
     .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/giggle_top.webp")
-    .attachTo(token, {offset:{x:(-0.5*token.document.width)*facing, y:-0.25*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
-    .loopProperty("sprite", "rotation", { from: 0, to: -15*facing, duration: 150, ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.5*token.document.width)*getTokenFacing(token), y:-0.25*token.document.width}, gridUnits: true, local: getTokenRotation(token)})
+    .loopProperty("sprite", "rotation", { from: 0, to: -15*getTokenFacing(token), duration: 150, ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 150, gridUnits: true, pingPong: false })
     .scaleToObject(0.2, {considerTokenScale: true})
     .private()
-    .mirrorX(mirrorFace)
+    .mirrorX(true)
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .zIndex(2)
 
   seq.effect()
     .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/giggle_bottom.webp")
-    .attachTo(token, {offset:{x:(-0.55*token.document.width)*facing, y:-0}, gridUnits: true, local: getTokenRotation(token)})
-    .loopProperty("sprite", "rotation", { from: 0, to: 20*facing, duration: 150,ease: "easeOutCubic" })
+    .attachTo(token, {offset:{x:(-0.55*token.document.width)*getTokenFacing(token), y:-0}, gridUnits: true, local: getTokenRotation(token)})
+    .loopProperty("sprite", "rotation", { from: 0, to: 20*getTokenFacing(token), duration: 150,ease: "easeOutCubic" })
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 150, gridUnits: true, pingPong: false })
     .scaleToObject(0.2, {considerTokenScale: true})
     .private()
-    .mirrorX(mirrorFace)
+    .mirrorX(true)
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .zIndex(2)
 
   seq.effect()
@@ -507,7 +905,7 @@ export async function performGiggle(token) {
     .loopProperty("sprite", "width", { from: 0, to: 0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
     .loopProperty("sprite", "height", { from: 0, to: 0.01, duration: 100, gridUnits: true, pingPong: true, ease:"easeOutQuad"  })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .waitUntilFinished(-200)
     .zIndex(1)
 
@@ -515,23 +913,28 @@ export async function performGiggle(token) {
 }
 
 export async function performLove(token) {
+  const userId = game.gambitsEmoteBar?.dialogUser ?? game.user.id;
+  const flagPath = `loopActive.Love.${userId}`;
   game.gambitsEmoteBar.loveActive.set(token.id, true);
+  if (token?.document) await token.document.setFlag(packageId, flagPath, true);
 
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Love")
-  seq.play()
-  
-  while (game.gambitsEmoteBar.loveActive.get(token.id)) {
+
+  const eskieFile = resolveEskieFile("eskie.emote.love.01", "eskie-free.emote.love.01");
+  const loveFile = eskieFile ?? "modules/gambitsEmoteBar/assets/love.webp";
+
+  while (game.gambitsEmoteBar.loveActive.get(token.id) && token?.document?.getFlag?.(packageId, flagPath)) {
     await new Sequence()
       .effect()
         .name(`emoteBarLove_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-        .file("modules/gambitsEmoteBar/assets/love.webp")
+        .file(loveFile)
         .atLocation(token, { offset: { x: Math.random() * (0.4 - (-0.4)) + (-0.4) }, gridUnits: true })
         .spriteOffset({ y: -0.15 * token.document.width }, { gridUnits: true })
         .scaleIn(0, 1000, { ease: "easeOutElastic" })
         .fadeOut(400, { ease: "linear" })
-        .scaleToObject(0.25, { considerTokenScale: true })
+        .scaleToObject(eskieFile ? 0.75 : 0.25, { considerTokenScale: true })
         .duration(1000)
         .attachTo(token, { bindAlpha: false })
         .rotate(token.rotation)
@@ -541,17 +944,61 @@ export async function performLove(token) {
 
       .play();
   }
-  
+
   game.gambitsEmoteBar.loveActive.delete(token.id);
+  if (token?.document) await token.document.setFlag(packageId, flagPath, false);
 }
 
 export async function performROFL(token) {
-  let facing = -1
-
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Rofl")
-  seq.play()
+
+  const eskieFile = resolveEskieFile("eskie.emote.laugh.02.pink", "eskie-free.emote.laugh.01.pink");
+  if (eskieFile) {
+    seq.animation()
+      .delay(100)
+      .on(token)
+      .opacity(0);
+
+    seq.effect()
+      .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, {
+        offset: { x: (-0.45 * token.document.width) * getTokenFacing(token), y: 0.4 * token.document.width },
+        bindAlpha: false,
+        bindRotation: false,
+        gridUnits: true,
+        local: false,
+      })
+      .scaleToObject(0.8, { considerTokenScale: true })
+      .mirrorY(true)
+      .mirrorX(true)
+      .spriteRotation(getTokenIsMirrored(token) ? 10 : -10)
+      .belowTokens(false)
+      .zIndex(2)
+      .persist(true)
+      .private();
+
+    seq.effect()
+      .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(getTokenImage(token))
+      .scaleToObject(1, { considerTokenScale: true })
+      .attachTo(token, { bindAlpha: false })
+      .loopProperty("sprite", "position.y", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
+      .loopProperty("sprite", "rotation", { from: -33, to: 33, duration: 300, ease: "easeOutCubic", pingPong: true })
+      .rotate(90)
+      .persist(true)
+      .waitUntilFinished(-200)
+      .zIndex(5);
+
+    seq.animation()
+      .on(token)
+      .opacity(1);
+
+    seq.play();
+    return;
+  }
 
   seq.animation()
     .on(token)
@@ -565,8 +1012,9 @@ export async function performROFL(token) {
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34, {considerTokenScale: true})
     .private()
+    .mirrorX(getTokenIsMirrored(token))
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .zIndex(2)
 
   seq.effect()
@@ -577,8 +1025,9 @@ export async function performROFL(token) {
     .loopProperty("sprite", "position.y", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })
     .scaleToObject(0.34, {considerTokenScale: true})
     .private()
+    .mirrorX(getTokenIsMirrored(token))
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .zIndex(2)
 
   seq.effect()
@@ -589,7 +1038,7 @@ export async function performROFL(token) {
     .loopProperty("sprite", "position.y", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
     .loopProperty("sprite", "rotation", { from: -33, to: 33, duration: 300, ease: "easeOutCubic", pingPong: true })
     .rotate(90)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .waitUntilFinished(-200)
     .zIndex(5)
     .belowTokens(false)
@@ -597,49 +1046,61 @@ export async function performROFL(token) {
   seq.animation()
     .on(token)
     .opacity(1)
-  
+
   seq.play()
 }
 
 export async function performSmoking(token) {
-  let offsets = token.document.getFlag(MODULE_ID, "offsets");
+  let offsets = token.document.getFlag(packageId, "offsets");
   let mouthOffset = offsets?.mouthOffset ?? { x: 0, y: 0 };
-  
-  let facing = -1;
-  let mirrorFace = false;
-  
+  const capturedMirrored = offsets?.capturedMirrored ?? false;
+
   const hasAnimatedSpellEffects = game.modules.get("animated-spell-effects")?.active;
-  const isMirrored = token.document.texture.scaleX < 0;
-  const adjustedMouthOffset = { x: isMirrored ? -mouthOffset.x : mouthOffset.x, y: mouthOffset.y };
+  const adjustedMouthOffset = applyCapturedMirrorToOffset(token, mouthOffset, capturedMirrored);
+
+  const eskieFile = resolveEskieFile("eskie.emote.cigarette.01", "eskie-free.emote.cigarette.01");
 
   let seq = new Sequence();
 
   applyEmoteSound(seq, "Smoking")
-  seq.play()
-  
-  if (hasAnimatedSpellEffects) {
-    new Sequence()
+
+  if (eskieFile) {
+    const finalMouthOffset = { x: adjustedMouthOffset.x + (0.1 * getTokenFacing(token)), y: adjustedMouthOffset.y + 0.035 };
+
     seq.effect()
-      .file("animated-spell-effects-cartoon.smoke.97")
+      .file(eskieFile)
       .name(`emoteBarSmoking_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-      .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.17 * facing), y: adjustedMouthOffset.y + 0.01 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
-      .mirrorX(!isMirrored && mirrorFace)
-      .scale(0.02)
-      .filter("ColorMatrix", { brightness: 0.75 })
+      .attachTo(token, { offset: finalMouthOffset, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+      .mirrorX(false)
+      .scaleToObject(0.5, { considerTokenScale: true })
       .rotate(token.rotation)
-      .persist(true, { persistTokenPrototype: true })
-      .zIndex(0.15);
+      .persist(true)
+      .spriteRotation(getTokenIsMirrored(token) ? -5 : 5)
+      .zIndex(0.15)
+      .waitUntilFinished();
+  } else {
+    if (hasAnimatedSpellEffects) {
+      seq.effect()
+        .file("animated-spell-effects-cartoon.smoke.97")
+        .name(`emoteBarSmoking_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+        .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.17 * getTokenFacing(token)), y: adjustedMouthOffset.y + 0.01 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+        .mirrorX(getTokenMirrorFacing(token))
+        .scale(0.02)
+        .filter("ColorMatrix", { brightness: 0.75 })
+        .rotate(token.rotation)
+        .persist(true)
+        .zIndex(0.15);
+    }
+    seq.effect()
+      .file("modules/gambitsEmoteBar/assets/smoking.webp")
+      .name(`emoteBarSmoking_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.1 * getTokenFacing(token)), y: adjustedMouthOffset.y + 0.05 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
+      .mirrorX(getTokenMirrorFacing(token))
+      .scale(0.15)
+      .rotate(token.rotation)
+      .persist(true)
+      .waitUntilFinished();
   }
-  
-  seq.effect()
-    .file("modules/gambitsEmoteBar/assets/smoking.webp")
-    .name(`emoteBarSmoking_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .attachTo(token, { offset: { x: adjustedMouthOffset.x - (0.1 * facing), y: adjustedMouthOffset.y + 0.05 }, gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
-    .mirrorX(!isMirrored && mirrorFace)
-    .scale(0.15)
-    .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
-    .waitUntilFinished()
 
   seq.play();
 }
@@ -650,7 +1111,32 @@ export async function performNervous(token) {
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Nervous")
-  seq.play()
+
+  const eskie = getEskieModules();
+  const eskieFile = resolveEskieFile("eskie.emote.nervous.02", "eskie-free.emote.nervous.01");
+  if (eskieFile) {
+    const isMirrored = token.document.texture.scaleX < 0;
+    const facing = isMirrored ? -1 : 1;
+
+    seq.effect()
+      .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
+      .file(eskieFile)
+      .attachTo(token, { offset: { x: 0.4 * token.document.width * facing, y: -0.5 * token.document.width }, gridUnits: true, local: getTokenRotation(token) })
+      .scaleToObject(0.8, { considerTokenScale: true })
+      .persist(true)
+      .rotate(token.rotation)
+      .private()
+      .addOverride(async (effect, data) => {
+        if (!eskie.hasPatreon) {
+          data.scaleToObject = { scale: 2, considerTokenScale: true };
+          data.offset.source = { x: 0, y: -0.15 * token.document.width, gridUnits: true };
+        }
+        return data;
+      });
+
+    seq.play();
+    return;
+  }
 
     seq.effect()
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -664,10 +1150,10 @@ export async function performNervous(token) {
       .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
       .loopProperty("sprite", "rotation", { from: 0, to: 15, duration: 1000 })
       .rotate(token.rotation)
-      .persist(true, { persistTokenPrototype: true })
+      .persist(true)
       .belowTokens(false)
       .zIndex(2)
-    
+
     seq.effect()
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .file("modules/gambitsEmoteBar/assets/nervous_right.webp")
@@ -680,7 +1166,7 @@ export async function performNervous(token) {
       .loopProperty("sprite", "scale.y", { from: 0.5, to: 1, duration: 200, ease: "easeOutQuint" })
       .loopProperty("sprite", "rotation", { from: 0, to: -15, duration: 1000 })
       .rotate(token.rotation)
-      .persist(true, { persistTokenPrototype: true })
+      .persist(true)
       .belowTokens(false)
       .zIndex(2)
 
@@ -688,10 +1174,10 @@ export async function performNervous(token) {
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .file(getTokenImage(token))
       .attachTo(token)
-      .scaleToObject()
+      .scaleToObject(1, { considerTokenScale: true })
       .animateProperty("sprite", "position.x", { from: 0, to: 1, duration: 50, ease: "linear", pingPong: true })
       .loopProperty("sprite", "position.x", { from: 0, to: -0.005, duration: 50, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
-      .persist(true, { persistTokenPrototype: true })
+      .persist(true)
       .rotate(token.rotation)
       .zIndex(1)
 
@@ -699,13 +1185,13 @@ export async function performNervous(token) {
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .file(getTokenImage(token))
       .attachTo(token)
-      .scaleToObject()
+      .scaleToObject(1, { considerTokenScale: true })
       .animateProperty("sprite", "position.x", { from: 0, to: 1, duration: 50, ease: "linear", pingPong: true })
       .loopProperty("sprite", "position.x", { from: 0, to: -0.005, duration: 50, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
-      .persist(true, { persistTokenPrototype: true })
+      .persist(true)
       .rotate(token.rotation)
       .zIndex(1)
-    
+
     seq.play();
 }
 
@@ -731,7 +1217,6 @@ export async function performParty(token) {
   let seq = new Sequence();
 
   applyEmoteSound(seq, "Party")
-  seq.play()
 
   seq.animation()
     .on(token)
@@ -747,7 +1232,7 @@ export async function performParty(token) {
     .loopProperty("spriteContainer", "position.x", { values: valuesX, duration: 40, ease: "linear" })
     .loopProperty("spriteContainer", "position.y", { values: valuesY, duration: 40, ease: "linear" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .waitUntilFinished()
 
   seq.animation()
@@ -758,10 +1243,15 @@ export async function performParty(token) {
 }
 
 export async function performThunderHype(token) {
+  const hasJB2APatreon = game.modules.get("jb2a-patreon")?.active === true || game.modules.get("jb2a_patreon")?.active === true;
+  if (!hasJB2APatreon) {
+    ui.notifications.warn("JB2A Patreon (jb2a-patreon) is not active.");
+    return;
+  }
+
   let seq = new Sequence()
 
-  applyEmoteSound(seq, "Thunderhype")
-  seq.play()
+  applyEmoteSound(seq, "ThunderHype")
 
   seq.effect()
     .name(`emoteBarThunderHype_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -827,25 +1317,19 @@ export async function performThunderHype(token) {
 export async function performBloodied(token) {
   let seq = new Sequence()
 
-  /*const hasJAA = game.modules.get("jaamod")?.active;
-  let fileName = hasJAA ? "jaamod.sequencer_fx_master.blood_splat.red" : "modules/gambitsEmoteBar/assets/bloodied.webp";
-  let scale = hasJAA ? 1.25 : 1;
-  let opacity = hasJAA ? 0.6 : 1;*/
-
   applyEmoteSound(seq, "Bloodied")
-  seq.play()
 
   seq.animation()
     .on(token)
     .opacity(0)
-  
+
   seq.effect()
     .name(`emoteBarBloodied_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .file("modules/gambitsEmoteBar/assets/bloodied.webp")
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .scaleToObject(1, {considerTokenScale: true})
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .belowTokens(false)
     .zIndex(2)
     .loopProperty("sprite", "position.y", { from: 0, to: -0.03, duration: 1200, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
@@ -858,41 +1342,38 @@ export async function performBloodied(token) {
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .loopProperty("sprite", "position.y", { from: 0, to: -0.03, duration: 1200, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
     .rotate(token.rotation)
-    .persist(true, { persistTokenPrototype: true })
+    .persist(true)
     .mirrorY(false)
     .waitUntilFinished()
 
   seq.animation()
     .on(token)
     .opacity(1)
-  
+
   seq.play();
 }
 
 export async function performSuspicious(token) {
+  const userId = game.gambitsEmoteBar?.dialogUser ?? game.user.id;
+  const flagPath = `loopActive.Suspicious.${userId}`;
   game.gambitsEmoteBar.suspiciousActive.set(token.id, true);
+  if (token?.document) await token.document.setFlag(packageId, flagPath, true);
 
   let seq = new Sequence()
 
   applyEmoteSound(seq, "Suspicious")
-  seq.play()
 
   let mirrored = token.document.texture.scaleX < 0;
   const offsets = token.document.getFlag("gambitsEmoteBar", "offsets") || {};
+  const capturedMirrored = offsets.capturedMirrored ?? false;
   const leftEyeOffset  = offsets.leftEyeOffset  || { x:0, y:0 };
   const rightEyeOffset = offsets.rightEyeOffset || { x:0, y:0 };
   const leftEyeScale   = offsets.leftEyeScale   || 0.25;
   const rightEyeScale  = offsets.rightEyeScale  || 0.25;
-  const adjustedLeftEyeOffset = {
-    x: mirrored ? -leftEyeOffset.x : leftEyeOffset.x,
-    y: leftEyeOffset.y
-  };
-  const adjustedRightEyeOffset = {
-    x: mirrored ? -rightEyeOffset.x : rightEyeOffset.x,
-    y: rightEyeOffset.y
-  };
+  const adjustedLeftEyeOffset = applyCapturedMirrorToOffset(token, leftEyeOffset, capturedMirrored);
+  const adjustedRightEyeOffset = applyCapturedMirrorToOffset(token, rightEyeOffset, capturedMirrored);
 
-  while ( game.gambitsEmoteBar.suspiciousActive.get(token.id) ) {
+  while (game.gambitsEmoteBar.suspiciousActive.get(token.id) && token?.document?.getFlag?.(packageId, flagPath)) {
     await new Sequence()
       .effect()
         .name(`emoteBarSuspicious_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -921,4 +1402,5 @@ export async function performSuspicious(token) {
   }
 
   game.gambitsEmoteBar.suspiciousActive.delete(token.id);
+  if (token?.document) await token.document.setFlag(packageId, flagPath, false);
 }

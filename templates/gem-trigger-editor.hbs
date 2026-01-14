@@ -1,0 +1,57 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body">
+  <input type="hidden" name="triggerId" value="{{triggerId}}" />
+
+  <div class="form-group">
+    <label><strong>{{localize 'gambitsEmoteBar.dialog.field.hook'}}</strong></label>
+    <div class="form-fields">
+      <select name="hook">
+        {{#each hooks}}
+          <option value="{{this}}" {{#if (eq this ../hook)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label><strong>{{localize 'gambitsEmoteBar.dialog.field.target'}}</strong></label>
+    <div class="form-fields">
+      <select name="target">
+        {{#each targets}}
+          <option value="{{this}}" {{#if (eq this ../target)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group" data-role="tokenRow" style="display:none;">
+    <label data-tooltip="{{localize 'gambitsEmoteBar.dialog.tooltip.tokenIds'}}"><strong>{{localize 'gambitsEmoteBar.dialog.field.tokenIds'}}</strong></label>
+    <div class="form-fields" style="gap: 6px;">
+      <input type="text" name="tokenIds" value="{{tokenIds}}" placeholder="id1, id2" />
+      <button type="button" data-action="useSelected" title="Use selected tokens">
+        <i class="fas fa-crosshairs"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label data-tooltip="{{localize 'gambitsEmoteBar.dialog.tooltip.duration'}}"><strong>{{localize 'gambitsEmoteBar.dialog.field.duration'}} (s)</strong></label>
+    <div class="form-fields">
+      <input type="number" name="duration" min="0" value="{{duration}}" style="width:120px;" />
+    </div>
+  </div>
+
+  <div class="form-group" data-role="thresholdRow" style="display:none;">
+    <label><strong>{{localize 'gambitsEmoteBar.dialog.field.hpThreshold'}}</strong> <span data-role="thresholdValue">{{threshold}}</span>%</label>
+    <div class="form-fields">
+      <input type="range" name="threshold" min="10" max="90" step="1" value="{{threshold}}" />
+    </div>
+  </div>
+
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="save"><i class="fas fa-save"></i> {{localize 'gambitsEmoteBar.dialog.button.save'}}</button>
+    <button type="button" data-action="cancel"><i class="fas fa-times"></i> {{localize 'gambitsEmoteBar.dialog.button.cancel'}}</button>
+  </footer>
+</form>

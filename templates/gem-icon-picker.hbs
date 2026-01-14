@@ -1,0 +1,26 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body" style="gap: 0.75rem;">
+    <input type="text"
+           data-role="iconSearch"
+           placeholder="{{localize 'gambitsEmoteBar.dialog.placeholder.openIconPicker'}}"
+           style="padding: 5px; font-size: 14px;" />
+
+    <div data-role="iconGrid"
+         style="flex: 1; min-height: 0; display:grid; grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); gap: 5px; overflow-y: auto;">
+      {{#each icons}}
+        <div class="icon-option"
+             data-action="choose"
+             data-icon="{{this}}"
+             data-tooltip="{{this}}"
+             style="cursor:pointer; text-align:center; border:1px solid var(--color-warm-2); border-radius:5px; padding:5px;">
+          <i class="fas {{this}}" style="font-size:24px;"></i>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="select"><i class="fas fa-check"></i> {{localize 'gambitsEmoteBar.dialog.button.select'}}</button>
+    <button type="button" data-action="cancel"><i class="fas fa-times"></i> {{localize 'gambitsEmoteBar.dialog.button.cancel'}}</button>
+  </footer>
+</form>

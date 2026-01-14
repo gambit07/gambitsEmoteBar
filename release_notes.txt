@@ -1,2 +1,22 @@
-- Removed a few unnecessary console logs that were spammy
-- Added handling if a token is deleted while they have an active emote applied. Any active emotes will now be removed from a token if it is deleted.
+Massive structural overhaul for Emote Bar! I'd wanted to come back to Emote Bar at some point, and Eskie(moh) recently released his own animation modules and was kind enough to send me new and updated emotes! So I've taken that opportunity to do a big re-work of Emote Bar. Enjoy!
+- Additions:
+  - Added integration with Eskie's Eskie Effects and Eskie Effects Free modules. Most emotes have had a re-design when using Eskie's modules. The original implementations are still in place and will be used as a backup if neither module is present.
+  - New emotes exclusive to Eskie's Effects have been added, you will only see these with the Eskie Effects module active: Thank You, Wink, Smug, Huh?, Confused, and Whistle
+  - New main menu toggle slider for Persistent/Timed emotes. Persistent emotes continually play. Timed emotes can be set to a specific duration, when reached the effect will disable itself.
+  - Added a new Preset selection dropdown when builing your own custom emotes. This will fill in the macro editor with the code used for a number of the built-in emote effects which you can use as examples or tweak to get the exact emote you want.
+  - Added a new title bar dropdown option to the main Emote Bar app to allow resetting Emote sort order to A-Z.
+- Updates:
+  - Overhauled the codebase, all windows are now written in applicationV2 instead of dialogV2
+  - Updated window designs in tandem, the main emote bar now has larger icons and better use of available space
+  - Updated emotes with new designs from Eskie Effects, you will only see the updated effects if you have the Eskie Effects or Eskie Effects Free modules active: Angry, Confused, Cry, Disgust, Drunk, Giggle, Laugh, Love, Nervous, ROFL, Shout, Smoking, Soul, and Surprised
+  - Updated the Thunder Hype emote to only be visible when JB2A Patreon is active, the emotes effects would not work if you did not have that module in the past.
+  - Updated GM's End All Emotes functionality. When no tokens are selected, the old functionality to clear all emotes occurs. When 1 or more tokens are selected, only those specific tokens emotes are cleared
+  - Updated Configure Default Emote Sounds to include custom emotes. Using any of the Presets menu options you will see 'applyEmoteSound(seq, emoteId);', this is what pulls the sound from Emote Sounds config menu.
+  - Updated the custom emote macro editor textarea to use foundry's codemirror element to allow more streamlined editing
+  - Updated active emotes highlighting in the menu bar. If no tokens are selected, all emotes active on the scene will be highlighted. If one or more tokens are selected, only active emotes for those tokens will be highlighted.
+  - Added handling for offsets captured for a mirrored vs non-mirrored token
+- Bugfixes:
+  - (Hopefully) resolved any issues where Emotes would get stuck on and had to be ended through Sequencer's 'Show Sequencer Manager' window
+  - Resolved a few visual issues for existing Emotes, most notably the Nervous emote not respecting token scaling
+  - Resolved issues where on the first play of an emote the animation could appear to double up with a slight overlap
+  - Did a full pass on horizontally mirrored tokens to make sure effects flip appropriately

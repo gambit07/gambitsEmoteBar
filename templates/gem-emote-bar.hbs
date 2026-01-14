@@ -1,0 +1,88 @@
+<form>
+  <div class="gem-form-container">
+    <div class="gem-playmode-container">
+      <div class="gem-playmode-row">
+        <button type="button"
+                class="gem-playmode-toggle {{#if timedEmotesEnabled}}is-on{{/if}}"
+                data-action="togglePlayMode"
+                data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.playMode.toggleTooltip'}}">
+          <span class="gem-playmode-text gem-playmode-text--permanent">{{localize 'gambitsEmoteBar.menu.emote.playMode.permanent'}}</span>
+          <span class="gem-playmode-text gem-playmode-text--timed">{{localize 'gambitsEmoteBar.menu.emote.playMode.timed'}}</span>
+        </button>
+      </div>
+
+      {{#if timedEmotesEnabled}}
+        <div class="gem-playmode-duration" data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.playMode.durationTooltip'}}">
+          <input type="range" name="timedEmotesDurationRange" min="5" max="60" value="{{timedEmotesDuration}}" />
+          <input type="number" name="timedEmotesDurationNumber" min="5" max="60" value="{{timedEmotesDuration}}" />
+        </div>
+      {{/if}}
+    </div>
+
+    <div class="gem-emote-scroll-container">
+      <div class="gem-emote-buttons" id="emoteButtonsContainer">
+        {{#each buttons}}
+          <button type="button"
+                  id="{{id}}"
+                  class="gem-emote-btn {{#if isCustom}}custom-emote{{else}}default-emote{{/if}}"
+                  data-tooltip="{{tooltip}}"
+                  data-emote="{{emoteId}}"
+                  data-persistent="{{persistent}}"
+                  draggable="true">
+            <i class="{{iconClass}}"></i>
+          </button>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="gem-fixed-action-container">
+      <div class="gem-action-button-grid">
+        {{#if isGM}}
+          <div class="gem-action-container register-emote">
+            <div class="gem-action-container custom-emote-register">
+              <button type="button"
+                      class="gem-action-button"
+                      data-action="openCustomEmotes"
+                      data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.registerDialog'}}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        {{/if}}
+
+        <div class="gem-action-container dual-column">
+          <button type="button"
+                  class="gem-action-button"
+                  data-action="endAll"
+                  data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.endAll'}}">
+            <i class="fas fa-eraser"></i>
+          </button>
+          <button type="button"
+                  class="gem-action-button"
+                  data-action="openVisibility"
+                  data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.hideUnhideEmote'}}">
+            <i class="fas fa-user-secret"></i>
+          </button>
+        </div>
+
+        <div class="{{actionContainerClass}}">
+          <button type="button"
+                  class="gem-action-button"
+                  data-action="setOffsets"
+                  data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.offset'}}">
+            <i class="fas fa-bullseye"></i>
+          </button>
+
+          {{#if showFilePicker}}
+            <button type="button"
+                    class="gem-action-button"
+                    data-action="openSoundConfig"
+                    data-tooltip="{{localize 'gambitsEmoteBar.menu.emote.filepicker'}}">
+              <i class="fas fa-file-audio"></i>
+            </button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

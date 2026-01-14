@@ -1,0 +1,33 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body" style="gap: 0.75rem;">
+    <div style="display:flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+      {{#each rows}}
+        <div style="display:flex; align-items:center; gap: 6px;">
+          <label for="soundPath_{{emoteId}}" style="width: 90px;">{{emoteId}}:</label>
+          <input type="text"
+                 name="soundPath_{{emoteId}}"
+                 id="soundPath_{{emoteId}}"
+                 value="{{value}}"
+                 placeholder="{{localize 'gambitsEmoteBar.dialog.placeholder.soundFilePath'}}"
+                 style="flex: 1;" />
+          <button type="button"
+                  data-action="browseSound"
+                  data-emote="{{emoteId}}"
+                  title="{{localize 'gambitsEmoteBar.dialog.heading.browseSoundFiles'}}"
+                  style="width: 34px; height: 30px; padding: 2px; flex-shrink: 0;">
+            <i class="fas fa-folder-open" style="font-size: 0.8rem;"></i>
+          </button>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="save">
+      <i class="fas fa-save"></i> {{localize 'gambitsEmoteBar.dialog.button.save'}}
+    </button>
+    <button type="button" data-action="cancel">
+      <i class="fas fa-times"></i> {{localize 'gambitsEmoteBar.dialog.button.cancel'}}
+    </button>
+  </footer>
+</form>

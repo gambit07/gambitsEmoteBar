@@ -1,0 +1,52 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body" style="gap: 0.75rem;">
+    <h3 style="margin: 0;">{{localize 'gambitsEmoteBar.dialog.heading.defaultEmotes'}}</h3>
+
+    {{#each defaults}}
+      <div class="gem-visibility-row {{#if isHidden}}gem-visibility-row--inactive{{else}}gem-visibility-row--active{{/if}} {{#unless isAvailable}}gem-visibility-row--unavailable{{/unless}}"
+           {{#unless isAvailable}}data-tooltip="{{unavailableTooltip}}"{{/unless}}>
+        <span>{{label}}</span>
+        <div style="display:flex; align-items: center; gap: 8px;">
+          <i class="{{iconClass}}" style="font-size: 24px;"></i>
+          <button type="button"
+                  data-action="toggle"
+                  data-emote="{{emoteId}}"
+                  data-available="{{#if isAvailable}}true{{else}}false{{/if}}"
+                  data-mode="{{#if isHidden}}unhide{{else}}hide{{/if}}"
+                  style="background:none; border:none; cursor:pointer;"
+                  {{#unless isAvailable}}disabled{{/unless}}>
+            <i class="fas fa-user-secret"></i>
+          </button>
+        </div>
+      </div>
+    {{/each}}
+
+    <h3 style="margin: 0;">{{localize 'gambitsEmoteBar.dialog.heading.customEmotes'}}</h3>
+
+    {{#if customs.length}}
+      {{#each customs}}
+        <div class="gem-visibility-row {{#if isHidden}}gem-visibility-row--inactive{{else}}gem-visibility-row--active{{/if}}">
+          <span>{{label}}</span>
+          <div style="display:flex; align-items: center; gap: 8px;">
+            <i class="{{iconClass}}" style="font-size: 24px;"></i>
+            <button type="button"
+                    data-action="toggle"
+                    data-emote="{{emoteId}}"
+                    data-mode="{{#if isHidden}}unhide{{else}}hide{{/if}}"
+                    style="background:none; border:none; cursor:pointer;">
+              <i class="fas fa-user-secret"></i>
+            </button>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <p style="margin: 0.25rem 0; opacity: 0.85;">{{localize 'gambitsEmoteBar.dialog.message.noCustomEmotes'}}</p>
+    {{/if}}
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="close">
+      <i class="fas fa-times"></i> {{localize 'gambitsEmoteBar.dialog.button.close'}}
+    </button>
+  </footer>
+</form>

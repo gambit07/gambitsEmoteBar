@@ -1,0 +1,60 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body">
+  <div class="form-group">
+    <label for="gem-emoteId"><strong>{{localize 'gambitsEmoteBar.dialog.field.uniqueEmoteName'}}</strong></label>
+    <div class="form-fields">
+      <input type="text" id="gem-emoteId" name="emoteId" value="{{emoteId}}" {{#if isEdit}}readonly{{/if}} required pattern="^\\S+$" placeholder="{{localize 'gambitsEmoteBar.dialog.placeholder.emoteName'}}" data-tooltip="Ensure this emote name is unique, otherwise things WILL break." />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="gem-tooltip"><strong>{{localize 'gambitsEmoteBar.dialog.field.emoteTooltipText'}}</strong></label>
+    <div class="form-fields">
+      <input type="text" id="gem-tooltip" name="tooltip" value="{{tooltip}}" required placeholder="{{localize 'gambitsEmoteBar.dialog.placeholder.emoteTooltipText'}}" data-tooltip="Emote Name that will be displayed in the main Emote Bar window on hover." />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label><strong>{{localize 'gambitsEmoteBar.dialog.field.emoteIcon'}}</strong></label>
+    <div class="form-fields gem-icon-row">
+      <button type="button" data-action="pickIcon" data-tooltip="Emote Icon that will be displayed in the main Emote Bar window.">{{localize 'gambitsEmoteBar.dialog.button.pickIcon'}}</button>
+      <span class="gem-icon-preview" data-role="iconPreview">{{#if icon}}<i class="{{iconClass}}" style="font-size:24px;"></i>{{/if}}</span>
+      <input type="hidden" name="icon" value="{{icon}}" />
+    </div>
+  </div>
+
+  <div class="form-group gem-macro-group">
+    <div class="form-fields gem-macro-fields">
+      <div class="form-group" style="margin: 0 0 6px 0;">
+        <label for="gem-preset" style="margin-right: 8px; white-space: nowrap;"><strong>{{localize 'gambitsEmoteBar.dialog.field.preset'}}</strong></label>
+        <div class="form-fields">
+          <select id="gem-preset" name="presetEmote" style="width: 100%;" data-tooltip="Optional Macro Presets from built-in emotes. Selecting a Preset will auto-fill the macro editor.">
+            <option value="">{{localize 'gambitsEmoteBar.dialog.placeholder.preset'}}</option>
+            {{#each builtInPresets}}
+              <option value="{{id}}">{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      <label for="gem-generated"><strong>{{localize 'gambitsEmoteBar.dialog.field.generatedName'}}</strong></label>
+      <div class="form-fields">
+        <input type="text" id="gem-generated" name="generatedName" value="{{generatedName}}" readonly data-tooltip="{{localize 'gambitsEmoteBar.dialog.tooltip.generatedName'}}" />
+      </div>
+
+      <div style="display:flex; justify-content: flex-start; gap: 10px; margin-bottom: 6px;">
+        <button type="button" data-action="openTriggers" data-tooltip="{{localize 'gambitsEmoteBar.dialog.tooltip.openTriggers'}}">
+          {{localize 'gambitsEmoteBar.dialog.button.openTriggers'}}
+        </button>
+      </div>
+      <div class="gem-macro-field">{{formField macroField name="macro" value=macro}}</div>
+    </div>
+  </div>
+
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="save"><i class="fas fa-save"></i> {{localize 'gambitsEmoteBar.dialog.button.saveEmote'}}</button>
+    <button type="button" data-action="cancel"><i class="fas fa-times"></i> {{localize 'gambitsEmoteBar.dialog.button.cancel'}}</button>
+  </footer>
+</form>

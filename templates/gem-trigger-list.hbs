@@ -1,0 +1,37 @@
+<form class="gem-v2-form">
+  <div class="gem-v2-body">
+    <h3 style="margin: 0;">{{localize 'gambitsEmoteBar.dialog.window.manageTriggers'}}: {{emoteId}}</h3>
+
+    <div class="gem-list-scroll">
+      {{#if triggers.length}}
+        {{#each triggers}}
+          <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--color-warm-2); border-radius:5px; padding:5px;">
+            <div style="flex: 1; display:flex; flex-direction:column; gap:2px;">
+              <div>
+                <strong>{{localize 'gambitsEmoteBar.dialog.field.hook'}}</strong> {{hook}},
+                <strong>{{localize 'gambitsEmoteBar.dialog.field.target'}}</strong> {{target}},
+                <strong>{{localize 'gambitsEmoteBar.dialog.field.duration'}}</strong> {{duration}}s
+                {{#if threshold}}
+                  , <strong>{{localize 'gambitsEmoteBar.dialog.field.hpThreshold'}}</strong> {{threshold}}%
+                {{/if}}
+              </div>
+              {{#if tokenNames}}
+                <div><strong>{{localize 'gambitsEmoteBar.dialog.field.tokens'}}</strong> ({{tokenNames}})</div>
+              {{/if}}
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" data-action="edit" data-id="{{id}}">{{localize 'gambitsEmoteBar.dialog.button.edit'}}</button>
+              <button type="button" data-action="del" data-id="{{id}}">{{localize 'gambitsEmoteBar.dialog.button.delete'}}</button>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p style="margin: 0.25rem 0; opacity: 0.85;">{{localize 'gambitsEmoteBar.dialog.message.noTriggers'}}</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <footer class="sheet-footer flexrow gem-v2-footer">
+    <button type="button" data-action="add"><i class="fas fa-plus"></i></button>
+  </footer>
+</form>

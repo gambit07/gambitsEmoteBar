@@ -1,131 +1,158 @@
 {
-    "I18N.LANGUAGE": "Português (Brasil)",
-    "gambitsEmoteBar": {
-        "controls": {
-            "emoteBar": {
-                "title": "Emote Bar"
-            }
-        },
-        "selector": {
-            "sequencer": {
-                "leftEye": "Olho Esquerdo",
-                "rightEye": "Olho Direito",
-                "mouth": "Boca",
-                "nose": "Nariz"
-            }
-        },
-        "keybinds": {
-            "toggleEmoteBar": {
-                "name": "Alternar Emote Bar",
-                "hint": "Pressione esta tecla para abrir/fechar a barra de emotes."
-            }
-        },
-        "menu": {
-            "emote": {
-                "laugh": "Rir",
-                "angry": "Raiva",
-                "surprised": "Surpreso",
-                "shout": "Gritar",
-                "drunk": "Bêbado (Nariz)",
-                "soul": "Alma",
-                "slap": "Tapa",
-                "cry": "Chorar (Olhos)",
-                "offset": "Configurar Offsets (Olhos, Boca, Nariz)",
-                "disgusted": "Enojado",
-                "giggle": "Risadinha",
-                "love": "Amor",
-                "rofl": "ROFL",
-                "smoking": "Fumar (Boca)",
-                "nervous": "Nervoso",
-                "party": "Festa",
-                "thunderHype": "TROVÃO!",
-                "filepicker": "Configurar Sons de Emote Padrão",
-                "endAll": "Encerrar todos os Emotes que você aplicou",
-                "registerDialog": "Registrar Emote Personalizado",
-                "hideUnhideEmote": "Ocultar/Exibir Emotes",
-                "bloodied": "Sangrando",
-                "suspicious": "Suspeito (Olhos)"
-            }
-        },
-        "log": {
-            "warning": {
-                "noEffect": "Nenhum efeito definido para emote:",
-                "pleaseSelectOneToken": "Selecione pelo menos um token.",
-                "noPermission": "Você não tem permissão para usar a ferramenta de emote no(s) token(s) selecionado(s).",
-                "selectMultiple": "Segure Shift para selecionar vários emotes SE VOCÊ TIVER CORAGEM.",
-                "selectSingle": "Selecione um único token para definir offsets.",
-                "handleEmoteClick": "Erro ao executar macro de emote personalizado:"
-            }
-        },
-        "dialog": {
-            "placeholder": {
-                "openIconPicker": "Procurar ícones...",
-                "emoteName": "Digite o nome do emote...",
-                "emoteTooltipText": "Insira o texto da dica do emote...",
-                "soundFilePath": "Insira o caminho do arquivo de som..."
-            },
-            "window": {
-                "openIconPicker": "Escolher Ícone",
-                "editMacroCode": "Editar Código de Macro",
-                "manageHidingEmotes": "Gerenciar Emotes Ocultos",
-                "customEmoteMacros": "Macros de Emotes Personalizados",
-                "pickIcon": "Escolher Ícone",
-                "emoteSoundFiles": "Selecione Arquivos de Som de Emote",
-                "editTriggers": "Editar Gatilhos",
-                "editTrigger": "Editar Gatilho",
-                "newTrigger": "Novo Gatilho",
-                "manageTriggers": "Gerenciar Gatilhos"
-            },
-            "field": {
-                "uniqueEmoteName": "Nome Único de Emote (sem espaços):",
-                "emoteTooltipText": "Texto da Dica do Emote:",
-                "emoteIcon": "Ícone do Emote:",
-                "macro": "Macro:",
-                "generatedName": ".nome:",
-                "macroCode": "Código da Macro:",
-                "triggers": "Gatilhos:",
-                "openTriggers": "Abrir Gatilhos",
-                "hook": "Hook:",
-                "target": "Alvo:",
-                "tokenIds": "ID do Token:",
-                "tokens": "Tokens:",
-                "duration": "Duração:",
-                "hpThreshold": "Limite de % do PV:"
-            },
-            "tooltip": {
-                "generatedName": "Se estiver usando um efeito persistente, insira este valor .nome (se você ignorar isso, VAI DAR RUIM)",
-                "openEmoteEditor": "O objeto token pode ser referenciado nesta macro como token",
-                "tokenIds": "Use uma vírgula para separar as IDs ao usar várias",
-                "duration": "Valor em segundos",
-                "trigger": "Gatilho",
-                "triggers": "Gatilhos"
-            },
-            "button": {
-                "select": "Selecionar",
-                "cancel": "Cancelar",
-                "saveEmote": "Salvar Emote",
-                "openEmoteEditor": "Abrir Editor de Emote",
-                "save": "Salvar",
-                "close": "Fechar",
-                "edit": "Editar",
-                "delete": "Excluir",
-                "configureTriggers": "Configurar Gatilhos",
-                "openTriggers": "Abrir Gatilhos"
-            },
-            "heading": {
-                "defaultEmotes": "Emotes Padrões",
-                "customEmotes": "Emotes Personalizados",
-                "browseSoundFiles": "Procurar arquivos de som"
-            },
-            "message": {
-                "noDefaultEmotes": "Nenhum emote padrão definido.",
-                "noCustomEmotes": "Nenhum emote personalizado definido."
-            }
-        },
-        "error": {
-            "uniqueEmoteNameNoSpaces": "O Nome Único de Emote não pode conter espaços.",
-            "fillAllFields": "Você deve preencher todos os campos.",
-            "emoteNameExists": "Já existe um emote com este nome. Escolha um nome exclusivo."
+  "I18N.LANGUAGE": "Português (Brasil)",
+  "gambitsEmoteBar": {
+    "controls": {
+      "emoteBar": {
+        "title": "Emote Bar",
+        "resetOrderAZ": "Redefinir ordem dos emotes",
+        "resetOrderAZDone": "Ordem dos emotes redefinida para A–Z."
+      }
+    },
+    "selector": {
+      "sequencer": {
+        "leftEye": "Olho Esquerdo",
+        "rightEye": "Olho Direito",
+        "mouth": "Boca",
+        "nose": "Nariz"
+      }
+    },
+    "keybinds": {
+      "toggleEmoteBar": {
+        "name": "Alternar Emote Bar",
+        "hint": "Pressione esta tecla para abrir/fechar a barra de emotes."
+      }
+    },
+    "menu": {
+      "emote": {
+        "laugh": "Rir",
+        "angry": "Raiva",
+        "surprised": "Surpreso",
+        "shout": "Gritar",
+        "drunk": "Bêbado (Nariz)",
+        "soul": "Alma",
+        "slap": "Tapa",
+        "cry": "Chorar (Olhos)",
+        "offset": "Configurar Offsets (Olhos, Boca, Nariz)",
+        "disgusted": "Enojado",
+        "giggle": "Risadinha",
+        "love": "Amor",
+        "rofl": "ROFL",
+        "smoking": "Fumar (Boca)",
+        "nervous": "Nervoso",
+        "party": "Festa",
+        "thunderHype": "TROVÃO!",
+        "thankYou": "Obrigado",
+        "wink": "Piscadela",
+        "smug": "Convencido",
+        "huh": "Hein?",
+        "confused": "Confuso",
+        "whistle": "Assobio (Boca)",
+        "filepicker": "Configurar Sons de Emote Padrão",
+        "endAll": "Encerrar todos os Emotes que você aplicou",
+        "registerDialog": "Registrar Emote Personalizado",
+        "hideUnhideEmote": "Ocultar/Exibir Emotes",
+        "bloodied": "Sangrando",
+        "suspicious": "Suspeito (Olhos)",
+        "endAllSelected": "Encerrar emotes nos token(s) selecionado(s)",
+        "endAllAll": "Encerrar emotes em todos os tokens",
+        "playMode": {
+          "permanent": "Permanente",
+          "timed": "Temporizado",
+          "seconds": "s",
+          "toggleTooltip": "Alternar entre emotes Permanentes e Temporizados",
+          "durationTooltip": "No modo Temporizado, os emotes terminam automaticamente após este número de segundos"
         }
+      }
+    },
+    "log": {
+      "warning": {
+        "noEffect": "Nenhum efeito definido para emote:",
+        "pleaseSelectOneToken": "Selecione pelo menos um token.",
+        "noPermission": "Você não tem permissão para usar a ferramenta de emote no(s) token(s) selecionado(s).",
+        "selectMultiple": "Segure Shift para selecionar vários emotes SE VOCÊ TIVER CORAGEM.",
+        "selectSingle": "Selecione um único token para definir offsets.",
+        "handleEmoteClick": "Erro ao executar macro de emote personalizado:"
+      }
+    },
+    "dialog": {
+      "placeholder": {
+        "openIconPicker": "Procurar ícones...",
+        "emoteName": "Digite o nome do emote...",
+        "emoteTooltipText": "Insira o texto da dica do emote...",
+        "soundFilePath": "Insira o caminho do arquivo de som...",
+        "preset": "Selecione um emote padrão..."
+      },
+      "window": {
+        "openIconPicker": "Escolher Ícone",
+        "editMacroCode": "Editar Código de Macro",
+        "manageHidingEmotes": "Gerenciar Emotes Ocultos",
+        "customEmoteMacros": "Macros de Emotes Personalizados",
+        "pickIcon": "Escolher Ícone",
+        "emoteSoundFiles": "Selecione Arquivos de Som de Emote",
+        "editTriggers": "Editar Gatilhos",
+        "editTrigger": "Editar Gatilho",
+        "newTrigger": "Novo Gatilho",
+        "manageTriggers": "Gerenciar Gatilhos"
+      },
+      "field": {
+        "uniqueEmoteName": "Nome Único de Emote (sem espaços):",
+        "emoteTooltipText": "Texto da Dica do Emote:",
+        "emoteIcon": "Ícone do Emote:",
+        "macro": "Macro:",
+        "generatedName": ".nome:",
+        "macroCode": "Código da Macro:",
+        "triggers": "Gatilhos:",
+        "openTriggers": "Abrir Gatilhos",
+        "hook": "Hook:",
+        "target": "Alvo:",
+        "tokenIds": "ID do Token:",
+        "tokens": "Tokens:",
+        "duration": "Duração:",
+        "hpThreshold": "Limite de % do PV:",
+        "preset": "Predefinição:"
+      },
+      "tooltip": {
+        "generatedName": "Se estiver usando um efeito persistente, insira este valor .nome (se você ignorar isso, VAI DAR RUIM)",
+        "tokenIds": "Use uma vírgula para separar as IDs ao usar várias",
+        "duration": "Valor em segundos",
+        "trigger": "Gatilho",
+        "triggers": "Gatilhos",
+        "preset": "Insere o código macro do emote padrão como ponto de partida (requer nome do emote primeiro)."
+      },
+      "button": {
+        "select": "Selecionar",
+        "cancel": "Cancelar",
+        "saveEmote": "Salvar Emote",
+        "save": "Salvar",
+        "close": "Fechar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "configureTriggers": "Configurar Gatilhos",
+        "openTriggers": "Abrir Gatilhos"
+      },
+      "heading": {
+        "defaultEmotes": "Emotes Padrões",
+        "customEmotes": "Emotes Personalizados",
+        "browseSoundFiles": "Procurar arquivos de som"
+      },
+      "message": {
+        "noDefaultEmotes": "Nenhum emote padrão definido.",
+        "noCustomEmotes": "Nenhum emote personalizado definido."
+      },
+      "playmode": {
+        "locked": "Você não pode alternar entre temporário/permanente enquanto um emote temporário estiver ativo."
+      }
+    },
+    "error": {
+      "uniqueEmoteNameNoSpaces": "O Nome Único de Emote não pode conter espaços.",
+      "fillAllFields": "Você deve preencher todos os campos.",
+      "emoteNameExists": "Já existe um emote com este nome. Escolha um nome exclusivo."
+    },
+    "settings": {
+      "disableTokenControls": {
+        "name": "Desativar Controles de Token da Barra de Emotes",
+        "hint": "Oculta o ícone da Barra de Emotes nos controles de Token (use um atalho para abrir)."
+      }
     }
+  }
 }

@@ -1,5 +1,6 @@
 import * as animations from './animations.js';
-import { MODULE_ID } from "./module.js";
+import { packageId } from "./constants.js";
+import { executeCustomMacro } from "./emote-logic.js";
 
 /**
  * Plays an emote animation for each provided token.
@@ -10,7 +11,7 @@ import { MODULE_ID } from "./module.js";
  * @returns {Promise<boolean>} Returns a promise that resolves to true if the emote is played successfully.
  *
  * @example
- * // Play the "laugh" emote on all controlled tokens for 5 seconds:
+ *
  * game.gambitsEmoteBar.playEmote({ emote: "laugh", tokens: canvas.tokens.controlled, duration: 5 });
  */
 
@@ -20,30 +21,34 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
   if (!tokens.length)
     return ui.notifications.warn("No tokens passed to the api.");
 
+  const normalizedEmote = typeof emote === "string" ? emote.trim() : "";
+  const emoteKey = normalizedEmote
+    ? normalizedEmote.charAt(0).toUpperCase() + normalizedEmote.slice(1)
+    : normalizedEmote;
+
   const userId = game.user.id;
 
-  const customEmotes = game.settings.get(MODULE_ID, "customEmotes") || {};
+  const customEmotes = game.settings.get(packageId, "customEmotes") || {};
 
-  if (customEmotes.hasOwnProperty(emote)) {
-    const customEmoteData = customEmotes[emote];
-      let persistentEffect = typeof emote.macro === "string" && customEmoteData.macro.includes(".persist()");
+  if (Object.prototype.hasOwnProperty.call(customEmotes, emoteKey)) {
+    const customEmoteData = customEmotes[emoteKey];
+    const persistentEffect = typeof customEmoteData.macro === "string" && customEmoteData.macro.includes(".persist(");
     for (let token of tokens) {
       try {
-        const macroFunction = new Function("token", customEmoteData.macro);
-        await macroFunction(token);
+        await executeCustomMacro(customEmoteData.macro, token);
       } catch (error) {
-        console.error(`Error executing custom emote macro for "${emote}":`, error);
-        ui.notifications.error(`Error executing custom emote macro for "${emote}". Check the console for details.`);
+        console.error(`Error executing custom emote macro for "${emoteKey}":`, error);
+        ui.notifications.error(`Error executing custom emote macro for "${emoteKey}". Check the console for details.`);
       }
     }
 
-    if(!persistentEffect) return;
+    if (!persistentEffect) return true;
 
     if (duration) {
       setTimeout(() => {
         tokens.forEach(token => {
           Sequencer.EffectManager.endEffects({
-            name: `emoteBar${emote.name}_${token.id}_${userId}`,
+            name: `emoteBar${emoteKey}_${token.id}_${userId}`,
             object: token
           });
         });
@@ -53,7 +58,7 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
   }
 
   for (let token of tokens) {
-    switch (emote) {
+    switch (emoteKey) {
       case "Laugh":
         await animations.performLaugh(token);
         break;
@@ -74,7 +79,7 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
         break;
       case "Slap":
         await animations.performSlap(token);
-        return;
+        break;
       case "Cry":
         await animations.performCry(token);
         break;
@@ -103,6 +108,24 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
       case "ThunderHype":
         await animations.performThunderHype(token);
         break;
+      case "ThankYou":
+        await animations.performThankYou(token);
+        break;
+      case "Wink":
+        await animations.performWink(token);
+        break;
+      case "Smug":
+        await animations.performSmug(token);
+        break;
+      case "Huh":
+        await animations.performHuh(token);
+        break;
+      case "Confused":
+        await animations.performConfused(token);
+        break;
+      case "Whistle":
+        await animations.performWhistle(token);
+        break;
       case "Bloodied":
         await animations.performBloodied(token);
         break;
@@ -116,16 +139,15 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
   }
 
   if (duration) {
-    if (emote === "Slap" || emote === "ThunderHype")
-      return true;
+    if (emoteKey === "Slap" || emoteKey === "ThunderHype") return true;
     setTimeout(() => {
-      if (emote === "Love") {
+      if (emoteKey === "Love") {
         tokens.forEach(token => {
           if (game.gambitsEmoteBar.loveActive)
             game.gambitsEmoteBar.loveActive.set(token.id, false);
         });
       }
-      if (emote === "Suspicious") {
+      if (emoteKey === "Suspicious") {
         tokens.forEach(token => {
           if (game.gambitsEmoteBar.suspiciousActive)
             game.gambitsEmoteBar.suspiciousActive.set(token.id, false);
@@ -133,7 +155,7 @@ export async function playEmote({ emote, tokens = [], duration = null }) {
       }
       tokens.forEach(token => {
         Sequencer.EffectManager.endEffects({
-          name: `emoteBar${emote}_${token.id}_${userId}`,
+          name: `emoteBar${emoteKey}_${token.id}_${userId}`,
           object: token
         });
       });
