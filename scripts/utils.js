@@ -1,5 +1,31 @@
 import { packageId } from "./constants.js";
 
+/**
+ * Sequencer's EffectManager will throw if you query effects for a canvas object
+ * which no longer exists (common during token deletion where `controlToken`
+ * fires while the TokenDocument is being removed).
+ *
+ * These helpers make UI highlighting and cleanup logic resilient.
+ */
+export function isLiveToken(token) {
+  const id = token?.document?.id ?? token?.id;
+  if (!id) return false;
+
+  if (canvas?.scene && !canvas.scene.tokens?.get?.(id)) return false;
+
+  if (token?.destroyed) return false;
+
+  return true;
+}
+
+export function safeGetSequencerEffects(query) {
+  try {
+    return Sequencer?.EffectManager?.getEffects?.(query) ?? [];
+  } catch (_err) {
+    return [];
+  }
+}
+
 export async function setOffsets(token) {
     const capturedMirrored = getTokenIsMirrored(token);
 
@@ -147,6 +173,9 @@ function addAlphaToRgb(rgbString, alpha) {
 }
 
 export async function endEmoteEffects(emote, tokens) {
+  tokens = (tokens ?? []).filter(isLiveToken);
+  if (tokens.length === 0) return;
+
   const stopLoopingEmote = async (token, emoteId) => {
     const userId = game.gambitsEmoteBar?.dialogUser ?? game.user.id;
     if (emoteId === "Love" && game.gambitsEmoteBar.loveActive) game.gambitsEmoteBar.loveActive.set?.(token.id, false);
@@ -154,12 +183,15 @@ export async function endEmoteEffects(emote, tokens) {
 
     if (!token?.document) return;
 
-    if (game.user.isGM) {
-      await token.document.unsetFlag(packageId, `loopActive.${emoteId}`);
-      return;
-    }
+    try {
+      if (game.user.isGM) {
+        await token.document.unsetFlag(packageId, `loopActive.${emoteId}`);
+        return;
+      }
 
-    await token.document.setFlag(packageId, `loopActive.${emoteId}.${userId}`, false);
+      await token.document.setFlag(packageId, `loopActive.${emoteId}.${userId}`, false);
+    } catch (_err) {
+    }
   };
 
   if (emote === "Love" || emote === "Suspicious") {
@@ -174,31 +206,38 @@ export async function endEmoteEffects(emote, tokens) {
       const names = getAllEmoteEffectNames(emote, token);
       if (names.length) {
         for (const name of names) {
-          Sequencer.EffectManager.endEffects({ name, object: token });
+          try { Sequencer.EffectManager.endEffects({ name, object: token }); } catch (_) {}
         }
         continue;
       }
     }
 
-    Sequencer.EffectManager.endEffects({
-      name: `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`,
-      object: token
-    });
+    try {
+      Sequencer.EffectManager.endEffects({
+        name: `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`,
+        object: token
+      });
+    } catch (_) {}
   }
 }
 
-export async function endAllEmoteEffects(tokens) {
-  let emotes = game.gambitsEmoteBar.dialogEmotes;
-  if(!tokens) tokens = getOwnedTokens();
+export async function endAllEmoteEffects(tokens, { skipFlags = false } = {}) {
+  const emotes = game.gambitsEmoteBar.dialogEmotes ?? [];
+  if (!tokens) tokens = getOwnedTokens() ?? [];
+  tokens = (tokens ?? []).filter(isLiveToken);
+  if (tokens.length === 0) return;
 
   for(let emote of emotes) {
     if (emote === "Love" || emote === "Suspicious") {
       for (const token of tokens) {
         if (emote === "Love" && game.gambitsEmoteBar.loveActive) game.gambitsEmoteBar.loveActive.set(token.id, false);
         if (emote === "Suspicious" && game.gambitsEmoteBar.suspiciousActive) game.gambitsEmoteBar.suspiciousActive.set(token.id, false);
-        if (token?.document) {
-          if (game.user.isGM) await token.document.unsetFlag(packageId, `loopActive.${emote}`);
-          else await token.document.setFlag(packageId, `loopActive.${emote}.${game.gambitsEmoteBar.dialogUser}`, false);
+        if (!skipFlags && token?.document) {
+          try {
+            if (game.user.isGM) await token.document.unsetFlag(packageId, `loopActive.${emote}`);
+            else await token.document.setFlag(packageId, `loopActive.${emote}.${game.gambitsEmoteBar.dialogUser}`, false);
+          } catch (_err) {
+          }
         }
       }
     }
@@ -207,11 +246,15 @@ export async function endAllEmoteEffects(tokens) {
       if (game.user.isGM) {
         const names = getAllEmoteEffectNames(emote, token);
         if (names.length) {
-          for (const name of names) Sequencer.EffectManager.endEffects({ name, object: token });
+          for (const name of names) {
+            try { Sequencer.EffectManager.endEffects({ name, object: token }); } catch (_) {}
+          }
           return;
         }
       }
-      Sequencer.EffectManager.endEffects({ name: `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+      try {
+        Sequencer.EffectManager.endEffects({ name: `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+      } catch (_) {}
     });
   }
 
@@ -222,11 +265,15 @@ export async function endAllEmoteEffects(tokens) {
         if (game.user.isGM) {
           const names = getAllEmoteEffectNames(emoteName, token);
           if (names.length) {
-            for (const name of names) Sequencer.EffectManager.endEffects({ name, object: token });
+            for (const name of names) {
+              try { Sequencer.EffectManager.endEffects({ name, object: token }); } catch (_) {}
+            }
             return;
           }
         }
-        Sequencer.EffectManager.endEffects({ name: `emoteBar${emoteName}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+        try {
+          Sequencer.EffectManager.endEffects({ name: `emoteBar${emoteName}_${token.id}_${game.gambitsEmoteBar.dialogUser}`, object: token });
+        } catch (_) {}
       });
     }
   }
@@ -255,8 +302,8 @@ export function getPickedTokens(button) {
       toggleEmoteButton(button, false);
       return [];
     }
-    const tokens = canvas.tokens.controlled.filter(token =>
-      token.document.testUserPermission(game.user, "OWNER") || game.user.isGM
+    const tokens = (canvas.tokens.controlled ?? []).filter(token =>
+      isLiveToken(token) && (token.document.testUserPermission(game.user, "OWNER") || game.user.isGM)
     );
     if (tokens.length === 0) {
       ui.notifications.warn(game.i18n.format("gambitsEmoteBar.log.warning.noPermission"));
@@ -266,8 +313,8 @@ export function getPickedTokens(button) {
 }
 
 export function getOwnedTokens() {
-  const tokens = canvas.tokens.placeables.filter(token =>
-    token.document.testUserPermission(game.user, "OWNER") || game.user.isGM
+  const tokens = (canvas.tokens.placeables ?? []).filter(token =>
+    isLiveToken(token) && (token.document.testUserPermission(game.user, "OWNER") || game.user.isGM)
   );
   if (tokens.length === 0) return;
   return tokens;
@@ -280,10 +327,10 @@ export function getOwnedTokens() {
  *   currently active (across tokens the user can own/control; GM sees all scene tokens).
  */
 export function getHighlightTokens() {
-  const controlled = canvas.tokens.controlled ?? [];
+  const controlled = (canvas.tokens.controlled ?? []).filter(isLiveToken);
   if (controlled.length === 1) return controlled;
 
-  if (game.user.isGM) return canvas.tokens.placeables ?? [];
+  if (game.user.isGM) return (canvas.tokens.placeables ?? []).filter(isLiveToken);
   return getOwnedTokens() || [];
 }
 
@@ -297,9 +344,9 @@ export function getHighlightTokens() {
  * end *all* variants regardless of who started them.
  */
 export function getAllEmoteEffectNames(emoteId, token) {
-  if (!token) return [];
+  if (!isLiveToken(token)) return [];
   const prefix = `emoteBar${emoteId}_${token.id}_`;
-  const effects = Sequencer?.EffectManager?.getEffects?.({ object: token }) ?? [];
+  const effects = safeGetSequencerEffects({ object: token });
 
   return effects
     .map(e => e?.data?.name ?? e?.name ?? null)
@@ -312,12 +359,14 @@ export function allEffectsActive(emote, tokens) {
 
   return tokens.every(token => {
 
+    if (!isLiveToken(token)) return false;
+
     if (game.user.isGM) {
       return getAllEmoteEffectNames(emote, token).length > 0;
     }
 
     const effectName = `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
-    const effects = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
+    const effects = safeGetSequencerEffects({ name: effectName, object: token });
     return effects.length > 0;
   });
 }
@@ -340,12 +389,14 @@ export function checkEffectsActive(button, state, tokens) {
 
   const anyActive = tokens.some(token => {
 
+    if (!isLiveToken(token)) return false;
+
     if (game.user.isGM) {
       return getAllEmoteEffectNames(emoteId, token).length > 0;
     }
 
     const effectName = `emoteBar${emoteId}_${token.id}_${userId}`;
-    const effect = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
+    const effect = safeGetSequencerEffects({ name: effectName, object: token });
     return Array.isArray(effect) && effect.length > 0;
   });
 

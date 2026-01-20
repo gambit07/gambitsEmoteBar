@@ -1,4 +1,4 @@
-import { handleHook, endEmoteEffects, endAllEmoteEffects } from './utils.js';
+import { handleHook, endEmoteEffects, endAllEmoteEffects, safeGetSequencerEffects, isLiveToken } from './utils.js';
 import { packageId } from "./constants.js";
 
 export function registerHooks() {
@@ -17,7 +17,13 @@ export function registerHooks() {
   });
 
   Hooks.on("preDeleteToken", async (tokenDoc, _options) => {
-    await endAllEmoteEffects([tokenDoc?.object]);
+    const token = tokenDoc?.object;
+    if (!token) return;
+
+    try {
+      await endAllEmoteEffects([token], { skipFlags: true });
+    } catch (_err) {
+    }
   });
 
   Hooks.on("updateCombat", (combat, update, options) => {
@@ -79,6 +85,7 @@ export function registerHooks() {
 
     const token = actor.getActiveTokens()?.[0];
     if (!token) return;
+    if (!isLiveToken(token)) return;
     const emoteTriggers = game.settings.get(packageId, "emoteTriggers") || {};
     const thresholdTriggers = Object.entries(emoteTriggers).flatMap(([emoteName, triggers]) => {
       return triggers
@@ -99,7 +106,7 @@ export function registerHooks() {
 
     for (const { emote, threshold } of thresholdTriggers) {
       const effectName = `emoteBar${emote}_${token.id}_${game.gambitsEmoteBar.dialogUser}`;
-      const effect = Sequencer.EffectManager.getEffects({ name: effectName, object: token });
+      const effect = safeGetSequencerEffects({ name: effectName, object: token });
 
       if ((currPct < threshold) && !effect.length) {
         handleHook("hpPercentage", actor);
