@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.1] - 2026-01-20
+- Bugfixes:
+  - Resolved error when deleting a token due to some writes being attempted
+
 ## [v3.0.0] - 2026-01-13
 Massive structural overhaul for Emote Bar! I'd wanted to come back to Emote Bar at some point, and Eskie(moh) recently released his own animation modules and was kind enough to send me new and updated emotes! So I've taken that opportunity to do a big re-work of Emote Bar. Enjoy!
 - Additions:
