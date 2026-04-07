@@ -403,12 +403,6 @@ export function checkEffectsActive(button, state, tokens) {
   toggleEmoteButton(button, anyActive, state);
 }
 
-export function getTokenImage(token) {
-  return token?.document?.ring?.enabled
-      ? token?.document?.ring?.subject?.texture ?? token?.document?.texture?.src
-      : token.document?.texture?.src || "icons/svg/cowled.svg";
-}
-
 export function applyEmoteSound(sequence, emote) {
   if (!game.settings.get(packageId, "emoteSoundEnable")) {
     return sequence;

@@ -1,2 +1,2 @@
 - Bugfixes:
-  - Resolved error when deleting a token due to some writes being attempted
+  - Resolved some emotes that weren't switched to copySprite. Should give some additional consistency for dynamic token setups

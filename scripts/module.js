@@ -122,7 +122,6 @@ Hooks.once('ready', async function() {
 	registerHooks();
 
 	const version = game.modules.get(packageId).version;
-	console.log(version)
 	if (game.settings.get(packageId, "releaseMessage") !== version) {
       const content = `
         <div class="gem-announcement" style="border:4px solid #4A90E2; border-radius:6px; padding:12px;">

@@ -280,7 +280,7 @@ export class CustomEmoteEditorApp extends GemBaseFormV2 {
       "  return;",
       "}",
       "",
-      "const { getTokenImage, applyEmoteSound, getTokenRotation, getEskieModules, resolveEskieFile, requireEskiePatreon, getTokenFacing, getTokenMirrorFacing, getTokenIsMirrored, applyCapturedMirrorToOffset } = utils;",
+      "const { applyEmoteSound, getTokenRotation, getEskieModules, resolveEskieFile, requireEskiePatreon, getTokenFacing, getTokenMirrorFacing, getTokenIsMirrored, applyCapturedMirrorToOffset } = utils;",
       "",
       `const emoteId = ${safeId};`,
       "const userId = game.gambitsEmoteBar.dialogUser;",

@@ -1,4 +1,4 @@
-import { getTokenImage, applyEmoteSound, getTokenRotation, getEskieModules, resolveEskieFile, requireEskiePatreon, getTokenFacing, getTokenMirrorFacing, getTokenIsMirrored, applyCapturedMirrorToOffset } from './utils.js';
+import { applyEmoteSound, getTokenRotation, getEskieModules, resolveEskieFile, requireEskiePatreon, getTokenFacing, getTokenMirrorFacing, getTokenIsMirrored, applyCapturedMirrorToOffset } from './utils.js';
 import { packageId } from "./constants.js";
 
 export async function performLaugh(token) {
@@ -490,7 +490,7 @@ export async function performDrunk(token) {
     seq.effect()
       .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
       .copySprite(token)
-      .attachTo(token, {bindAlpha:false, local: getTokenRotation(token)})
+      .attachTo(token, {bindAlpha:false})
       .scaleToObject(1, {considerTokenScale:true})
       .persist(true)
       .loopProperty("spriteContainer", "position.x", {  from:-0.05, to: 0.05, duration: 2500, pingPong: true, ease:"easeInOutSine", gridUnits:true, delay: 100 })
@@ -603,7 +603,7 @@ export async function performDrunk(token) {
     .private()
 
   seq.effect()
-    .file(getTokenImage(token))
+    .copySprite(token)
     .name(`emoteBarDrunk_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .scaleToObject(1, {considerTokenScale: true})
@@ -897,7 +897,7 @@ export async function performGiggle(token) {
 
   seq.effect()
     .name(`emoteBarGiggle_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file(getTokenImage(token))
+    .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .atLocation(token)
     .attachTo(token, {bindAlpha: false})
@@ -982,7 +982,7 @@ export async function performROFL(token) {
 
     seq.effect()
       .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-      .file(getTokenImage(token))
+      .copySprite(token)
       .scaleToObject(1, { considerTokenScale: true })
       .attachTo(token, { bindAlpha: false })
       .loopProperty("sprite", "position.y", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease: "easeOutQuad" })
@@ -1032,7 +1032,7 @@ export async function performROFL(token) {
 
   seq.effect()
     .name(`emoteBarRofl_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file(getTokenImage(token))
+    .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token, {bindAlpha: false})
     .loopProperty("sprite", "position.y", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
@@ -1172,7 +1172,7 @@ export async function performNervous(token) {
 
     seq.effect()
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-      .file(getTokenImage(token))
+      .copySprite(token)
       .attachTo(token)
       .scaleToObject(1, { considerTokenScale: true })
       .animateProperty("sprite", "position.x", { from: 0, to: 1, duration: 50, ease: "linear", pingPong: true })
@@ -1183,7 +1183,7 @@ export async function performNervous(token) {
 
     seq.effect()
       .name(`emoteBarNervous_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-      .file(getTokenImage(token))
+      .copySprite(token)
       .attachTo(token)
       .scaleToObject(1, { considerTokenScale: true })
       .animateProperty("sprite", "position.x", { from: 0, to: 1, duration: 50, ease: "linear", pingPong: true })
@@ -1224,7 +1224,7 @@ export async function performParty(token) {
 
   seq.effect()
     .name(`emoteBarParty_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file(getTokenImage(token))
+    .copySprite(token)
     .attachTo(token, { gridUnits: true, bindAlpha: false, local: getTokenRotation(token) })
     .scaleToObject(1, { considerTokenScale: true })
     .filter("ColorMatrix", { hue: 0 }, `emoteBarParty_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
@@ -1337,7 +1337,7 @@ export async function performBloodied(token) {
 
   seq.effect()
     .name(`emoteBarBloodied_${token.id}_${game.gambitsEmoteBar.dialogUser}`)
-    .file(getTokenImage(token))
+    .copySprite(token)
     .scaleToObject(1, {considerTokenScale: true})
     .attachTo(token, {gridUnits: true, bindAlpha: false, local: getTokenRotation(token)})
     .loopProperty("sprite", "position.y", { from: 0, to: -0.03, duration: 1200, gridUnits: true, pingPong: true, ease:"easeOutQuad" })
