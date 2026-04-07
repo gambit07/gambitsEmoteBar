@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.2] - 2026-04-06
+- Bugfixes:
+  - Resolved some emotes that weren't switched to copySprite. Should give some additional consistency for dynamic token setups
+
 ## [v3.0.1] - 2026-01-20
 - Bugfixes:
   - Resolved error when deleting a token due to some writes being attempted
