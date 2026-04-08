@@ -362,42 +362,42 @@ button.gem-action-button i {
   transform: translateY(1px);
 }
 
-.form-footer button[data-action="gem-close"] {
+.gem-v2-footer button[data-action="gem-close"] {
   width: 120px;
   min-width: 100px !important;
   flex: 0 0 120px !important;
   margin: 0 auto;
 }
 
-.form-footer button[data-action="gem-wide-close"] {
+.gem-v2-footer button[data-action="gem-wide-close"] {
   width: 150px;
   min-width: 100px !important;
   flex: 0 0 150px !important;
   margin: 0 auto;
 }
 
-.form-footer button[data-action="gem-ultrawide-close"] {
+.gem-v2-footer button[data-action="gem-ultrawide-close"] {
   width: 300px;
   min-width: 100px !important;
   flex: 0 0 300px !important;
   margin: 0 auto;
 }
 
-.form-footer button[data-action="gem-ultrawide-save"] {
+.gem-v2-footer button[data-action="gem-ultrawide-save"] {
   width: 300px;
   min-width: 100px !important;
   flex: 0 0 300px !important;
   margin: 0 auto;
 }
 
-.form-footer button[data-action="gem-wide-save"] {
+.gem-v2-footer button[data-action="gem-wide-save"] {
   width: 150px;
   min-width: 100px !important;
   flex: 0 0 150px !important;
   margin: 0 auto;
 }
 
-.form-footer {
+.gem-v2-footer {
   display: flex;
   justify-content: center;
 }
@@ -548,4 +548,148 @@ button.gem-action-button i {
   flex: 0 0 auto;
   width: 64px;
   padding: 2px 6px;
+}
+
+
+/* ==========================================================================
+   Emote bar hardening
+   --------------------------------------------------------------------------
+   Some Foundry systems/themes ship broad rules for buttons, forms, inputs,
+   icons, and window content. Anchor the bar to its ApplicationV2 root id so
+   layout-critical rules win more consistently without forcing a full visual
+   reset.
+   ========================================================================== */
+#gem-emote-bar,
+#gem-emote-bar * {
+  box-sizing: border-box;
+}
+
+#gem-emote-bar form {
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#gem-emote-bar .window-content {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+#gem-emote-bar .gem-form-container {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+#gem-emote-bar .gem-playmode-container,
+#gem-emote-bar .gem-emote-scroll-container,
+#gem-emote-bar .gem-fixed-action-container,
+#gem-emote-bar .gem-emote-buttons,
+#gem-emote-bar .gem-action-button-grid,
+#gem-emote-bar .gem-action-container {
+  min-width: 0 !important;
+}
+
+#gem-emote-bar .gem-emote-scroll-container {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+#gem-emote-bar .gem-emote-buttons {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: var(--gem-gap) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: var(--gem-pad) !important;
+}
+
+#gem-emote-bar .gem-action-button-grid,
+#gem-emote-bar .gem-action-container.dual-column,
+#gem-emote-bar .gem-action-container.dual-column-custom,
+#gem-emote-bar .gem-action-container.single-column-custom {
+  display: grid !important;
+  width: 100% !important;
+}
+
+#gem-emote-bar .gem-action-container.dual-column,
+#gem-emote-bar .gem-action-container.dual-column-custom,
+#gem-emote-bar .gem-action-container.single-column-custom {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: var(--gem-action-gap) !important;
+}
+
+#gem-emote-bar button.gem-emote-btn,
+#gem-emote-bar button.gem-action-button,
+#gem-emote-bar button.gem-playmode-toggle {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  font: inherit !important;
+  color: inherit !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  text-shadow: none !important;
+}
+
+#gem-emote-bar button.gem-emote-btn,
+#gem-emote-bar button.gem-action-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+
+#gem-emote-bar button.gem-emote-btn {
+  aspect-ratio: 1 / 1 !important;
+  padding: 6px !important;
+}
+
+#gem-emote-bar button.gem-action-button {
+  height: var(--gem-action-h) !important;
+  padding: 0 !important;
+}
+
+#gem-emote-bar button.gem-emote-btn > i,
+#gem-emote-bar button.gem-action-button > i {
+  margin: 0 !important;
+  line-height: 1 !important;
+  pointer-events: none;
+}
+
+#gem-emote-bar .gem-playmode-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#gem-emote-bar .gem-playmode-duration {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+#gem-emote-bar .gem-playmode-duration input[type="range"] {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+#gem-emote-bar .gem-playmode-duration input[type="number"] {
+  flex: 0 0 auto !important;
+  width: 64px !important;
+}
+
+#gem-emote-bar .gem-playmode-toggle::before {
+  background: var(--color-warm-2, #c26c00) !important;
+}
+
+#gem-emote-bar .gem-playmode-toggle.is-on::before {
+  background: var(--color-bg, #1b1b1b) !important;
 }

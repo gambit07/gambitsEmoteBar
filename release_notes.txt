@@ -1,2 +1,2 @@
-- Bugfixes:
-  - Resolved some emotes that weren't switched to copySprite. Should give some additional consistency for dynamic token setups
+- Updates:
+  - Hardened some css to get the menu looking better on more systems
