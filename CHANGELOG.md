@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.3] - 2026-04-08
+- Updates:
+  - Hardened some css to get the menu looking better on more systems
+
 ## [v3.0.2] - 2026-04-06
 - Bugfixes:
   - Resolved some emotes that weren't switched to copySprite. Should give some additional consistency for dynamic token setups
