@@ -551,14 +551,25 @@ button.gem-action-button i {
 }
 
 
-/* ==========================================================================
-   Emote bar hardening
-   --------------------------------------------------------------------------
-   Some Foundry systems/themes ship broad rules for buttons, forms, inputs,
-   icons, and window content. Anchor the bar to its ApplicationV2 root id so
-   layout-critical rules win more consistently without forcing a full visual
-   reset.
-   ========================================================================== */
+#gem-emote-bar {
+  --gem-bar-width: 120px;
+  --gem-gap: 6px;
+  --gem-pad: 6px;
+  --gem-action-gap: 6px;
+  --gem-action-h: 34px;
+  --gem-icon: clamp(1.55rem, 5vw, 2.25rem);
+  --gem-action-icon: 1rem;
+  --gem-radius: 4px;
+  --gem-surface: rgba(8, 10, 18, 0.92);
+  --gem-surface-alt: rgba(14, 16, 28, 0.96);
+  --gem-border-soft: rgba(255, 255, 255, 0.14);
+  --gem-border-strong: var(--color-warm-2, #c26c00);
+
+  width: var(--gem-bar-width) !important;
+  min-width: var(--gem-bar-width) !important;
+  max-width: var(--gem-bar-width) !important;
+}
+
 #gem-emote-bar,
 #gem-emote-bar * {
   box-sizing: border-box;
@@ -568,6 +579,55 @@ button.gem-action-button i {
   height: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+#gem-emote-bar .window-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  min-height: 2rem !important;
+  padding: 0.25rem 0.35rem !important;
+}
+
+#gem-emote-bar .window-header :is(.window-controls, ul, ol, nav, menu) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.125rem !important;
+  margin: 0 0 0 auto !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+#gem-emote-bar .window-title {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  line-height: 1.1 !important;
+  font-size: 0.85rem !important;
+}
+
+#gem-emote-bar .window-header :is(.header-control, button, a) {
+  flex: 0 0 auto !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 1.4rem !important;
+  min-width: 1.4rem !important;
+  height: 1.4rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+
+#gem-emote-bar .window-header :is(.header-control, button, a):hover,
+#gem-emote-bar .window-header :is(.header-control, button, a):focus-visible {
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 #gem-emote-bar .window-content {
@@ -591,6 +651,13 @@ button.gem-action-button i {
 #gem-emote-bar .gem-action-button-grid,
 #gem-emote-bar .gem-action-container {
   min-width: 0 !important;
+}
+
+#gem-emote-bar .gem-playmode-toggle {
+  width: 100% !important;
+  max-width: 7.25rem !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
 }
 
 #gem-emote-bar .gem-emote-scroll-container {
@@ -644,7 +711,13 @@ button.gem-action-button i {
   justify-content: center !important;
   width: 100% !important;
   margin: 0 !important;
+  padding: 0 !important;
   line-height: 1 !important;
+  border-radius: var(--gem-radius) !important;
+  border: 1px solid var(--gem-border-soft) !important;
+  background: var(--gem-surface) !important;
+  color: inherit !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02) !important;
 }
 
 #gem-emote-bar button.gem-emote-btn {
@@ -654,7 +727,23 @@ button.gem-action-button i {
 
 #gem-emote-bar button.gem-action-button {
   height: var(--gem-action-h) !important;
-  padding: 0 !important;
+}
+
+#gem-emote-bar button.gem-emote-btn:hover,
+#gem-emote-bar button.gem-action-button:hover,
+#gem-emote-bar button.gem-emote-btn:focus-visible,
+#gem-emote-bar button.gem-action-button:focus-visible {
+  background: var(--gem-surface-alt) !important;
+  border-color: var(--gem-border-strong) !important;
+}
+
+#gem-emote-bar button.gem-emote-btn[data-active="true"] {
+  background: var(--gem-border-strong) !important;
+  border-color: var(--gem-border-strong) !important;
+}
+
+#gem-emote-bar button.gem-emote-btn[data-active="true"] > i {
+  color: var(--color-text-light-0, #fff) !important;
 }
 
 #gem-emote-bar button.gem-emote-btn > i,
@@ -662,6 +751,14 @@ button.gem-action-button i {
   margin: 0 !important;
   line-height: 1 !important;
   pointer-events: none;
+}
+
+#gem-emote-bar button.gem-emote-btn > i {
+  font-size: var(--gem-icon) !important;
+}
+
+#gem-emote-bar button.gem-action-button > i {
+  font-size: var(--gem-action-icon) !important;
 }
 
 #gem-emote-bar .gem-playmode-row {

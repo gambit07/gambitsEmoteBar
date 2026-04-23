@@ -1,2 +1,1 @@
-- Updates:
-  - Hardened some css to get the menu looking better on more systems
+- Official Foundry V14 Compatability! Big thanks as always to Wasp for keeping the wonderful (free) Sequencer module up to date. Consider joining Wasps Patreon to support that development! https://www.patreon.com/cw/fantasycomputerworks

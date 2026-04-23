@@ -12,11 +12,11 @@
       "discord": "EskieMoh#2969"
     }
   ],
-  "version": "3.0.3",
+  "version": "3.1.0",
   "compatibility": {
-    "minimum": 12.328,
-    "verified": 13.345,
-    "maximum": 13.999
+    "minimum": 12,
+    "verified": 14,
+    "maximum": 14
   },
   "esmodules": [
     "scripts/module.js"
@@ -31,7 +31,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "3.4.8",
-          "verified": "3.6.11"
+          "verified": "4.0.1"
         }
       }
     ]
@@ -50,5 +50,5 @@
   ],
   "url": "https://github.com/gambit07/gambitsEmoteBar",
   "manifest": "https://github.com/gambit07/gambitsEmoteBar/releases/latest/download/module.json",
-  "download": "https://github.com/gambit07/gambitsEmoteBar/releases/download/3.0.3/module.zip"
+  "download": "https://github.com/gambit07/gambitsEmoteBar/releases/download/3.1.0/module.zip"
 }

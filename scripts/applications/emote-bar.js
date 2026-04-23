@@ -7,13 +7,17 @@ import { EmoteVisibilityManagerApp } from "./emote-visibility-manager.js";
 import { CustomEmoteListApp } from "./custom-emote-list.js";
 import { TriggerListApp } from "./trigger-list.js";
 
+/**
+ * Fixed width used to stabilize the emote bar layout across Foundry versions.
+ */
+const EMOTE_BAR_WIDTH = 200;
+
 export class EmoteBarApp extends GemBaseFormV2 {
   constructor(options = {}) {
     super(options);
     EmoteBarApp.instance = this;
     this._state = { active: null };
     this._posLoaded = false;
-    this._sizeAdjusted = false;
     this._highlightInterval = null;
     this._controlTokenHookId = null;
     this._timedEndTimers = new Map();
@@ -24,9 +28,8 @@ export class EmoteBarApp extends GemBaseFormV2 {
       if (desired > 0) {
         this.options.position ??= {};
         this.options.position.height = desired;
-        this.options.position.minHeight = desired;
-        this.options.position.maxHeight = desired;
         this.position.height = desired;
+        this._fixedHeight = desired;
       }
     } catch (_) {}
   }
@@ -48,7 +51,7 @@ export class EmoteBarApp extends GemBaseFormV2 {
         },
       ],
     },
-    position: { width: 106, height: 500, zIndex: 102 },
+    position: { width: EMOTE_BAR_WIDTH, height: 500, zIndex: 102 },
     actions: {
       endAll: EmoteBarApp.endAll,
       openVisibility: EmoteBarApp.openVisibility,
@@ -158,10 +161,11 @@ export class EmoteBarApp extends GemBaseFormV2 {
     super._onRender(options);
 
     try {
-      const h = Number(this.position?.height) || Number(this.options?.position?.height) || 0;
+      const h = Number(this._fixedHeight) || Number(this.position?.height) || Number(this.options?.position?.height) || 0;
       const el = this.element;
       if (el && h > 0) {
         el.style.setProperty("height", `${h}px`, "important");
+        el.style.setProperty("min-height", `${h}px`, "important");
         el.style.setProperty("max-height", `${h}px`, "important");
       }
     } catch (_) {}
@@ -176,7 +180,9 @@ export class EmoteBarApp extends GemBaseFormV2 {
 
     const el = this.element;
     if (!el) return;
-    el.style.setProperty("min-width", "106px", "important");
+    el.style.setProperty("width", `${EMOTE_BAR_WIDTH}px`, "important");
+    el.style.setProperty("min-width", `${EMOTE_BAR_WIDTH}px`, "important");
+    el.style.setProperty("max-width", `${EMOTE_BAR_WIDTH}px`, "important");
     el.style.setProperty("padding-left", "0px", "important");
     el.style.setProperty("padding-right", "0px", "important");
 
