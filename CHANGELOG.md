@@ -1,5 +1,8 @@
 # Changelog
 
+## [v3.1.1] - 2026-06-18
+- Official Foundry V14 Compatability! Big thanks as always to Wasp for keeping the wonderful (free) Sequencer module up to date. Consider joining Wasps Patreon to support that development! https://www.patreon.com/cw/fantasycomputerworks
+
 ## [v3.1.0] - 2026-04-23
 - Official Foundry V14 Compatability! Big thanks as always to Wasp for keeping the wonderful (free) Sequencer module up to date. Consider joining Wasps Patreon to support that development! https://www.patreon.com/cw/fantasycomputerworks
 
